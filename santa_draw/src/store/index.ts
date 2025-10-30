@@ -1,0 +1,1 @@
+// Centralized state management will be added here (Vuex)
