@@ -6,6 +6,11 @@ const routes = [
         name: 'home',
         component: () => import('@/views/HomeView.vue'),
     },
+    {
+        path: '/draw/manual',
+        name: 'draw-manuel',
+        component: () => import('@/views/DrawView.vue'),
+    },
 ]
 
 export const router = createRouter({
