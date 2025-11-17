@@ -89,7 +89,7 @@ function togglePassword() {
       <label
           v-if="label"
           :for="id"
-          class="flex items-center gap-0.5 font-rethink-sans font-medium text-xs text-gray-700 !leading-4 tracking-[0.12px]">
+          class="flex items-center gap-0.5 font-rethink-sans font-medium text-sm md:text-base text-gray-700 !leading-4 tracking-[0.12px]">
         {{ label }}
 
         <span
@@ -101,7 +101,7 @@ function togglePassword() {
 
       <div
           v-if="$slots.headerRight"
-          class="font-inter font-medium text-gray-400 text-[10px] !leading-4">
+          class="font-inter font-medium text-gray-400 text-xs md:text-[10px] !leading-4">
         <slot name="headerRight"></slot>
       </div>
     </div>
@@ -125,7 +125,7 @@ function togglePassword() {
           :placeholder="placeholder"
           :required="required"
           autocomplete="off"
-          class="outline-none h-full min-h-4 w-full bg-transparent shadow-transparent autofill:shadow-[inset_0_0_0px_100px_rgb(0,0,0,0)] font-inter font-normal !leading-4 text-sm tracking-[0.14px]"
+          class="outline-none h-full min-h-4 w-full bg-transparent shadow-transparent autofill:shadow-[inset_0_0_0px_100px_rgb(0,0,0,0)] font-inter font-normal !leading-4 text-base md:text-base tracking-[0.14px]"
           :class="[invalidMessage ? 'text-red-500' : input.length ? 'text-gray-700' : 'text-gray-400 focus:text-gray-700']"
           @input="onInput" />
 
@@ -143,7 +143,7 @@ function togglePassword() {
 
     <span
         v-if="invalidMessage"
-        class="text-[10px] font-inter font-normal text-red-500 !leading-3">
+        class="text-xs md:text-[10px] font-inter font-normal text-red-500 !leading-3">
       {{ invalidMessage }}
     </span>
   </div>

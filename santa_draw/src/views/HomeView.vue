@@ -1,21 +1,17 @@
 <template>
-  <div class="min-h-screen flex overflow-hidden relative">
+  <div class="min-h-screen flex flex-col lg:flex-row overflow-hidden relative">
     <div class="snowfall"></div>
-    <div class="w-full lg:w-1/2 bg-gradient-to-br from-red-600 via-red-700 to-red-800 flex items-center justify-center relative overflow-hidden">
+    <!-- Left side - Hidden on mobile, visible on desktop -->
+    <div class="hidden lg:flex w-full lg:w-1/2 bg-gradient-to-br from-red-600 via-red-700 to-red-800 items-center justify-center relative overflow-hidden">
       <div class="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.1),transparent)]"></div>
 
       <ChristmasTree
           variant="large"
           customClass="absolute left-10 top-1/2 -translate-y-1/2 opacity-40" />
 
-      <div class="absolute top-12 left-0 animate-sleigh-fly">
-        <FlyingSleigh class="absolute" :width="450" :height="160" :duration="25" />
-      </div>
-
       <ChristmasTree
           variant="small"
           customClass="absolute right-16 top-1/2 -translate-y-1/2 opacity-30" />
-
 
       <div class="absolute left-8 top-1/2 translate-y-16 z-10">
         <GiftBox
@@ -76,14 +72,20 @@
       </div>
     </div>
 
+    <!-- Right side - Full width on mobile -->
     <div
         class="w-full lg:w-1/2 bg-gradient-to-b from-red-700 via-red-600 to-red-800
-         flex items-center justify-center p-6 relative">
+         flex flex-col items-center justify-center p-4 md:p-6 relative min-h-screen lg:min-h-0">
       <div class="absolute inset-0 bg-[radial-gradient(circle_at_70%_30%,rgba(255,255,255,0.15),transparent)]"></div>
 
       <div class="absolute -left-10 -top-10 w-40 h-40 rounded-full bg-yellow-200/20 blur-2xl"></div>
       <div class="absolute -right-16 top-10 w-52 h-52 rounded-full bg-red-300/20 blur-3xl"></div>
       <div class="absolute bottom-10 right-20 w-32 h-32 rounded-full bg-green-300/15 blur-2xl"></div>
+
+      <!-- Mobile Santa Avatar - Top of page -->
+      <div class="lg:hidden mb-4 md:mb-6 relative z-10">
+        <SantaAvatar :size="120" />
+      </div>
 
       <IntroCard
           v-if="currentPanel === 'intro'"
@@ -107,9 +109,8 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import SantaAvatar from "@/components/christmas/SantaAvatar.vue";
-import FlyingSleigh from "@/components/christmas/FlyingSleigh.vue";
 import ChristmasTree from "@/components/christmas/ChristmasTree.vue";
 import GiftBox from "@/components/christmas/GiftBox.vue";
 import ChristmasBell from "@/components/christmas/ChristmasBell.vue";
@@ -119,6 +120,7 @@ import RegisterCard from "@/components/landing/RegisterCard.vue";
 import LoginCard from "@/components/landing/LoginCard.vue";
 
 const router = useRouter()
+const route = useRoute()
 
 const santaRef = ref<HTMLElement | null>(null)
 const mousePos = ref({ x: 0, y: 0 })
@@ -151,6 +153,14 @@ const handleMouseMove = (e: MouseEvent) => {
 
 onMounted(() => {
   window.addEventListener('mousemove', handleMouseMove)
+  
+  // Check if panel query parameter exists
+  const panelParam = route.query.panel as string | undefined
+  if (panelParam === 'register') {
+    currentPanel.value = 'register'
+  } else if (panelParam === 'login') {
+    currentPanel.value = 'login'
+  }
 })
 
 onUnmounted(() => {
@@ -158,7 +168,7 @@ onUnmounted(() => {
 })
 
 const goManual = () => {
-  router.push('/draw/manual')
+  router.push({ path: '/draw/manual', query: { directStart: 'true' } })
 }
 
 const openRegister = () => {

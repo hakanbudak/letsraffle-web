@@ -1,32 +1,32 @@
 <template>
   <div
       class="relative w-full max-w-2xl bg-white/95 backdrop-blur-md border border-red-200
-           rounded-3xl shadow-[0_20px_60px_rgba(127,29,29,0.4)] px-6 py-10 md:px-12 z-10
-           min-h-[550px] flex flex-col justify-center">
+           rounded-2xl md:rounded-3xl shadow-[0_20px_60px_rgba(127,29,29,0.4)] px-4 py-6 md:px-6 lg:px-12 md:py-10 z-10
+           min-h-[500px] md:min-h-[550px] flex flex-col justify-center">
     <button
         type="button"
-        class="mb-6 inline-flex items-center text-sm text-slate-500 hover:text-red-600 transition-colors"
+        class="mb-4 md:mb-6 inline-flex items-center text-xs md:text-sm text-slate-500 hover:text-red-600 transition-colors"
         @click="$emit('back-to-intro')">
-      ← Geri dön
+      {{ t("auth.goBack") }}
     </button>
 
-    <div class="text-center mb-8">
-      <p class="text-xs uppercase tracking-[0.35em] text-red-600">Santa's Edition</p>
-      <h1 class="text-4xl md:text-5xl font-bold text-red-700 mt-1">Kayıt Ol</h1>
-      <p class="text-slate-600 mt-2">
-        Hesabını oluştur ve çekilişlerini yönetmeye başla 🎁
+    <div class="text-center mb-6 md:mb-8">
+      <p class="text-xs md:text-sm uppercase tracking-[0.25em] md:tracking-[0.35em] text-red-600">{{ t("landing.tagline") }}</p>
+      <h1 class="text-3xl md:text-5xl lg:text-6xl font-bold text-red-700 mt-1">{{ t("auth.registerTitle") }}</h1>
+      <p class="text-sm md:text-base text-slate-600 mt-1.5 md:mt-2 px-2">
+        {{ t("auth.registerSubtitle") }}
       </p>
     </div>
 
-    <div class="grid gap-5 max-w-md mx-auto w-full">
+    <div class="grid gap-4 md:gap-5 max-w-md mx-auto w-full">
       <Input
           id="email"
           v-model:input="form.email.value"
           :invalidMessage="form.email.inValidMessage"
           type="text"
           name="email"
-          label="Email"
-          placeholder="Enter your email address"
+          :label="t('auth.emailLabel')"
+          :placeholder="t('auth.emailPlaceholder')"
           @onFocus="clearError('email')" />
 
       <Input
@@ -35,8 +35,8 @@
           :invalidMessage="form.password.inValidMessage"
           type="password"
           name="password"
-          label="Password"
-          placeholder="Enter your password"
+          :label="t('auth.passwordLabel')"
+          :placeholder="t('auth.passwordPlaceholder')"
           @onFocus="clearError('password')" />
 
       <p
@@ -46,21 +46,21 @@
       </p>
 
       <Button
-          class="mt-2 inline-flex justify-center items-center rounded-xl bg-red-600
-               text-white text-lg font-semibold py-3 hover:bg-red-700 transition-all
-               disabled:opacity-60 disabled:cursor-not-allowed"
+          class="mt-2 inline-flex justify-center items-center rounded-lg md:rounded-xl bg-red-600
+               text-white text-base md:text-lg font-semibold py-2.5 md:py-3 hover:bg-red-700 transition-all
+               disabled:opacity-60 disabled:cursor-not-allowed w-full"
           :disabled="loading"
           @click="submitForm">
-        <span v-if="!loading">Hesap Oluştur</span>
-        <span v-else>Oluşturuluyor...</span>
+        <span v-if="!loading">{{ t("auth.registerButton") }}</span>
+        <span v-else>{{ t("auth.registerLoading") }}</span>
       </Button>
 
-      <p class="text-center text-sm text-gray-500 mt-2">
-        Zaten hesabın var mı?
+      <p class="text-center text-xs md:text-sm text-gray-500 mt-2">
+        {{ t("auth.haveAccount") }}
         <button
             class="text-red-600 font-medium hover:underline ml-1"
             @click="$emit('go-login')">
-          Giriş yap
+          {{ t("auth.loginLink") }}
         </button>
       </p>
     </div>
@@ -75,6 +75,7 @@ import { handleAuthSuccess } from "@/services/authHelpers";
 import { validateEmail } from "@/helpers/common";
 import Input from "@/components/ui-kit/input/Input.vue";
 import Button from "@/components/ui-kit/button/Button.vue";
+import { useI18n } from "vue-i18n";
 
 const emit = defineEmits<{
   (e: "go-login"): void;
@@ -95,6 +96,7 @@ const form = reactive({
 
 const loading = ref<boolean>(false);
 const generalError = ref<string>("");
+const { t } = useI18n();
 
 function addError(key: "email" | "password", message: string) {
   form[key].inValidMessage = message;
@@ -106,7 +108,7 @@ function clearError(key: "email" | "password") {
 
 function validateEmailInput() {
   if (!form.email.value || !validateEmail(form.email.value)) {
-    addError("email", "Please enter a valid email address!");
+    addError("email", t("auth.errors.emailInvalid"));
     return false;
   }
   return true;
@@ -114,12 +116,12 @@ function validateEmailInput() {
 
 function validatePasswordInput() {
   if (!form.password.value) {
-    addError("password", "Please enter a password!");
+    addError("password", t("auth.errors.passwordRequired"));
     return false;
   }
 
   if (form.password.value.length < 6) {
-    addError("password", "Password must be at least 6 characters.");
+    addError("password", t("auth.errors.passwordLength"));
     return false;
   }
 
@@ -136,7 +138,7 @@ async function createAccount() {
     });
     return response.data;
   } catch (err: unknown) {
-    let message = "Bu e-posta adresine sahip bir hesap zaten mevcut. Lütfen giriş yapın.";
+    let message = t("auth.errors.duplicateEmail");
     const error = err as AxiosError<{ message?: string }>;
 
     if (axios.isAxiosError(error) && error.response) {
@@ -167,7 +169,7 @@ async function submitForm() {
     emit("register-success");
   } catch (err) {
     const error = err as AxiosError<{ message?: string }>;
-    let message = "Something went wrong while creating your account.";
+    let message = t("auth.errors.genericRegister");
 
     if (axios.isAxiosError(error) && error.response) {
       message = error.response.data?.message || message;
