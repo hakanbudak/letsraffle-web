@@ -14,8 +14,12 @@
   "dependencies": {
     "@tailwindcss/vite": "^4.1.16",
     "axios": "^1.13.2",
+    "canvas-confetti": "^1.9.4",
+    "magic-snowflakes": "^7.0.2",
+    "qrcode": "^1.5.4",
     "tailwindcss": "^4.1.16",
     "vue": "^3.5.22",
+    "vue-i18n": "^9.14.5",
     "vue-router": "^4.6.3"
   },
   "devDependencies": {
