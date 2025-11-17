@@ -126,6 +126,7 @@
 
       <div class="flex justify-center">
         <button
+            v-if="!isDrawCompleted"
             type="button"
             :disabled="participants.length < 3 || isCreatingEvent"
             :class="[
@@ -136,6 +137,13 @@
             @click="$emit('create-event')">
           <span v-if="!isCreatingEvent">{{ t("draw.manualButtons.create") }}</span>
           <span v-else>{{ t("draw.manualButtons.creating") }}</span>
+        </button>
+        <button
+            v-else
+            type="button"
+            class="w-full px-6 py-3 rounded-xl text-sm font-semibold shadow-sm transition-all bg-green-600 text-white hover:bg-green-700 hover:shadow-md cursor-pointer"
+            @click="$emit('reset-draw')">
+          {{ t("draw.manualButtons.newDraw") }}
         </button>
       </div>
     </div>
@@ -152,10 +160,12 @@ defineProps<{
   requirePhone: boolean;
   isCreatingEvent: boolean;
   editingParticipantId: number | null;
+  isDrawCompleted: boolean;
 }>();
 
 defineEmits<{
   (e: "create-event"): void;
+  (e: "reset-draw"): void;
   (e: "edit", participant: Participant): void;
   (e: "remove", id: number): void;
 }>();

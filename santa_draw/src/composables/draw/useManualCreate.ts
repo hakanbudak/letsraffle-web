@@ -15,15 +15,14 @@ export function useManualCreate(options: Options) {
   const { t } = useI18n();
   const isCreatingEvent = ref(false);
   const showSuccessModal = ref(false);
+  const isDrawCompleted = ref(false);
 
   const handleCreateEvent = async () => {
     if (!options.participants.value.length) {
-      alert(t("alerts.manualMissingParticipants"));
       return;
     }
 
     if (options.participants.value.length < 3) {
-      alert(t("alerts.manualMinimumParticipants"));
       return;
     }
 
@@ -41,28 +40,39 @@ export function useManualCreate(options: Options) {
         })),
       };
 
-      await api.post("/api/v1/draws/manuel", payload);
+      const { data } = await api.post("/api/v1/draws/manual", payload);
 
-      confetti({
-        particleCount: 100,
-        spread: 70,
-        origin: { y: 0.6 },
-        colors: ["#EF4444", "#10B981", "#3B82F6", "#F59E0B", "#8B5CF6"],
-      });
+      if (data && (data.success || data.drawId || data.id)) {
+        confetti({
+          particleCount: 100,
+          spread: 70,
+          origin: { y: 0.6 },
+          colors: ["#EF4444", "#10B981", "#3B82F6", "#F59E0B", "#8B5CF6"],
+        });
 
-      showSuccessModal.value = true;
+        isDrawCompleted.value = true;
+        showSuccessModal.value = true;
+      } else {
+        throw new Error("Unexpected response format");
+      }
     } catch (error) {
       console.error("Çekiliş oluşturulurken hata:", error);
-      alert(t("alerts.manualCreateError"));
     } finally {
       isCreatingEvent.value = false;
     }
   };
 
+  const resetDraw = () => {
+    isDrawCompleted.value = false;
+    options.participants.value = [];
+  };
+
   return {
     isCreatingEvent,
     showSuccessModal,
+    isDrawCompleted,
     handleCreateEvent,
+    resetDraw,
   };
 }
 

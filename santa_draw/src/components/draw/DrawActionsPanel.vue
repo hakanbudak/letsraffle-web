@@ -3,6 +3,14 @@
       :visible="showSuccessModal"
       @close="showSuccessModal = false"
   />
+  <DrawSuccessModal
+      :visible="showExecuteSuccessModal"
+      :title="t('modals.executeSuccessTitle')"
+      :message="t('modals.executeSuccessMessage')"
+      :additional-message="t('modals.executeSuccessInfo')"
+      :footer-text="t('modals.executeSuccessFooter')"
+      @close="showExecuteSuccessModal = false"
+  />
   <div class="w-full grid md:grid-cols-2 gap-4 md:gap-6 lg:gap-8">
     <div class="bg-white rounded-2xl md:rounded-3xl border border-red-100 p-4 md:p-8">
       <header class="mb-3 md:mb-4">
@@ -59,17 +67,17 @@
           v-if="!hideModeToggle"
           class="mb-4 md:mb-6 flex flex-col gap-2 md:gap-3 md:flex-row md:items-center md:justify-between bg-red-50/60 border border-red-100 rounded-xl md:rounded-2xl px-3 md:px-4 py-2.5 md:py-3 text-xs md:text-sm lg:text-base text-slate-600">
         <div class="max-w-md">
-          <p class="font-semibold text-red-700">
+          <p class="font-medium text-red-700">
             {{ mode === 'manual' ? t("draw.manualModeTitle") : t("draw.inviteModeTitle") }}
           </p>
-          <p class="mt-1">
+          <p class="mt-1 text-sm">
             {{ t("draw.modeDescription") }}
           </p>
         </div>
         <button
             type="button"
             class="self-start md:self-auto inline-flex items-center gap-1 rounded-lg md:rounded-xl border border-red-200
-                 bg-white px-2.5 md:px-3 py-1 md:py-1.5 font-medium text-xs md:text-sm lg:text-base text-red-700 hover:bg-red-50
+                 bg-white px-2.5 md:px-3 py-1 md:py-1.5 font-medium text-xs md:text-sm lg:sm text-red-700 hover:bg-red-50
                  transition-all w-full md:w-auto justify-center"
             @click="mode === 'manual' ? switchToInviteMode() : switchToManualMode()">
           {{ mode === 'manual' ? t("draw.viewInviteButton") : t("draw.backManualButton") }}
@@ -255,7 +263,9 @@
         :require-phone="requirePhone"
         :is-creating-event="isCreatingEvent"
         :editing-participant-id="editingParticipantId"
+        :is-draw-completed="isDrawCompleted"
         @create-event="handleCreateEvent"
+        @reset-draw="handleResetDraw"
         @edit="editParticipant"
         @remove="removeParticipant"
     />
@@ -269,6 +279,7 @@
         :can-execute-draw="canExecuteDraw"
         :is-executing-draw="isExecutingDraw"
         :deleting-participant-id="deletingParticipantId"
+        :is-copied="isCopied"
         @copy="copyToClipboard"
         @refresh="fetchInvitedParticipants"
         @execute-draw="executeDraw"
@@ -319,7 +330,9 @@ const {
 const {
   isCreatingEvent,
   showSuccessModal,
+  isDrawCompleted,
   handleCreateEvent,
+  resetDraw,
 } = useManualCreate({
   participants,
   requireAddress,
@@ -341,6 +354,8 @@ const {
   canExecuteDraw,
   isExecutingDraw,
   deletingParticipantId,
+  isCopied,
+  showExecuteSuccessModal,
   normalizeDrawDate,
   saveOrganizer,
   fetchInvitedParticipants,
@@ -393,6 +408,13 @@ const switchToManualMode = () => {
   if (route.path !== "/draw/manual") {
     router.push({ path: "/draw/manual", query: route.query });
   }
+};
+
+const handleResetDraw = () => {
+  resetDraw();
+  resetForm();
+  requireAddress.value = false;
+  requirePhone.value = false;
 };
 
 const goToRegister = () => {

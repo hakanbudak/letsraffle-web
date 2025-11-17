@@ -1,6 +1,7 @@
 import { computed, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import QRCode from "qrcode";
+import confetti from "canvas-confetti";
 import api from "@/services/api";
 import type { Participant, ParticipantForm, InvitedParticipant } from "@/components/draw/types";
 import type { Ref } from "vue";
@@ -31,6 +32,7 @@ export function useInviteActions(options: Options) {
   const isLoadingInvites = ref(false);
   const isExecutingDraw = ref(false);
   const deletingParticipantId = ref<number | null>(null);
+  const showExecuteSuccessModal = ref(false);
 
   const minDrawDate = computed(() => {
     const min = new Date();
@@ -50,13 +52,17 @@ export function useInviteActions(options: Options) {
     inviteUrl.value = `${INVITE_LINK_BASE()}/${code}`;
   };
 
+  const isCopied = ref(false);
+
   const copyToClipboard = async () => {
     try {
       await navigator.clipboard.writeText(inviteUrl.value);
-      alert(t("alerts.copySuccess"));
+      isCopied.value = true;
+      setTimeout(() => {
+        isCopied.value = false;
+      }, 2000);
     } catch (error) {
       console.error("Kopyalama hatası:", error);
-      alert(t("alerts.copyError"));
     }
   };
 
@@ -113,7 +119,6 @@ export function useInviteActions(options: Options) {
       }
     } catch (error) {
       console.error("Katılımcılar yüklenirken hata:", error);
-      alert(t("alerts.inviteLoadError"));
     } finally {
       isLoadingInvites.value = false;
     }
@@ -176,7 +181,6 @@ export function useInviteActions(options: Options) {
       }
     } catch (error) {
       console.error("Çekiliş oluşturulurken hata:", error);
-      alert(t("alerts.inviteCreateError"));
     } finally {
       isSaving.value = false;
     }
@@ -191,11 +195,42 @@ export function useInviteActions(options: Options) {
       await api.post(`/api/v1/draws/${drawId.value}/execute`, {
         draw_id: drawId.value,
       });
-      alert(t("alerts.executeSuccess"));
+      
+      const duration = 3000;
+      const animationEnd = Date.now() + duration;
+      const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+
+      function randomInRange(min: number, max: number) {
+        return Math.random() * (max - min) + min;
+      }
+
+      const interval: NodeJS.Timeout = setInterval(function() {
+        const timeLeft = animationEnd - Date.now();
+
+        if (timeLeft <= 0) {
+          return clearInterval(interval);
+        }
+
+        const particleCount = 50 * (timeLeft / duration);
+        confetti({
+          ...defaults,
+          particleCount,
+          origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 }
+        });
+        confetti({
+          ...defaults,
+          particleCount,
+          origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 }
+        });
+      }, 250);
+
+      setTimeout(() => {
+        showExecuteSuccessModal.value = true;
+      }, 500);
+      
       await fetchInvitedParticipants();
     } catch (error) {
       console.error("Çekiliş yürütülürken hata:", error);
-      alert(t("alerts.executeError"));
     } finally {
       isExecutingDraw.value = false;
     }
@@ -209,7 +244,6 @@ export function useInviteActions(options: Options) {
       invitedParticipants.value = invitedParticipants.value.filter((p) => p.id !== participantId);
     } catch (error) {
       console.error("Katılımcı silinirken hata:", error);
-      alert(t("alerts.deleteParticipantError"));
     } finally {
       deletingParticipantId.value = null;
     }
@@ -236,6 +270,8 @@ export function useInviteActions(options: Options) {
     canExecuteDraw,
     isExecutingDraw,
     deletingParticipantId,
+    isCopied,
+    showExecuteSuccessModal,
     normalizeDrawDate,
     saveOrganizer,
     fetchInvitedParticipants,

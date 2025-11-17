@@ -10,6 +10,7 @@ export function useUserDraws() {
   const activeDraws = ref<DrawListItem[]>([]);
   const isLoading = ref(false);
   const error = ref<string | null>(null);
+  const hasFetched = ref(false);
 
   const getUserFromStorage = (): AuthUser | null => {
     if (typeof window === "undefined") return null;
@@ -28,6 +29,7 @@ export function useUserDraws() {
     
     if (!token || !user) {
       activeDraws.value = [];
+      hasFetched.value = true;
       return;
     }
 
@@ -63,6 +65,7 @@ export function useUserDraws() {
       }
     } finally {
       isLoading.value = false;
+      hasFetched.value = true;
     }
   };
 
@@ -85,6 +88,7 @@ export function useUserDraws() {
     activeDraws,
     isLoading,
     error,
+    hasFetched,
     fetchUserDraw,
     fetchDrawDetail,
   };

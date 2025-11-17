@@ -70,6 +70,7 @@ const messages = {
         cancel: "İptal",
         create: "Çekilişi Yap",
         creating: "Çekiliş yapılıyor…",
+        newDraw: "Yeni Çekiliş Yap",
       },
       inviteButtons: {
         save: "Bilgilerimi kaydet",
@@ -132,6 +133,10 @@ const messages = {
       successMessage: "Başarılı bir şekilde çekilişi yaptınız! 🎁",
       successFooter: "Mutlu Seneler! 🎄",
       close: "Tamam",
+      executeSuccessTitle: "Çekiliş Tamamlandı! 🎉",
+      executeSuccessMessage: "Çekiliş başarıyla yapıldı!",
+      executeSuccessInfo: "Lütfen e-posta ve spam klasörlerinizi kontrol edin. Sonuçlar e-posta ile gönderildi.",
+      executeSuccessFooter: "Mutlu Yıllar! 🎄",
     },
     alerts: {
       manualMissingParticipants: "Lütfen en az bir katılımcı ekleyin!",
@@ -144,6 +149,7 @@ const messages = {
       drawDateFuture: "Çekiliş tarihi gelecekte olmalıdır",
       inviteCreateError: "Çekiliş oluşturulurken bir hata oluştu. Lütfen tekrar deneyin.",
       executeSuccess: "Çekiliş başarıyla tamamlandı! 🎉",
+      executeSuccessWithEmail: "Çekiliş başarıyla tamamlandı! 🎉\n\nLütfen e-posta ve spam klasörlerinizi kontrol edin. Sonuçlar e-posta ile gönderildi.\n\nMutlu Yıllar! 🎄",
       executeError: "Çekiliş yapılırken bir hata oluştu. Lütfen tekrar deneyin.",
       joinMissingInvite: "Davet kodu bulunamadı",
       joinLoadError: "Çekiliş bilgileri yüklenirken bir hata oluştu. Lütfen tekrar deneyin.",
@@ -271,6 +277,7 @@ const messages = {
         cancel: "Cancel",
         create: "Run the draw",
         creating: "Running draw…",
+        newDraw: "Create New Draw",
       },
       inviteButtons: {
         save: "Save my details",
@@ -333,6 +340,10 @@ const messages = {
       successMessage: "You successfully completed the draw! 🎁",
       successFooter: "Happy Holidays! 🎄",
       close: "Got it",
+      executeSuccessTitle: "Draw Completed! 🎉",
+      executeSuccessMessage: "The draw has been executed successfully!",
+      executeSuccessInfo: "Please check your email and spam folders. Results have been sent via email.",
+      executeSuccessFooter: "Happy Holidays! 🎄",
     },
     alerts: {
       manualMissingParticipants: "Please add at least one participant!",
@@ -345,6 +356,7 @@ const messages = {
       drawDateFuture: "The draw date must be in the future",
       inviteCreateError: "Something went wrong while creating the draw. Please try again.",
       executeSuccess: "Draw executed successfully! 🎉",
+      executeSuccessWithEmail: "Draw executed successfully! 🎉\n\nPlease check your email and spam folders. Results have been sent via email.\n\nHappy Holidays! 🎄",
       executeError: "Something went wrong while running the draw. Please try again.",
       joinMissingInvite: "Invite code not found",
       joinLoadError: "We couldn't load the draw info. Please try again.",

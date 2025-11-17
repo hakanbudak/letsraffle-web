@@ -1,6 +1,6 @@
 <template>
   <div
-      v-if="activeDraws.length > 0 || isLoading"
+      v-if="hasFetched && activeDraws.length > 0"
       class="w-full md:w-1/3 bg-gradient-to-br from-red-50 to-green-50 rounded-2xl md:rounded-3xl border border-red-100 p-4 md:p-8 flex flex-col">
     <div class="text-center mb-4 md:mb-6">
       <p class="text-xs md:text-sm uppercase tracking-[0.25em] md:tracking-[0.35em] text-red-500">
@@ -80,7 +80,7 @@ import { useUserDraws } from "@/composables/draw/useUserDraws";
 import type { DrawDetail } from "./types";
 
 const { t, locale } = useI18n();
-const { activeDraws, isLoading, fetchDrawDetail } = useUserDraws();
+const { activeDraws, isLoading, hasFetched, fetchDrawDetail } = useUserDraws();
 const selectedDrawId = ref<number | null>(null);
 
 const emit = defineEmits<{
