@@ -11,6 +11,12 @@
       :footer-text="t('modals.executeSuccessFooter')"
       @close="showExecuteSuccessModal = false"
   />
+  <DrawSuccessModal
+      :visible="showReadyInfoModal"
+      :title="t('draw.readyForDrawInfoTitle')"
+      :message="t('draw.readyForDrawInfoMessage')"
+      @close="showReadyInfoModal = false"
+  />
   <div class="w-full grid md:grid-cols-2 gap-4 md:gap-6 lg:gap-8">
     <div class="bg-white rounded-2xl md:rounded-3xl border border-red-100 p-4 md:p-8">
       <header class="mb-3 md:mb-4">
@@ -89,22 +95,22 @@
             class="mb-4 md:mb-6 flex flex-col gap-2 md:flex-row md:items-center md:justify-center text-sm md:text-base text-slate-700">
           <label :class="[
             'inline-flex items-center gap-2',
-            participants.length > 0 ? 'cursor-not-allowed opacity-60' : 'cursor-pointer']">
+            (participants.length > 0 || (mode === 'invite' && isOrganizerSaved)) ? 'cursor-not-allowed opacity-60' : 'cursor-pointer']">
             <input
                 v-model="requireAddress"
                 type="checkbox"
-                :disabled="participants.length > 0"
+                :disabled="participants.length > 0 || (mode === 'invite' && isOrganizerSaved)"
                 class="h-4 w-4 rounded border border-red-300 text-red-500 focus:ring-red-500 disabled:cursor-not-allowed" />
             <span>{{ t("draw.requireAddress") }}</span>
           </label>
 
           <label :class="[
             'inline-flex items-center gap-2',
-            participants.length > 0 ? 'cursor-not-allowed opacity-60' : 'cursor-pointer']">
+            (participants.length > 0 || (mode === 'invite' && isOrganizerSaved)) ? 'cursor-not-allowed opacity-60' : 'cursor-pointer']">
             <input
                 v-model="requirePhone"
                 type="checkbox"
-                :disabled="participants.length > 0"
+                :disabled="participants.length > 0 || (mode === 'invite' && isOrganizerSaved)"
                 class="h-4 w-4 rounded border border-red-300 text-red-500 focus:ring-red-500 disabled:cursor-not-allowed" />
             <span>{{ t("draw.requirePhone") }}</span>
           </label>
@@ -116,7 +122,8 @@
             <input
                 v-model="isDrawDateEnabled"
                 type="checkbox"
-                class="h-4 w-4 rounded border border-red-300 text-red-500 focus:ring-red-500" />
+                :disabled="isOrganizerSaved"
+                class="h-4 w-4 rounded border border-red-300 text-red-500 focus:ring-red-500 disabled:cursor-not-allowed disabled:opacity-60" />
             <span>{{ t("draw.enableDrawDate") }}</span>
           </label>
           <p v-if="!isDrawDateEnabled" class="text-xs md:text-sm text-slate-500">
@@ -131,7 +138,8 @@
                 v-model="drawDate"
                 type="date"
                 :min="minDrawDate"
-                class="w-full h-10 md:h-12 px-3 md:px-4 rounded-lg md:rounded-xl border border-slate-200 bg-white hover:border-red-200 focus:border-red-500 focus:ring-red-500 text-sm md:text-base text-slate-700 outline-none transition-all"
+                :disabled="isOrganizerSaved"
+                class="w-full h-10 md:h-12 px-3 md:px-4 rounded-lg md:rounded-xl border border-slate-200 bg-white hover:border-red-200 focus:border-red-500 focus:ring-red-500 text-sm md:text-base text-slate-700 outline-none transition-all disabled:cursor-not-allowed disabled:opacity-60 disabled:bg-slate-50"
                 @input="drawDateError = ''; normalizeDrawDate()"
             />
             <span v-if="drawDateError" class="text-xs md:text-sm text-red-500 mt-1">
@@ -151,6 +159,7 @@
                   id="first-name"
                   v-model:input="form.firstName.value"
                   :invalidMessage="form.firstName.inValidMessage"
+                  :disabled="mode === 'invite' && isOrganizerSaved"
                   type="text"
                   name="firstName"
                   :placeholder="t('draw.fields.firstName.placeholder')"
@@ -163,6 +172,7 @@
                   id="last-name"
                   v-model:input="form.lastName.value"
                   :invalidMessage="form.lastName.inValidMessage"
+                  :disabled="mode === 'invite' && isOrganizerSaved"
                   type="text"
                   name="lastName"
                   :placeholder="t('draw.fields.lastName.placeholder')"
@@ -179,6 +189,7 @@
                 id="email"
                 v-model:input="form.email.value"
                 :invalidMessage="form.email.inValidMessage"
+                :disabled="mode === 'invite' && isOrganizerSaved"
                 type="email"
                 name="email"
                 :placeholder="t('draw.fields.email.placeholder')"
@@ -194,6 +205,7 @@
                 id="address"
                 v-model:input="form.address.value"
                 :invalidMessage="form.address.inValidMessage"
+                :disabled="mode === 'invite' && isOrganizerSaved"
                 type="text"
                 name="address"
                 :placeholder="t('draw.fields.address.placeholder')"
@@ -209,6 +221,7 @@
                 id="phone"
                 v-model:input="form.phone.value"
                 :invalidMessage="form.phone.inValidMessage"
+                :disabled="mode === 'invite' && isOrganizerSaved"
                 type="text"
                 name="phone"
                 :placeholder="t('draw.fields.phone.placeholder')"
@@ -240,14 +253,24 @@
 
             <template v-else>
               <button
+                  v-if="!isOrganizerSaved"
                   type="button"
-                    :disabled="isSaving"
+                  :disabled="isSaving"
                   class="w-full md:w-auto px-4 md:px-5 py-2 md:py-2.5 rounded-lg md:rounded-xl bg-red-600 text-white
                        text-sm md:text-base font-semibold shadow-sm hover:bg-red-700 hover:shadow-md
                        transition-all disabled:opacity-60 disabled:cursor-not-allowed"
-                    @click="saveOrganizer">
-                  <span v-if="!isSaving">{{ t("draw.inviteButtons.save") }}</span>
-                  <span v-else>{{ t("draw.inviteButtons.saving") }}</span>
+                  @click="saveOrganizer">
+                <span v-if="!isSaving">{{ t("draw.inviteButtons.save") }}</span>
+                <span v-else>{{ t("draw.inviteButtons.saving") }}</span>
+              </button>
+              <button
+                  v-else
+                  type="button"
+                  class="w-full md:w-auto px-4 md:px-5 py-2 md:py-2.5 rounded-lg md:rounded-xl bg-green-600 text-white
+                       text-sm md:text-base font-semibold shadow-sm hover:bg-green-700 hover:shadow-md
+                       transition-all"
+                  @click="handleNewDraw">
+                {{ t("draw.inviteButtons.newDraw") }}
               </button>
             </template>
           </div>
@@ -280,10 +303,13 @@
         :is-executing-draw="isExecutingDraw"
         :deleting-participant-id="deletingParticipantId"
         :is-copied="isCopied"
+        :is-draw-date-enabled="isDrawDateEnabled"
+        :draw-date="drawDate"
         @copy="copyToClipboard"
         @refresh="fetchInvitedParticipants"
         @execute-draw="executeDraw"
         @delete-participant="deleteInvitedParticipant"
+        @show-ready-info="handleShowReadyInfo"
     />
   </div>
 </template>
@@ -356,6 +382,7 @@ const {
   deletingParticipantId,
   isCopied,
   showExecuteSuccessModal,
+  isOrganizerSaved,
   normalizeDrawDate,
   saveOrganizer,
   fetchInvitedParticipants,
@@ -363,6 +390,8 @@ const {
   setInviteLink,
   executeDraw,
   deleteInvitedParticipant,
+  resetInviteDraw,
+  markDrawAsReady,
 } = useInviteActions({
   participants,
   requireAddress,
@@ -371,6 +400,13 @@ const {
   validateForm,
   router,
 });
+
+const showReadyInfoModal = ref(false);
+
+const handleShowReadyInfo = async () => {
+  await markDrawAsReady();
+  showReadyInfoModal.value = true;
+};
 
 const hideModeToggle = computed(() => {
   if (isAuthenticated) return false;
@@ -412,6 +448,13 @@ const switchToManualMode = () => {
 
 const handleResetDraw = () => {
   resetDraw();
+  resetForm();
+  requireAddress.value = false;
+  requirePhone.value = false;
+};
+
+const handleNewDraw = () => {
+  resetInviteDraw();
   resetForm();
   requireAddress.value = false;
   requirePhone.value = false;

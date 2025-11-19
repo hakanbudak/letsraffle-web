@@ -33,6 +33,7 @@ export function useInviteActions(options: Options) {
   const isExecutingDraw = ref(false);
   const deletingParticipantId = ref<number | null>(null);
   const showExecuteSuccessModal = ref(false);
+  const isOrganizerSaved = ref(false);
 
   const minDrawDate = computed(() => {
     const min = new Date();
@@ -176,6 +177,7 @@ export function useInviteActions(options: Options) {
       if (data.success) {
         drawId.value = data.drawId;
         setInviteLink(data.inviteCode);
+        isOrganizerSaved.value = true;
         options.router.push("/draw/dynamic");
         await fetchInvitedParticipants();
       }
@@ -187,6 +189,26 @@ export function useInviteActions(options: Options) {
   };
 
   const canExecuteDraw = computed(() => invitedParticipants.value.length >= 3 && !!drawId.value);
+
+  const markDrawAsReady = async () => {
+    if (!drawId.value || !isDrawDateEnabled.value || !drawDate.value) {
+      return;
+    }
+
+    isSaving.value = true;
+    try {
+      const payload = {
+        draw_id: drawId.value,
+      };
+
+      await api.post(`/api/v1/draws/${drawId.value}/execute`, payload);
+      await fetchInvitedParticipants();
+    } catch (error) {
+      console.error("Çekiliş hazırlanırken hata:", error);
+    } finally {
+      isSaving.value = false;
+    }
+  };
 
   const executeDraw = async () => {
     if (!drawId.value || !canExecuteDraw.value) return;
@@ -255,6 +277,20 @@ export function useInviteActions(options: Options) {
     drawDate.value = defaultDate.toISOString().slice(0, 10);
   }
 
+  const resetInviteDraw = () => {
+    drawDate.value = "";
+    drawDateError.value = "";
+    isDrawDateEnabled.value = false;
+    inviteCode.value = null;
+    inviteUrl.value = "";
+    drawId.value = null;
+    qrCodeDataUrl.value = "";
+    invitedParticipants.value = [];
+    isOrganizerSaved.value = false;
+    isCopied.value = false;
+    deletingParticipantId.value = null;
+  };
+
   return {
     drawDate,
     drawDateError,
@@ -279,6 +315,9 @@ export function useInviteActions(options: Options) {
     setInviteLink,
     executeDraw,
     deleteInvitedParticipant,
+    isOrganizerSaved,
+    resetInviteDraw,
+    markDrawAsReady,
   };
 }
 

@@ -154,14 +154,26 @@
     <div v-if="drawId" class="mt-4 md:mt-6">
       <button
           type="button"
-          class="w-full px-4 md:px-6 py-2.5 md:py-3 rounded-lg md:rounded-xl bg-red-600 text-white text-sm md:text-base font-semibold shadow-sm hover:bg-red-700 hover:shadow-md transition-all disabled:opacity-60 disabled:cursor-not-allowed"
+          :class="[
+            'w-full px-4 md:px-6 py-2.5 md:py-3 rounded-lg md:rounded-xl text-sm md:text-base font-semibold shadow-sm transition-all',
+            hasDrawDate
+              ? 'bg-green-600 text-white hover:bg-green-700 hover:shadow-md disabled:opacity-60 disabled:cursor-not-allowed'
+              : 'bg-red-600 text-white hover:bg-red-700 hover:shadow-md disabled:opacity-60 disabled:cursor-not-allowed'
+          ]"
           :disabled="!canExecuteDraw || isExecutingDraw"
-          @click="$emit('execute-draw')"
+          @click="hasDrawDate ? $emit('show-ready-info') : $emit('execute-draw')"
       >
-        <span v-if="!isExecutingDraw">{{ t("draw.executeButton") }}</span>
-        <span v-else>{{ t("draw.executingButton") }}</span>
+        <span v-if="isExecutingDraw">{{ t("draw.executingButton") }}</span>
+        <span v-else-if="hasDrawDate">{{ t("draw.readyForDrawButton") }}</span>
+        <span v-else>{{ t("draw.executeButton") }}</span>
       </button>
-      <p v-if="!canExecuteDraw" class="text-xs md:text-sm text-slate-500 mt-1.5 md:mt-2">
+      <p v-if="hasDrawDate && !canExecuteDraw" class="text-xs md:text-sm text-slate-500 mt-1.5 md:mt-2">
+        {{ t("draw.executeButtonHint") }}
+      </p>
+      <p v-else-if="hasDrawDate && canExecuteDraw" class="text-xs md:text-sm text-slate-500 mt-1.5 md:mt-2">
+        {{ t("draw.readyForDrawMessage") }}
+      </p>
+      <p v-else-if="!canExecuteDraw" class="text-xs md:text-sm text-slate-500 mt-1.5 md:mt-2">
         {{ t("draw.executeButtonHint") }}
       </p>
     </div>
@@ -169,11 +181,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { useI18n } from "vue-i18n";
 import type { InvitedParticipant } from "./types";
 
-defineProps<{
+const props = defineProps<{
   inviteUrl: string;
   qrCodeDataUrl: string;
   isLoadingInvites: boolean;
@@ -183,13 +195,20 @@ defineProps<{
   isExecutingDraw: boolean;
   deletingParticipantId: number | null;
   isCopied: boolean;
+  isDrawDateEnabled?: boolean;
+  drawDate?: string;
 }>();
+
+const hasDrawDate = computed(() => {
+  return props.isDrawDateEnabled && props.drawDate && props.drawDate.trim() !== "";
+});
 
 defineEmits<{
   (e: "copy"): void;
   (e: "refresh"): void;
   (e: "execute-draw"): void;
   (e: "delete-participant", participantId: number): void;
+  (e: "show-ready-info"): void;
 }>();
 
 const { t } = useI18n();
