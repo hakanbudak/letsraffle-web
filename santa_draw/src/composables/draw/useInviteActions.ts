@@ -92,11 +92,11 @@ export function useInviteActions(options: Options) {
   });
 
   const fetchInvitedParticipants = async () => {
-    if (!drawId.value) return;
+    if (!inviteCode.value) return;
 
     isLoadingInvites.value = true;
     try {
-      const { data } = await api.get(`/api/v1/draws/${drawId.value}`);
+      const { data } = await api.get(`/api/v1/draws/${inviteCode.value}`);
       invitedParticipants.value = data.participants || [];
 
       if (data.inviteCode && !inviteCode.value) {

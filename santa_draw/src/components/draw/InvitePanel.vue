@@ -60,9 +60,36 @@
       </div>
     </div>
 
+    <div v-if="isOrganizerSaved" class="mb-3 md:mb-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
+      <div>
+        <p class="text-xs md:text-sm uppercase tracking-[0.25em] md:tracking-[0.35em] text-red-500">
+          {{ t("invitePanel.previewTagline") }}
+        </p>
+        <h3 class="mt-1.5 md:mt-2 text-lg md:text-xl lg:text-2xl font-bold text-red-700">
+          {{ t("invitePanel.previewTitle") }}
+        </h3>
+      </div>
+
+      <button
+          type="button"
+          class="inline-flex items-center gap-1 rounded-lg md:rounded-xl border border-red-200
+                 bg-white px-2.5 md:px-3 py-1 md:py-1.5 text-xs md:text-sm font-medium text-red-700
+                 hover:bg-red-50 transition-all disabled:opacity-60"
+          :disabled="isLoadingInvites || !drawId"
+          @click="$emit('refresh')"
+      >
+        <span v-if="!isLoadingInvites">{{ t("invitePanel.refresh") }}</span>
+        <span v-else>{{ t("invitePanel.refreshing") }}</span>
+      </button>
+    </div>
+
+    <p v-if="isOrganizerSaved" class="text-sm md:text-base text-slate-600 mb-2 md:mb-3">
+      {{ t("invitePanel.description") }}
+    </p>
+
     <div class="flex-1 mt-2">
       <div
-          v-if="!invitedParticipants.length && !isLoadingInvites"
+          v-if="!isOrganizerSaved"
           class="h-full flex flex-col justify-center"
       >
         <div class="w-full">
@@ -76,71 +103,33 @@
           </div>
 
           <div class="flex flex-col gap-6 md:gap-8">
-            <div class="step-card group relative step-animation" style="animation-delay: 0.1s">
-              <div class="absolute inset-0 bg-gradient-to-br from-red-50 to-pink-50 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-              <div class="relative bg-white rounded-3xl p-6 md:p-8 shadow-lg border-2 border-red-100 group-hover:border-red-300 group-hover:shadow-2xl group-hover:scale-[1.02] transition-all duration-300 flex flex-col md:flex-row items-center md:items-start gap-6">
-                <div class="absolute top-3 right-3 text-3xl md:text-4xl opacity-60 group-hover:opacity-100 group-hover:scale-110 transition-all duration-300">
-                  🎅
-                </div>
-                <div class="flex-shrink-0">
-                  <div class="step-number text-7xl md:text-8xl font-bold text-red-600 opacity-30">
-                    1
-                  </div>
-                </div>
-                <div class="flex-1 text-center md:text-left">
-                  <h4 class="text-xl md:text-2xl font-bold text-red-700 mb-3">{{ t("invitePanel.howItWorks.step1Title") }}</h4>
-                  <p class="text-sm md:text-base text-slate-600 leading-relaxed">
-                    {{ t("invitePanel.howItWorks.step1Desc") }}
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div class="step-card group relative step-animation" style="animation-delay: 0.3s">
-              <div class="absolute inset-0 bg-gradient-to-br from-red-50 to-pink-50 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-              <div class="relative bg-white rounded-3xl p-6 md:p-8 shadow-lg border-2 border-red-100 group-hover:border-red-300 group-hover:shadow-2xl group-hover:scale-[1.02] transition-all duration-300 flex flex-col md:flex-row items-center md:items-start gap-6">
-                <div class="absolute top-3 right-3 text-3xl md:text-4xl opacity-60 group-hover:opacity-100 group-hover:scale-110 transition-all duration-300">
-                  🦌
-                </div>
-                <div class="flex-shrink-0">
-                  <div class="step-number text-7xl md:text-8xl font-bold text-red-600 opacity-30">
-                    2
-                  </div>
-                </div>
-                <div class="flex-1 text-center md:text-left">
-                  <h4 class="text-xl md:text-2xl font-bold text-red-700 mb-3">{{ t("invitePanel.howItWorks.step2Title") }}</h4>
-                  <p class="text-sm md:text-base text-slate-600 leading-relaxed">
-                    {{ t("invitePanel.howItWorks.step2Desc") }}
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div class="step-card group relative step-animation" style="animation-delay: 0.5s">
-              <div class="absolute inset-0 bg-gradient-to-br from-red-50 to-pink-50 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-              <div class="relative bg-white rounded-3xl p-6 md:p-8 shadow-lg border-2 border-red-100 group-hover:border-red-300 group-hover:shadow-2xl group-hover:scale-[1.02] transition-all duration-300 flex flex-col md:flex-row items-center md:items-start gap-6">
-                <div class="absolute top-3 right-3 text-3xl md:text-4xl opacity-60 group-hover:opacity-100 group-hover:scale-110 transition-all duration-300">
-                  🎁
-                </div>
-                <div class="flex-shrink-0">
-                  <div class="step-number text-7xl md:text-8xl font-bold text-red-600 opacity-30">
-                    3
-                  </div>
-                </div>
-                <div class="flex-1 text-center md:text-left">
-                  <h4 class="text-xl md:text-2xl font-bold text-red-700 mb-3">{{ t("invitePanel.howItWorks.step3Title") }}</h4>
-                  <p class="text-sm md:text-base text-slate-600 leading-relaxed">
-                    {{ t("invitePanel.howItWorks.step3Desc") }}
-                  </p>
-                </div>
-              </div>
-            </div>
+            <HowItWorksStep
+                :number="1"
+                icon="🎅"
+                :title="t('invitePanel.howItWorks.step1Title')"
+                :description="t('invitePanel.howItWorks.step1Desc')"
+                :delay="0.1"
+            />
+            <HowItWorksStep
+                :number="2"
+                icon="🦌"
+                :title="t('invitePanel.howItWorks.step2Title')"
+                :description="t('invitePanel.howItWorks.step2Desc')"
+                :delay="0.2"
+            />
+            <HowItWorksStep
+                :number="3"
+                icon="🎁"
+                :title="t('invitePanel.howItWorks.step3Title')"
+                :description="t('invitePanel.howItWorks.step3Desc')"
+                :delay="0.3"
+            />
           </div>
         </div>
       </div>
 
       <div
-          v-else
+          v-if="isOrganizerSaved"
           class="bg-white rounded-xl md:rounded-2xl p-3 md:p-6 border border-red-100 flex flex-col"
           :style="invitedParticipants.length > 2 ? 'height: 300px;' : ''"
       >
@@ -223,6 +212,7 @@
 import { ref, computed } from "vue";
 import { useI18n } from "vue-i18n";
 import type { InvitedParticipant } from "./types";
+import HowItWorksStep from "@/components/draw/HowItWorksStep.vue";
 
 const props = defineProps<{
   inviteUrl: string;
@@ -236,6 +226,7 @@ const props = defineProps<{
   isCopied: boolean;
   isDrawDateEnabled?: boolean;
   drawDate?: string;
+  isOrganizerSaved?: boolean;
 }>();
 
 const hasDrawDate = computed(() => {

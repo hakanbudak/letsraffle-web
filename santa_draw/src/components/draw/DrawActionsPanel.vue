@@ -305,6 +305,7 @@
         :is-copied="isCopied"
         :is-draw-date-enabled="isDrawDateEnabled"
         :draw-date="drawDate"
+        :is-organizer-saved="isOrganizerSaved"
         @copy="copyToClipboard"
         @refresh="fetchInvitedParticipants"
         @execute-draw="executeDraw"
