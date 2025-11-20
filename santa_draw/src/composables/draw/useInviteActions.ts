@@ -32,8 +32,9 @@ export function useInviteActions(options: Options) {
   const isLoadingInvites = ref(false);
   const isExecutingDraw = ref(false);
   const deletingParticipantId = ref<number | null>(null);
-  const showExecuteSuccessModal = ref(false);
-  const isOrganizerSaved = ref(false);
+  const showExecuteSuccessModal = ref<boolean>(false);
+  const isOrganizerSaved = ref<boolean>(false);
+  const isInviteDrawLocked = ref<boolean>(false);
 
   const minDrawDate = computed(() => {
     const min = new Date();
@@ -221,6 +222,7 @@ export function useInviteActions(options: Options) {
       await api.post(`/api/v1/draws/${drawId.value}/execute`, {
         draw_id: drawId.value,
       });
+      isInviteDrawLocked.value = true;
       
       const duration = 3000;
       const animationEnd = Date.now() + duration;
@@ -293,6 +295,7 @@ export function useInviteActions(options: Options) {
     isOrganizerSaved.value = false;
     isCopied.value = false;
     deletingParticipantId.value = null;
+    isInviteDrawLocked.value = false;
   };
 
   return {
@@ -320,6 +323,7 @@ export function useInviteActions(options: Options) {
     executeDraw,
     deleteInvitedParticipant,
     isOrganizerSaved,
+    isInviteDrawLocked,
     resetInviteDraw,
     markDrawAsReady,
   };

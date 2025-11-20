@@ -4,8 +4,8 @@ import type { FieldKey, Participant, ParticipantForm } from "@/components/draw/t
 
 export function useDrawForm() {
   const { t } = useI18n();
-  const requireAddress = ref(false);
-  const requirePhone = ref(false);
+  const requireAddress = ref<boolean>(false);
+  const requirePhone = ref<boolean>(false);
 
   const form = reactive<ParticipantForm>({
     firstName: { value: "", inValidMessage: "" },

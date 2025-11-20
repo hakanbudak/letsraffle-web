@@ -13,9 +13,9 @@ interface Options {
 
 export function useManualCreate(options: Options) {
   const { t } = useI18n();
-  const isCreatingEvent = ref(false);
-  const showSuccessModal = ref(false);
-  const isDrawCompleted = ref(false);
+  const isCreatingEvent = ref<boolean>(false);
+  const showSuccessModal = ref<boolean>(false);
+  const isDrawCompleted = ref<boolean>(false);
 
   const handleCreateEvent = async () => {
     if (!options.participants.value.length) {

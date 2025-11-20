@@ -306,6 +306,7 @@
         :is-draw-date-enabled="isDrawDateEnabled"
         :draw-date="drawDate"
         :is-organizer-saved="isOrganizerSaved"
+        :is-draw-locked="isInviteDrawLocked"
         @copy="copyToClipboard"
         @refresh="fetchInvitedParticipants"
         @execute-draw="executeDraw"
@@ -384,6 +385,7 @@ const {
   isCopied,
   showExecuteSuccessModal,
   isOrganizerSaved,
+  isInviteDrawLocked,
   normalizeDrawDate,
   saveOrganizer,
   fetchInvitedParticipants,
@@ -439,12 +441,14 @@ const handleRouteInviteCodeChange = async () => {
   const code = getRouteInviteCode();
   if (!code) {
     lastInviteCodeFromRoute = undefined;
+    isInviteDrawLocked.value = false;
     return;
   }
   if (code === lastInviteCodeFromRoute) {
     return;
   }
   lastInviteCodeFromRoute = code;
+  isInviteDrawLocked.value = false;
   setInviteLink(code);
   isOrganizerSaved.value = true;
   await fetchInvitedParticipants();

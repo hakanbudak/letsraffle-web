@@ -8,9 +8,9 @@ import type { AuthUser } from "@/types";
 export function useUserDraws() {
   const { t } = useI18n();
   const activeDraws = ref<DrawListItem[]>([]);
-  const isLoading = ref(false);
+  const isLoading = ref<boolean>(false);
   const error = ref<string | null>(null);
-  const hasFetched = ref(false);
+  const hasFetched = ref<boolean>(false);
 
   const getUserFromStorage = (): AuthUser | null => {
     if (typeof window === "undefined") return null;
