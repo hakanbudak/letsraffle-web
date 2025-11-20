@@ -178,7 +178,11 @@ export function useInviteActions(options: Options) {
         drawId.value = data.drawId;
         setInviteLink(data.inviteCode);
         isOrganizerSaved.value = true;
-        options.router.push("/draw/dynamic");
+        if (data.inviteCode) {
+          options.router.push(`/draws/${data.inviteCode}`);
+        } else {
+          options.router.push("/draw/dynamic");
+        }
         await fetchInvitedParticipants();
       }
     } catch (error) {

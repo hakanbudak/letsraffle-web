@@ -419,6 +419,37 @@ const hideModeToggle = computed(() => {
   return matchesTrue(value?.toString());
 });
 
+const isInviteRoute = (path: string) => path === "/draw/dynamic" || path.startsWith("/draws/");
+
+const getRouteInviteCode = () => {
+  const queryValue = route.query.inviteCode;
+  if (typeof queryValue === "string" && queryValue.trim()) {
+    return queryValue;
+  }
+  const paramValue = route.params.inviteCode;
+  if (typeof paramValue === "string" && paramValue.trim()) {
+    return paramValue;
+  }
+  return undefined;
+};
+
+let lastInviteCodeFromRoute: string | undefined;
+
+const handleRouteInviteCodeChange = async () => {
+  const code = getRouteInviteCode();
+  if (!code) {
+    lastInviteCodeFromRoute = undefined;
+    return;
+  }
+  if (code === lastInviteCodeFromRoute) {
+    return;
+  }
+  lastInviteCodeFromRoute = code;
+  setInviteLink(code);
+  isOrganizerSaved.value = true;
+  await fetchInvitedParticipants();
+};
+
 const localeMap: Record<string, string> = {
   tr: "tr-TR",
   en: "en-US",
@@ -430,21 +461,6 @@ const formatDrawDate = (dateString: string) => {
   const options: Intl.DateTimeFormatOptions = { day: "numeric", month: "long", year: "numeric" };
   const currentLocale = localeMap[locale.value] || "tr-TR";
   return new Intl.DateTimeFormat(currentLocale, options).format(date);
-};
-
-const switchToInviteMode = () => {
-  if (hideModeToggle.value) return;
-  mode.value = "invite";
-  if (route.path !== "/draw/dynamic") {
-    router.push({ path: "/draw/dynamic", query: route.query });
-  }
-};
-
-const switchToManualMode = () => {
-  mode.value = "manual";
-  if (route.path !== "/draw/manual") {
-    router.push({ path: "/draw/manual", query: route.query });
-  }
 };
 
 const handleResetDraw = () => {
@@ -459,6 +475,24 @@ const handleNewDraw = () => {
   resetForm();
   requireAddress.value = false;
   requirePhone.value = false;
+  lastInviteCodeFromRoute = undefined;
+};
+
+const switchToInviteMode = () => {
+  if (hideModeToggle.value) return;
+  handleResetDraw();
+  handleNewDraw();
+  mode.value = "invite";
+  if (route.path !== "/draw/dynamic") {
+    router.push({ path: "/draw/dynamic", query: route.query });
+  }
+};
+
+const switchToManualMode = () => {
+  mode.value = "manual";
+  if (route.path !== "/draw/manual") {
+    router.push({ path: "/draw/manual", query: route.query });
+  }
 };
 
 const goToRegister = () => {
@@ -471,7 +505,7 @@ const dismissRegisterPrompt = () => {
 };
 
 const syncModeWithRoute = (path: string) => {
-  if (path === "/draw/dynamic") {
+  if (isInviteRoute(path)) {
     mode.value = "invite";
   } else if (path === "/draw/manual") {
     mode.value = "manual";
@@ -496,25 +530,28 @@ const enforceModeRestrictions = () => {
 
 onMounted(() => {
   enforceModeRestrictions();
-  const inviteCodeParam = route.query.inviteCode as string | undefined;
-  if (route.path === "/draw/dynamic" && inviteCodeParam) {
-    setInviteLink(inviteCodeParam);
-  }
+  void handleRouteInviteCodeChange();
 });
 
 watch(
   () => route.path,
   () => {
     enforceModeRestrictions();
+    void handleRouteInviteCodeChange();
   },
 );
 
 watch(
   () => route.query.inviteCode,
-  (code) => {
-    if (typeof code === "string" && code) {
-      setInviteLink(code);
-    }
+  () => {
+    void handleRouteInviteCodeChange();
+  },
+);
+
+watch(
+  () => route.params.inviteCode,
+  () => {
+    void handleRouteInviteCodeChange();
   },
 );
 
@@ -528,13 +565,16 @@ watch(
 const loadDrawDetail = (drawDetail: DrawDetail) => {
   // Switch to invite mode
   mode.value = "invite";
-  if (route.path !== "/draw/dynamic") {
-    router.push({ path: "/draw/dynamic", query: route.query });
+  if (drawDetail.inviteCode) {
+    router.push({ path: `/draws/${drawDetail.inviteCode}`, query: route.query }).catch(() => undefined);
+  } else if (route.path !== "/draw/dynamic") {
+    router.push({ path: "/draw/dynamic", query: route.query }).catch(() => undefined);
   }
 
   // Load draw details into invite actions
   drawId.value = drawDetail.id;
   setInviteLink(drawDetail.inviteCode);
+  isOrganizerSaved.value = true;
   requireAddress.value = drawDetail.requireAddress;
   requirePhone.value = drawDetail.requirePhone;
   if (drawDetail.drawDate) {

@@ -17,6 +17,11 @@ const routes = [
         component: () => import('@/views/DrawView.vue'),
     },
     {
+        path: '/draws/:inviteCode',
+        name: 'draw-invite-detail',
+        component: () => import('@/views/DrawView.vue'),
+    },
+    {
         path: '/draw/join/:inviteCode?',
         name: 'join-draw',
         component: () => import('@/views/JoinDrawView.vue'),
