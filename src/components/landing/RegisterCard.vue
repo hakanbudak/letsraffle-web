@@ -2,7 +2,7 @@
   <div
       class="relative w-full max-w-2xl bg-white/95 backdrop-blur-md border border-red-200
            rounded-2xl md:rounded-3xl shadow-[0_20px_60px_rgba(127,29,29,0.4)] px-4 py-6 md:px-6 lg:px-12 md:py-10 z-10
-           min-h-[500px] md:min-h-[550px] flex flex-col justify-center">
+           min-h-[31.25rem] md:min-h-[34.375rem] flex flex-col justify-center">
     <button
         type="button"
         class="mb-4 md:mb-6 inline-flex items-center text-xs md:text-sm text-slate-500 hover:text-red-600 transition-colors"

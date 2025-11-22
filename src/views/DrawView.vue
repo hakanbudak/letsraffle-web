@@ -14,7 +14,7 @@
     <div class="absolute -right-24 top-24 w-64 h-64 rounded-full bg-red-300/25 blur-3xl"></div>
     <div class="absolute right-10 bottom-10 w-40 h-40 rounded-full bg-green-300/20 blur-2xl"></div>
 
-    <div class="relative z-10 w-full max-w-[1650px] px-4 md:px-8">
+    <div class="relative z-10 w-full max-w-[103.125rem] px-4 md:px-8">
       <div class="relative flex justify-center">
         <div class="relative -mb-20 -z-10">
           <SantaAvatar :size="200" />

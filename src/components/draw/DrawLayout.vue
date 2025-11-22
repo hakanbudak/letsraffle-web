@@ -2,7 +2,7 @@
   <div
       class="relative w-full bg-[#f9d9de]/95 backdrop-blur-md border border-red-200
            rounded-3xl shadow-[0_20px_60px_rgba(127,29,29,0.5)] px-4 py-6 md:px-10 md:py-10
-           min-h-[600px] md:min-h-[860px] flex flex-col md:flex-row gap-4 md:gap-10">
+           min-h-[37.5rem] md:min-h-[53.75rem] flex flex-col md:flex-row gap-4 md:gap-10">
 
     <div class="absolute top-1 right-6 flex gap-2 z-10" v-if="showLogoutButton">
       <button

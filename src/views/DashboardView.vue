@@ -45,7 +45,7 @@
       <div class="flex flex-col lg:flex-row gap-6 lg:gap-8 items-stretch">
         <!-- Left: Active draws -->
         <section class="flex-1 w-full">
-          <div class="bg-white/95 rounded-3xl border border-red-100 shadow-[0_20px_45px_rgba(127,29,29,0.35)] h-full min-h-[520px] p-4 md:p-6 flex flex-col gap-4">
+          <div class="bg-white/95 rounded-3xl border border-red-100 shadow-[0_20px_45px_rgba(127,29,29,0.35)] h-full min-h-[32.5rem] p-4 md:p-6 flex flex-col gap-4">
             <header class="text-center">
               <p class="text-xs md:text-sm uppercase tracking-[0.3em] text-red-500">
                 {{ t("dashboard.tagline") }}
@@ -65,7 +65,7 @@
 
         <!-- Right: Mode selection with holiday theme -->
         <section class="flex-1 w-full">
-          <div class="relative overflow-hidden bg-gradient-to-br from-red-500 via-red-600 to-amber-500 rounded-3xl border border-red-200 shadow-2xl shadow-red-900/40 p-5 md:p-8 h-full min-h-[520px] flex flex-col gap-5">
+          <div class="relative overflow-hidden bg-gradient-to-br from-red-500 via-red-600 to-amber-500 rounded-3xl border border-red-200 shadow-2xl shadow-red-900/40 p-5 md:p-8 h-full min-h-[32.5rem] flex flex-col gap-5">
             <div class="absolute inset-0 opacity-40 pointer-events-none">
               <DecorativeLight class="absolute top-6 left-8 bg-yellow-200 shadow-yellow-200/50" :size="10" variant="twinkle" />
               <DecorativeLight class="absolute top-14 right-10 bg-green-200 shadow-green-200/50" :size="8" variant="delayed" />
