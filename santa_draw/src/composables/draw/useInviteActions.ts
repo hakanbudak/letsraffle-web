@@ -108,6 +108,14 @@ export function useInviteActions(options: Options) {
         drawId.value = data.id;
       }
 
+      if (typeof data.requireAddress === "boolean") {
+        options.requireAddress.value = data.requireAddress;
+      }
+
+      if (typeof data.requirePhone === "boolean") {
+        options.requirePhone.value = data.requirePhone;
+      }
+
       if (data.drawDate) {
         try {
           const serverDate = new Date(data.drawDate);

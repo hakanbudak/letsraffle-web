@@ -1,15 +1,8 @@
 <template>
   <div
-      v-if="hasFetched && activeDraws.length > 0"
-      class="w-full md:w-1/3 bg-gradient-to-br from-red-50 to-green-50 rounded-2xl md:rounded-3xl border border-red-100 p-4 md:p-8 flex flex-col max-h-[820px] md:max-h-[920px] overflow-hidden">
-    <div class="text-center mb-4 md:mb-6">
-      <p class="text-xs md:text-sm uppercase tracking-[0.25em] md:tracking-[0.35em] text-red-500">
-        {{ t("participantsPanel.tagline") }}
-      </p>
-      <h3 class="mt-1.5 md:mt-2 text-2xl md:text-3xl font-bold text-red-700">
-        {{ t("participantsPanel.title") }}
-      </h3>
-    </div>
+      v-if="hasFetched"
+      class="w-full bg-gradient-to-br from-red-50 to-green-50 rounded-2xl md:rounded-3xl border border-red-100 p-4 md:p-8 flex flex-col max-h-[520px] md:max-h-[380px] overflow-hidden">
+
 
     <div v-if="isLoading" class="flex-1 flex items-center justify-center py-8">
       <div class="text-center">

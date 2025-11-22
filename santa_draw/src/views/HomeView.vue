@@ -1,9 +1,19 @@
 <template>
   <div class="min-h-screen flex flex-col lg:flex-row overflow-hidden relative">
     <div class="snowfall"></div>
-    <!-- Left side - Hidden on mobile, visible on desktop -->
     <div class="hidden lg:flex w-full lg:w-1/2 bg-gradient-to-br from-red-600 via-red-700 to-red-800 items-center justify-center relative overflow-hidden">
       <div class="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.1),transparent)]"></div>
+
+      <div class="absolute top-32 left-1/2 -translate-x-1/2 z-20 text-center w-full px-8">
+        <h1 class="text-7xl font-bold text-amber-50 mb-2 drop-shadow-2xl tracking-wider"
+            style="text-shadow: 4px 4px 8px rgba(0,0,0,0.3), 0 0 20px rgba(255,255,255,0.2)">
+          {{ t("common.tagline") }}
+        </h1>
+        <h1 class="text-8xl font-bold text-yellow-400 drop-shadow-2xl tracking-wider"
+            style="text-shadow: 4px 4px 8px rgba(0,0,0,0.4), 0 0 25px rgba(234,179,8,0.3)">
+          {{ t("common.title") }}
+        </h1>
+      </div>
 
       <ChristmasTree
           variant="large"
@@ -12,28 +22,6 @@
       <ChristmasTree
           variant="small"
           customClass="absolute right-16 top-1/2 -translate-y-1/2 opacity-30" />
-
-      <div class="absolute left-8 top-1/2 translate-y-16 z-10">
-        <GiftBox
-            size="20"
-            box-color="linear-gradient(to bottom right, #34d399, #059669)"
-            ribbon-color="#dc2626"
-            customClass="absolute left-8 top-1/2 translate-y-16 rotate-3" />
-
-        <GiftBox
-            size="14"
-            box-color="linear-gradient(to bottom right, #ef4444, #b91c1c)"
-            ribbon-color="#fcd34d"
-            customClass="absolute -right-6 top-4 rotate-6" />
-      </div>
-
-      <div class="absolute right-12 top-1/2 translate-y-16 z-10">
-        <GiftBox
-            size="16"
-            box-color="linear-gradient(to bottom right, #3b82f6, #1e40af)"
-            ribbon-color="#ffffff"
-            customClass="absolute right-12 top-1/2 translate-y-16" />
-      </div>
 
       <DecorativeLight
           class="absolute top-1/4 left-1/4 bg-yellow-300 shadow-yellow-300/50"
@@ -67,12 +55,12 @@
             swing />
       </div>
 
-      <div ref="santaRef" class="relative z-10">
+      <div ref="santaRef" class="relative z-10 mt-40">
         <SantaAvatar class="relative z-10" :size="400" />
       </div>
     </div>
 
-    <!-- Right side - Full width on mobile -->
+
     <div
         class="w-full lg:w-1/2 bg-gradient-to-b from-red-700 via-red-600 to-red-800
          flex flex-col items-center justify-center p-4 md:p-6 relative min-h-screen lg:min-h-0">
@@ -82,7 +70,6 @@
       <div class="absolute -right-16 top-10 w-52 h-52 rounded-full bg-red-300/20 blur-3xl"></div>
       <div class="absolute bottom-10 right-20 w-32 h-32 rounded-full bg-green-300/15 blur-2xl"></div>
 
-      <!-- Mobile Santa Avatar - Top of page -->
       <div class="lg:hidden mb-4 md:mb-6 relative z-10">
         <SantaAvatar :size="120" />
       </div>
@@ -102,7 +89,7 @@
           v-else
           @go-register="openRegister"
           @back-to-intro="backToIntro"
-          @login-success="router.push('/draw/manual')" />
+          @login-success="router.push('/dashboard')" />
     </div>
   </div>
 </template>
@@ -110,9 +97,9 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
+import { useI18n } from "vue-i18n";
 import SantaAvatar from "@/components/christmas/SantaAvatar.vue";
 import ChristmasTree from "@/components/christmas/ChristmasTree.vue";
-import GiftBox from "@/components/christmas/GiftBox.vue";
 import ChristmasBell from "@/components/christmas/ChristmasBell.vue";
 import DecorativeLight from "@/components/christmas/DecorativeLight.vue";
 import IntroCard from "@/components/landing/IntroCard.vue";
@@ -121,6 +108,7 @@ import LoginCard from "@/components/landing/LoginCard.vue";
 
 const router = useRouter()
 const route = useRoute()
+const { t } = useI18n();
 
 const santaRef = ref<HTMLElement | null>(null)
 const mousePos = ref({ x: 0, y: 0 })
@@ -185,35 +173,16 @@ const backToIntro = () => {
 
 </script>
 
-<style scoped>
-@keyframes sleigh-fly {
-  0% { transform: translateX(-100px) translateY(0) rotate(-8deg); }
-  100% { transform: translateX(calc(100vw + 10px)) translateY(-30px) rotate(2deg); }
-}
-
-.animate-sleigh-fly {
-  animation: sleigh-fly 25s linear infinite;
-}
-
-@keyframes glow {
-  0%, 100% {
-    filter: drop-shadow(0 0 3px #EF4444) drop-shadow(0 0 6px #EF4444);
+<style>
+@keyframes fall {
+  0% {
+    transform: translateY(-10vh) rotate(0deg);
     opacity: 1;
   }
-  50% {
-    filter: drop-shadow(0 0 8px #FCA5A5) drop-shadow(0 0 12px #FCA5A5);
-    opacity: 0.8;
+  100% {
+    transform: translateY(100vh) rotate(360deg);
+    opacity: 0.3;
   }
-}
-
-@keyframes twinkle {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.3; transform: scale(0.8); }
-}
-
-@keyframes twinkle-delayed {
-  0%, 100% { opacity: 0.3; transform: scale(0.8); }
-  50% { opacity: 1; transform: scale(1); }
 }
 
 @keyframes swing {
@@ -223,11 +192,5 @@ const backToIntro = () => {
 
 .animate-swing {
   animation: swing 2s ease-in-out infinite;
-  transform-origin: top center;
-}
-
-@keyframes pulse-slow {
-  0%, 100% { opacity: 0.3; }
-  50% { opacity: 0.5; }
 }
 </style>

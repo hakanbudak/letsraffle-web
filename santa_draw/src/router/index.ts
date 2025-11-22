@@ -7,6 +7,11 @@ const routes = [
         component: () => import('@/views/HomeView.vue'),
     },
     {
+        path: '/dashboard',
+        name: 'dashboard',
+        component: () => import('@/views/DashboardView.vue'),
+    },
+    {
         path: '/draw/manual',
         name: 'draw-manuel',
         component: () => import('@/views/DrawView.vue'),

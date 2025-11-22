@@ -39,7 +39,7 @@ export function useUserDraws() {
       const { data } = await api.get<DrawListItem[]>(`/api/v1/draws`);
 
       const filtered = (data || []).filter((draw) =>
-        draw.status === "active" || draw.status === "in_progress"
+        draw.status === "active" || draw.status === "in_progress" || draw.status === "completed"
       );
 
       activeDraws.value = filtered;

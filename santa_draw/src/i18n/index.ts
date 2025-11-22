@@ -21,6 +21,8 @@ const messages = {
       copy: "Kopyala",
       copied: "Link kopyalandı!",
       loading: "Yükleniyor…",
+      tagline: "MUTLU",
+      title: "YILLAR"
     },
     landing: {
       tagline: "Santa's Edition",
@@ -39,6 +41,23 @@ const messages = {
         "🎁 Katılımcıların e-posta ile bilgilendirilmesi, çekiliş zamanlaması ve grup yönetimi daha sonra eklenecek.",
       back: "← Geri dön",
       goRegister: "← Kayıt ol",
+    },
+    dashboard: {
+      tagline: "Hazırsın 🛷",
+      title: "Çekiliş modunu seç",
+      subtitle: "Aktif etkinliklerini soldan takip et, sağdan yeni çekiliş modunu başlat.",
+      manualCard: {
+        title: "Manuel Mod",
+        description: "Katılımcıları elle ekle, kuralları belirle ve çekilişi anında başlat.",
+        cta: "Manuel moda git",
+      },
+      inviteCard: {
+        title: "Davet Mod",
+        description: "Katılımcılar formu doldursun, tarih planla veya tek tıkla çekilişi yürüt.",
+        cta: "Davet moda git",
+      },
+      backButton: "Geri",
+      logout: "Çıkış Yap"
     },
     draw: {
       headingTagline: "Santa's Draw",
@@ -245,6 +264,8 @@ const messages = {
       copy: "Copy",
       copied: "Link copied!",
       loading: "Loading…",
+      tagline: "MERRY",
+      title: "CHRISTMAS"
     },
     landing: {
       tagline: "Santa's Edition",
@@ -263,6 +284,23 @@ const messages = {
         "🎁 Email notifications, scheduling, and advanced group management are coming soon.",
       back: "← Back",
       goRegister: "← Register",
+    },
+    dashboard: {
+      tagline: "You're in 🎄",
+      title: "Choose your draw mode",
+      subtitle: "Track active events on the left, start a new flow on the right.",
+      manualCard: {
+        title: "Manual Mode",
+        description: "Add participants yourself, tweak the rules, and run the draw instantly.",
+        cta: "Go to manual mode",
+      },
+      inviteCard: {
+        title: "Invite Mode",
+        description: "Let participants join via form, schedule the draw, or run it whenever you like.",
+        cta: "Go to invite mode",
+      },
+      backButton: "Dashboard",
+      logout: "Log Out"
     },
     draw: {
       headingTagline: "Santa's Draw",
