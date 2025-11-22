@@ -134,10 +134,12 @@ dist
 !.yarn/sdks
 !.yarn/versions
 
-# Vite logs files
+# Vite cache and logs
+.vite/
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 
 # IDE directories
 .idea/
 .vscode/
+.DS_Store
