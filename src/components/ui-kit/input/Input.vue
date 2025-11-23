@@ -108,7 +108,7 @@ function togglePassword() {
 
     <div
         v-click-outside="() => emit('onBlur')"
-        class="flex items-center gap-2 h-12 w-full rounded-xl p-[15px] border border-solid border-gray-200"
+        class="flex items-center gap-2 h-12 w-full rounded-xl px-[15px] border border-solid border-gray-200"
         :class="[inputClass]"
         @click="onFocus">
       <slot
