@@ -1,7 +1,7 @@
 <template>
   <div
       v-if="hasFetched"
-      class="w-full bg-gradient-to-br from-red-50 to-green-50 rounded-2xl md:rounded-3xl border border-red-100 p-4 md:p-8 flex flex-col max-h-[520px] md:max-h-[380px] overflow-hidden">
+      class="w-full bg-gradient-to-br from-red-50 to-green-50 rounded-2xl md:rounded-3xl border border-red-100 p-4 md:p-8 flex flex-col max-h-[580px] md:max-h-[300px] overflow-hidden">
 
 
     <div v-if="isLoading" class="flex-1 flex items-center justify-center py-8">
