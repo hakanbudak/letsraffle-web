@@ -90,7 +90,7 @@
     <div class="flex-1 mt-2">
       <div
           v-if="!isOrganizerSaved"
-          class="h-full flex flex-col justify-center"
+          class="flex flex-col justify-start items-stretch"
       >
         <div class="w-full">
           <div class="mb-6 md:mb-8">

@@ -39,14 +39,14 @@
         <button
             type="button"
             @click="dismissRegisterPrompt"
-            class="absolute top-2 right-2 md:top-3 md:right-3 w-6 h-6 md:w-7 md:h-7 rounded-full bg-green-100 hover:bg-green-200 
+            class="absolute top-2 right-2 md:top-3 md:right-3 w-6 h-6 md:w-7 md:h-7 rounded-full bg-green-100 hover:bg-green-200
                  flex items-center justify-center text-green-700 hover:text-green-800 transition-all"
             :title="t('common.close')">
           <svg class="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
           </svg>
         </button>
-        
+
         <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 md:gap-4 pr-6 md:pr-8">
           <div class="flex-1">
             <h3 class="text-base md:text-lg font-bold text-green-800 mb-1.5 md:mb-2">
@@ -90,67 +90,19 @@
         </button>
       </section>
 
+      <DrawSettings
+          ref="drawSettingsRef"
+          v-if="mode === 'invite'"
+          v-model:require-address="requireAddress"
+          v-model:require-phone="requirePhone"
+          v-model:is-draw-date-enabled="isDrawDateEnabled"
+          v-model:draw-date="drawDate"
+          v-model:draw-date-error="drawDateError"
+          :min-draw-date="minDrawDate"
+          :is-disabled="participants.length > 0 || isOrganizerSaved"
+          @normalize-draw-date="normalizeDrawDate"
+      />
       <div class="w-full">
-        <section
-            class="mb-4 md:mb-6 flex flex-col gap-2 md:flex-row md:items-center md:justify-center text-sm md:text-base text-slate-700">
-          <label :class="[
-            'inline-flex items-center gap-2',
-            (participants.length > 0 || (mode === 'invite' && isOrganizerSaved)) ? 'cursor-not-allowed opacity-60' : 'cursor-pointer']">
-            <input
-                v-model="requireAddress"
-                type="checkbox"
-                :disabled="participants.length > 0 || (mode === 'invite' && isOrganizerSaved)"
-                class="h-4 w-4 rounded border border-red-300 text-red-500 focus:ring-red-500 disabled:cursor-not-allowed" />
-            <span>{{ t("draw.requireAddress") }}</span>
-          </label>
-
-          <label :class="[
-            'inline-flex items-center gap-2',
-            (participants.length > 0 || (mode === 'invite' && isOrganizerSaved)) ? 'cursor-not-allowed opacity-60' : 'cursor-pointer']">
-            <input
-                v-model="requirePhone"
-                type="checkbox"
-                :disabled="participants.length > 0 || (mode === 'invite' && isOrganizerSaved)"
-                class="h-4 w-4 rounded border border-red-300 text-red-500 focus:ring-red-500 disabled:cursor-not-allowed" />
-            <span>{{ t("draw.requirePhone") }}</span>
-          </label>
-        </section>
-
-        <!-- Çekiliş Tarihi -->
-        <section v-if="mode === 'invite'" class="mb-4 md:mb-6 space-y-2 md:space-y-3">
-          <label class="inline-flex items-center gap-2 text-sm md:text-base text-slate-700 cursor-pointer">
-            <input
-                v-model="isDrawDateEnabled"
-                type="checkbox"
-                :disabled="isOrganizerSaved"
-                class="h-4 w-4 rounded border border-red-300 text-red-500 focus:ring-red-500 disabled:cursor-not-allowed disabled:opacity-60" />
-            <span>{{ t("draw.enableDrawDate") }}</span>
-          </label>
-          <p v-if="!isDrawDateEnabled" class="text-xs md:text-sm text-slate-500">
-            {{ t("draw.drawDateOptionalHint") }}
-          </p>
-          <div v-if="isDrawDateEnabled" class="flex flex-col gap-1">
-            <span class="text-sm md:text-base font-medium text-slate-700">
-              {{ t("draw.drawDateLabel") }}
-              <span class="text-red-500">*</span>
-            </span>
-            <input
-                v-model="drawDate"
-                type="date"
-                :min="minDrawDate"
-                :disabled="isOrganizerSaved"
-                class="w-full h-10 md:h-12 px-3 md:px-4 rounded-lg md:rounded-xl border border-slate-200 bg-white hover:border-red-200 focus:border-red-500 focus:ring-red-500 text-sm md:text-base text-slate-700 outline-none transition-all disabled:cursor-not-allowed disabled:opacity-60 disabled:bg-slate-50"
-                @input="drawDateError = ''; normalizeDrawDate()"
-            />
-            <span v-if="drawDateError" class="text-xs md:text-sm text-red-500 mt-1">
-              {{ drawDateError }}
-            </span>
-            <span v-if="drawDate && !drawDateError" class="text-xs md:text-sm text-slate-500 mt-1">
-              {{ t("draw.drawDateInfo", { date: formatDrawDate(drawDate) }) }}
-            </span>
-          </div>
-        </section>
-
         <section class="space-y-4">
           <div class="grid gap-3 md:gap-4 md:grid-cols-2">
             <div class="flex flex-col gap-1">
@@ -259,7 +211,7 @@
                   class="w-full md:w-auto px-4 md:px-5 py-2 md:py-2.5 rounded-lg md:rounded-xl bg-red-600 text-white
                        text-sm md:text-base font-semibold shadow-sm hover:bg-red-700 hover:shadow-md
                        transition-all disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
-                  @click="saveOrganizer">
+                  @click="handleSaveOrganizer">
                 <span v-if="!isSaving">{{ t("draw.inviteButtons.save") }}</span>
                 <span v-else>{{ t("draw.inviteButtons.saving") }}</span>
               </button>
@@ -275,10 +227,8 @@
             </template>
           </div>
         </section>
-
       </div>
     </div>
-
     <ManualSummaryPanel
         v-if="mode === 'manual'"
         :participants="participants"
@@ -329,12 +279,14 @@ import { useManualCreate } from "@/composables/draw/useManualCreate";
 import { useInviteActions } from "@/composables/draw/useInviteActions";
 import type { Mode, DrawDetail } from "./types";
 import { TOKEN_KEY } from "@/services/authHelpers";
+import DrawSettings from "@/components/draw/DrawSettings.vue";
 
 const router = useRouter();
 const route = useRoute();
-const { t, locale } = useI18n();
+const { t } = useI18n();
 
 const mode = ref<Mode>("manual");
+const drawSettingsRef = ref<InstanceType<typeof DrawSettings> | null>(null);
 const isAuthenticated = !!localStorage.getItem(TOKEN_KEY);
 const REGISTER_PROMPT_DISMISSED_KEY = "register_prompt_dismissed";
 const isRegisterPromptDismissed = ref(
@@ -404,11 +356,19 @@ const {
   router,
 });
 
-const showReadyInfoModal = ref(false);
+const showReadyInfoModal = ref<boolean>(false);
 
 const handleShowReadyInfo = async () => {
   await markDrawAsReady();
   showReadyInfoModal.value = true;
+};
+
+const handleSaveOrganizer = async () => {
+  await saveOrganizer();
+
+  if (drawSettingsRef.value) {
+    drawSettingsRef.value.closeSettings();
+  }
 };
 
 const hideModeToggle = computed(() => {
@@ -452,19 +412,6 @@ const handleRouteInviteCodeChange = async () => {
   setInviteLink(code);
   isOrganizerSaved.value = true;
   await fetchInvitedParticipants();
-};
-
-const localeMap: Record<string, string> = {
-  tr: "tr-TR",
-  en: "en-US",
-};
-
-const formatDrawDate = (dateString: string) => {
-  if (!dateString) return "";
-  const date = new Date(dateString + "T00:00:00");
-  const options: Intl.DateTimeFormatOptions = { day: "numeric", month: "long", year: "numeric" };
-  const currentLocale = localeMap[locale.value] || "tr-TR";
-  return new Intl.DateTimeFormat(currentLocale, options).format(date);
 };
 
 const handleResetDraw = () => {
@@ -589,7 +536,7 @@ const loadDrawDetail = (drawDetail: DrawDetail) => {
     drawDate.value = "";
   }
   invitedParticipants.value = drawDetail.participants || [];
-  
+
   // QR code will be generated by the watcher in useInviteActions when inviteUrl changes
 };
 

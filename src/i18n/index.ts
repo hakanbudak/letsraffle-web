@@ -61,6 +61,23 @@ const messages = {
       backButton: "Geri",
       logout: "Çıkış Yap"
     },
+    drawSettings: {
+      settingsTitle: "Çekiliş Ayarları",
+      settingsActive: "{count} ayar aktif",
+      settingsOptional: "Opsiyonel ayarları yapılandırın",
+      requireAddress: "Adres Bilgisi İste",
+      requireAddressDesc: "Katılımcılardan teslimat için adres bilgisi toplanır",
+      requirePhone: "Telefon Numarası İste",
+      requirePhoneDesc: "Katılımcılardan iletişim için telefon numarası toplanır",
+      enableDrawDate: "Çekiliş Tarihi Belirle",
+      drawDateEnabledDesc: "Çekiliş belirlenen tarihte otomatik olarak yapılır",
+      drawDateDisabledDesc: "İstediğiniz zaman manuel olarak çekiliş yapabilirsiniz",
+      dateLabel: "Tarih",
+      timeLabel: "Saat",
+      selectTime: "Saat seçiniz",
+      drawDateTimeInfo: "Çekiliş {date} tarihinde otomatik olarak gerçekleştirilecektir",
+      drawDateOnlyInfo: "Çekiliş {date} tarihinde yapılacaktır (Saat belirtilmedi)"
+    },
     draw: {
       headingTagline: "Santa's Draw",
       headingTitle: "Çekilişini Yönet",
@@ -305,6 +322,23 @@ const messages = {
       },
       backButton: "Dashboard",
       logout: "Log Out"
+    },
+    drawSettings: {
+      settingsTitle: "Draw Settings",
+      settingsActive: "{count} setting(s) active",
+      settingsOptional: "Configure optional settings",
+      requireAddress: "Require Address",
+      requireAddressDesc: "Collect address information from participants for delivery",
+      requirePhone: "Require Phone",
+      requirePhoneDesc: "Collect phone number from participants for contact",
+      enableDrawDate: "Set Draw Date",
+      drawDateEnabledDesc: "The draw will be executed automatically on the specified date",
+      drawDateDisabledDesc: "You can manually execute the draw at any time",
+      dateLabel: "Date",
+      timeLabel: "Time",
+      selectTime: "Select time",
+      drawDateTimeInfo: "The draw will be executed automatically on {date}",
+      drawDateOnlyInfo: "The draw will be executed on {date} (Time not specified)"
     },
     draw: {
       headingTagline: "Santa's Draw",
