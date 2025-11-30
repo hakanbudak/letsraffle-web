@@ -182,6 +182,7 @@ import api from "@/services/api";
 import SantaAvatar from "@/components/christmas/SantaAvatar.vue";
 import ChristmasTree from "@/components/christmas/ChristmasTree.vue";
 import { useI18n } from "vue-i18n";
+import { setLocale, type Locale } from "@/i18n";
 
 const route = useRoute();
 const { t, locale } = useI18n();
@@ -193,6 +194,7 @@ interface DrawInfo {
   drawDate: string;
   status: string;
   participantCount: number;
+  language?: string;
 }
 
 const inviteCode = ref<string>("");
@@ -269,6 +271,13 @@ const fetchDrawInfo = async () => {
   try {
     const { data } = await api.get(`/api/v1/draws/join/${inviteCode.value}`);
     drawInfo.value = data;
+    
+    if (data.language) {
+      const normalizedLang = data.language.toLowerCase();
+      if (normalizedLang === "tr" || normalizedLang === "en") {
+        setLocale(normalizedLang as Locale);
+      }
+    }
   } catch (err: any) {
     console.error("Çekiliş bilgileri yüklenirken hata:", err);
     error.value = err.response?.data?.message || t("alerts.joinLoadError");
