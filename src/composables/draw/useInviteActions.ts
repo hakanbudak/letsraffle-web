@@ -6,6 +6,7 @@ import api from "@/services/api";
 import type { Participant, ParticipantForm, InvitedParticipant } from "@/components/draw/types";
 import type { Ref } from "vue";
 import type { Router } from "vue-router";
+import { setLocale, type Locale } from "@/i18n";
 
 interface Options {
   participants: Ref<Participant[]>;
@@ -19,7 +20,7 @@ interface Options {
 const INVITE_LINK_BASE = () => `${window.location.origin}/draw/join`;
 
 export function useInviteActions(options: Options) {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const drawDate = ref<string>("");
   const drawDateError = ref<string>("");
   const isDrawDateEnabled = ref(false);
@@ -127,6 +128,13 @@ export function useInviteActions(options: Options) {
       } else {
         isDrawDateEnabled.value = false;
       }
+
+      if (data.language) {
+        const normalizedLang = data.language.toLowerCase();
+        if (normalizedLang === "tr" || normalizedLang === "en") {
+          setLocale(normalizedLang as Locale);
+        }
+      }
     } catch (error) {
       console.error("Katılımcılar yüklenirken hata:", error);
     } finally {
@@ -176,6 +184,7 @@ export function useInviteActions(options: Options) {
         addressRequired: options.requireAddress.value,
         phoneNumberRequired: options.requirePhone.value,
         participants: allParticipants,
+        language: locale.value,
       };
       if (isDrawDateEnabled.value && selectedDate) {
         payload.drawDate = selectedDate.toISOString();
@@ -236,9 +245,9 @@ export function useInviteActions(options: Options) {
       const animationEnd = Date.now() + duration;
       const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
 
-      function randomInRange(min: number, max: number) {
+      const randomInRange = (min: number, max: number) => {
         return Math.random() * (max - min) + min;
-      }
+      };
 
       const interval: NodeJS.Timeout = setInterval(function() {
         const timeLeft = animationEnd - Date.now();
