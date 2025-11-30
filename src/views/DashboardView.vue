@@ -22,7 +22,7 @@
     <button
         type="button"
         @click="handleLogout"
-        class="absolute top-4 md:top-16 right-3 md:right-4 z-30
+        class="absolute top-4 md:top-16 left-4 md:left-auto right-auto md:right-4 z-30
            px-3 py-1.5 md:px-4 md:py-2
            bg-white/90 hover:bg-white text-red-600
            font-semibold rounded-xl shadow-lg hover:shadow-xl
