@@ -191,6 +191,13 @@ const messages = {
       createdAt: "Oluşturulma: {date}",
       clickToView: "Detayları görmek için tıklayın",
     },
+    notFound: {
+      title: "Sayfa Bulunamadı",
+      description: "Aradığınız sayfa kaybolmuş gibi görünüyor. Belki de Noel Baba onu hediye olarak götürmüştür! 🎁",
+      goHome: "Ana Sayfaya Dön",
+      goBack: "Geri Git",
+      funMessage: "Endişelenmeyin, yılbaşı çekilişiniz hala burada! 🎄✨",
+    },
     modals: {
       successTitle: "Tebrikler!",
       successMessage: "Çekilişin başarıyla tamamlandı! Artık herkes yeni yıla özel hediyesini alabilir! 🎁✨",
@@ -460,6 +467,13 @@ const messages = {
       drawDateLabel: "Draw date: {date}",
       createdAt: "Created: {date}",
       clickToView: "Click to view details",
+    },
+    notFound: {
+      title: "Page Not Found",
+      description: "The page you're looking for seems to have disappeared. Maybe Santa took it as a gift! 🎁",
+      goHome: "Go Home",
+      goBack: "Go Back",
+      funMessage: "Don't worry, your Secret Santa draw is still here! 🎄✨",
     },
     modals: {
       successTitle: "Congrats!",
