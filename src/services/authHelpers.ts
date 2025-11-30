@@ -7,6 +7,11 @@ export const TOKEN_KEY = "santas_draw_access_token";
 export const USER_KEY = "santas_draw_user";
 let interceptorsConfigured = false;
 
+export function isAuthenticated(): boolean {
+    if (typeof window === 'undefined') return false;
+    return !!localStorage.getItem(TOKEN_KEY);
+}
+
 export function handleAuthSuccess(data: AuthResponse) {
     localStorage.setItem(TOKEN_KEY, data.access_token);
     localStorage.setItem(USER_KEY, JSON.stringify(data.user));

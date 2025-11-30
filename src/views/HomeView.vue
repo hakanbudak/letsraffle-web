@@ -107,6 +107,7 @@ import DecorativeLight from "@/components/christmas/DecorativeLight.vue";
 import IntroCard from "@/components/landing/IntroCard.vue";
 import RegisterCard from "@/components/landing/RegisterCard.vue";
 import LoginCard from "@/components/landing/LoginCard.vue";
+import { isAuthenticated } from "@/services/authHelpers";
 
 
 const router = useRouter()
@@ -143,6 +144,11 @@ const handleMouseMove = (e: MouseEvent) => {
 }
 
 onMounted(() => {
+  if (isAuthenticated()) {
+    router.push('/dashboard').catch(() => undefined)
+    return
+  }
+  
   window.addEventListener('mousemove', handleMouseMove)
   
   // Check if panel query parameter exists
