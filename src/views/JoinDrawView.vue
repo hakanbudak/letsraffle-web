@@ -179,7 +179,7 @@
                     type="button"
                     @click="submitError = ''"
                     class="text-red-700 hover:text-red-900 transition-colors"
-                    aria-label="Kapat">
+                    :aria-label="t('common.close')">
                   <span class="text-xl leading-none">×</span>
                 </button>
               </div>
