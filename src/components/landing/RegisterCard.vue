@@ -139,10 +139,10 @@ async function createAccount() {
     return response.data;
   } catch (err: unknown) {
     let message = t("auth.errors.duplicateEmail");
-    const error = err as AxiosError<{ message?: string }>;
+    const error = err as AxiosError<{ detail?: string }>;
 
     if (axios.isAxiosError(error) && error.response) {
-      message = error.response.data?.detail || message;
+      message = error.response.data?.detail;
     }
 
     throw new Error(message);
@@ -168,14 +168,7 @@ async function submitForm() {
 
     emit("register-success");
   } catch (err) {
-    const error = err as AxiosError<{ message?: string }>;
-    let message = t("auth.errors.genericRegister");
-
-    if (axios.isAxiosError(error) && error.response) {
-      message = error.response.data?.detail || message;
-    }
-
-    generalError.value = message;
+    generalError.value = err.message || t("auth.errors.genericRegister");
   } finally {
     loading.value = false;
   }
