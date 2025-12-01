@@ -7,7 +7,7 @@
 
     <div class="absolute bottom-full right-0 bg-white p-2 rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.15)] flex flex-col gap-1 opacity-0 invisible translate-y-2.5 transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] mb-2.5 min-w-[140px] group-hover:opacity-100 group-hover:visible group-hover:translate-y-0">
       <a
-          href="https://github.com/hakanbudak/santas_draw_frontend"
+          href="https://github.com/hakanbudak/letsraffle-web"
           target="_blank"
           rel="noopener noreferrer"
           class="flex items-center justify-between px-3 py-2 no-underline text-slate-600 rounded-lg transition-colors duration-200 text-[0.85rem] font-medium hover:bg-slate-50 hover:text-slate-800"
@@ -17,7 +17,7 @@
       </a>
 
       <a
-          href="https://github.com/selamet/santas_draw"
+          href="https://github.com/selamet/letsraffle-api"
           target="_blank"
           rel="noopener noreferrer"
           class="flex items-center justify-between px-3 py-2 no-underline text-slate-600 rounded-lg transition-colors duration-200 text-[0.85rem] font-medium hover:bg-slate-50 hover:text-slate-800"
