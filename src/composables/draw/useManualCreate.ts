@@ -12,7 +12,7 @@ interface Options {
 }
 
 export function useManualCreate(options: Options) {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const isCreatingEvent = ref<boolean>(false);
   const showSuccessModal = ref<boolean>(false);
   const isDrawCompleted = ref<boolean>(false);
@@ -31,6 +31,7 @@ export function useManualCreate(options: Options) {
       const payload = {
         addressRequired: options.requireAddress.value,
         phoneNumberRequired: options.requirePhone.value,
+        language: locale.value,
         participants: options.participants.value.map((p) => ({
           firstName: p.firstName,
           lastName: p.lastName,
