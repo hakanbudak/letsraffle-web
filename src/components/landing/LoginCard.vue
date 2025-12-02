@@ -39,6 +39,12 @@
           :placeholder="t('auth.passwordPlaceholder')"
           @onFocus="clearError('password')" />
 
+      <div class="flex justify-end -mt-2">
+        <router-link to="/forgot-password" class="text-xs md:text-sm text-slate-500 hover:text-red-600 transition-colors">
+          {{ t("auth.forgotPasswordTitle") }}?
+        </router-link>
+      </div>
+
       <Button
           type="button"
           class="mt-2 inline-flex justify-center items-center rounded-lg md:rounded-xl bg-red-600
