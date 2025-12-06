@@ -152,7 +152,7 @@
               <div class="flex-shrink-0 w-10 h-10 rounded-full bg-gradient-to-br from-red-400 to-red-600 flex items-center justify-center text-white font-bold shadow-md">
                 {{ p.firstName.charAt(0) }}{{ p.lastName.charAt(0) }}
               </div>
-              <div class="flex-1 min-w-0">
+              <div class="flex-1 min-w-0 overflow-hidden">
                 <div class="font-semibold text-slate-800 text-sm flex items-center gap-2">
                   {{ p.firstName }} {{ p.lastName }}
                 </div>
