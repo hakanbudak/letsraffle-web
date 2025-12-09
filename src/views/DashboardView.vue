@@ -22,11 +22,13 @@
     <button
         type="button"
         @click="handleLogout"
-        class="absolute top-4 md:top-16 left-4 md:left-auto right-auto md:right-4 z-30
-           px-3 py-1.5 md:px-4 md:py-2
-           bg-white/90 hover:bg-white text-red-600
-           font-semibold rounded-xl shadow-lg hover:shadow-xl
-           transition-all duration-200 flex items-center gap-2 group">
+        class="absolute top-13 md:top-16 right-4 z-30
+        px-4 py-1.5 md:py-2
+        bg-white/90 hover:bg-white
+        text-red-600 font-semibold
+        rounded-xl shadow-lg hover:shadow-xl
+        transition-all duration-200
+        flex items-center gap-2 group">
       <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 md:h-5 md:w-5 group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
       </svg>
