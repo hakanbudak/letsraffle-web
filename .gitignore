@@ -143,3 +143,7 @@ vite.config.ts.timestamp-*
 .idea/
 .vscode/
 .DS_Store
+
+# Blender render ciktilari (art/build_santa.py ile yeniden uretilir)
+art/renders/
+art/*.blend1

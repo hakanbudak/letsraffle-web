@@ -1,30 +1,19 @@
 <template>
-  <div
-      class="relative w-full max-w-2xl bg-white/95 backdrop-blur-md border border-red-200
-           rounded-2xl md:rounded-3xl shadow-[0_20px_60px_rgba(127,29,29,0.4)] px-4 py-6 md:px-6 lg:px-12 md:py-10 z-10
-           min-h-[31.25rem] md:min-h-[34.375rem] flex flex-col justify-center">
-    <button
-        type="button"
-        class="mb-4 md:mb-6 inline-flex items-center text-xs md:text-sm text-slate-500 hover:text-red-600 transition-colors"
-        @click="$emit('back-to-intro')">
-      {{ t("auth.goBack") }}
-    </button>
+  <section class="xm-card xm-rise w-full px-5 py-8 sm:px-10 sm:py-9 compact:!py-7" aria-labelledby="register-title">
+    <AuthTabs active="register" @select="(v) => v === 'login' && $emit('go-login')" />
+    <h2 id="register-title" class="mt-6 compact:mt-4 mb-1.5 font-display text-[34px] font-black leading-tight text-cranberry-800">{{ t("auth.registerTitle") }}</h2>
+    <div class="xm-candy xm-candy-move mb-3 w-[88px]"></div>
+    <p class="mb-6 text-[15px] leading-normal text-ink-soft">{{ t("auth.registerSubtitle") }}</p>
 
-    <div class="text-center mb-6 md:mb-8">
-      <p class="text-xs md:text-sm uppercase tracking-[0.25em] md:tracking-[0.35em] text-red-600">{{ t("landing.tagline") }}</p>
-      <h1 class="text-3xl md:text-5xl lg:text-6xl font-bold text-red-700 mt-1">{{ t("auth.registerTitle") }}</h1>
-      <p class="text-sm md:text-base text-slate-600 mt-1.5 md:mt-2 px-2">
-        {{ t("auth.registerSubtitle") }}
-      </p>
-    </div>
-
-    <div class="grid gap-4 md:gap-5 max-w-md mx-auto w-full">
+    <form class="flex flex-col gap-4" novalidate @submit.prevent="submitForm">
       <Input
           id="email"
           v-model:input="form.email.value"
           :invalidMessage="form.email.inValidMessage"
-          type="text"
+          type="email"
           name="email"
+          icon="mail"
+          autocomplete="email"
           :label="t('auth.emailLabel')"
           :placeholder="t('auth.emailPlaceholder')"
           @onFocus="clearError('email')" />
@@ -35,36 +24,31 @@
           :invalidMessage="form.password.inValidMessage"
           type="password"
           name="password"
+          icon="lock"
+          autocomplete="new-password"
           :label="t('auth.passwordLabel')"
           :placeholder="t('auth.passwordPlaceholder')"
           @onFocus="clearError('password')" />
 
-      <p
-          v-if="generalError"
-          class="text-center text-xs text-red-500 -mt-2">
-        {{ generalError }}
-      </p>
+      <p v-if="generalError" class="xm-error justify-center" role="alert">{{ generalError }}</p>
 
-      <Button
-          class="mt-2 inline-flex justify-center items-center rounded-lg md:rounded-xl bg-red-600
-               text-white text-base md:text-lg font-semibold py-2.5 md:py-3 hover:bg-red-700 transition-all
-               disabled:opacity-60 disabled:cursor-not-allowed w-full cursor-pointer"
-          :disabled="loading"
-          @click="submitForm">
+      <button type="submit" class="xm-btn xm-btn-red xm-shine mt-2 w-full" :disabled="loading">
         <span v-if="!loading">{{ t("auth.registerButton") }}</span>
         <span v-else>{{ t("auth.registerLoading") }}</span>
-      </Button>
+        <svg v-if="!loading" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14" /><path d="m13 6 6 6-6 6" /></svg>
+      </button>
+    </form>
 
-      <p class="text-center text-xs md:text-sm text-gray-500 mt-2">
+    <div class="mt-5 flex flex-wrap items-center justify-between gap-2 text-sm font-bold">
+      <button type="button" class="min-h-11 cursor-pointer border-0 bg-transparent p-0 font-extrabold text-cranberry-600 hover:text-cranberry-900" @click="$emit('back-to-intro')">
+        {{ t("auth.goBack") }}
+      </button>
+      <span class="text-ink-muted">
         {{ t("auth.haveAccount") }}
-        <button
-            class="text-red-600 font-medium hover:underline ml-1"
-            @click="$emit('go-login')">
-          {{ t("auth.loginLink") }}
-        </button>
-      </p>
+        <button type="button" class="min-h-11 cursor-pointer border-0 bg-transparent p-0 font-extrabold text-cranberry-600 hover:text-cranberry-900" @click="$emit('go-login')">{{ t("auth.loginLink") }}</button>
+      </span>
     </div>
-  </div>
+  </section>
 </template>
 
 <script setup lang="ts">
@@ -74,7 +58,7 @@ import api from "@/services/api";
 import { handleAuthSuccess } from "@/services/authHelpers";
 import { validateEmail } from "@/helpers/common";
 import Input from "@/components/ui-kit/input/Input.vue";
-import Button from "@/components/ui-kit/button/Button.vue";
+import AuthTabs from "@/components/landing/AuthTabs.vue";
 import { useI18n } from "vue-i18n";
 
 const emit = defineEmits<{

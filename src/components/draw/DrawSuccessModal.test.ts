@@ -8,6 +8,7 @@ const i18n = createI18n({
   locale: 'en',
   messages: {
     en: {
+      characters: { santa: { celebrate: 'Santa celebrating' } },
       modals: {
         successTitle: 'Congrats!',
         successMessage: 'You successfully completed the draw! 🎁',
@@ -144,7 +145,7 @@ describe('DrawSuccessModal', () => {
       },
     })
 
-    const modalContent = wrapper.find('.bg-white')
+    const modalContent = wrapper.find('[role="dialog"]')
     await modalContent.trigger('click')
 
     // Should not emit close because of @click.stop

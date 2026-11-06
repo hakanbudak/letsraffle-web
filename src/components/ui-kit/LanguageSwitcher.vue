@@ -1,28 +1,18 @@
 <template>
-  <div class="fixed top-4 right-4 z-50">
-    <label
-        class="relative inline-flex items-center gap-2 rounded-2xl border border-red-200/70
-               bg-white/90 px-3 py-1.5 text-xs font-semibold text-red-700 shadow-sm backdrop-blur">
-      <span class="sr-only">{{ t("languageSwitcher.label") }}</span>
-      <select
-          v-model="selectedLocale"
-          :aria-label="t('languageSwitcher.label')"
-          class="appearance-none bg-transparent pr-5 text-xs font-semibold uppercase tracking-wide
-                 focus:outline-none cursor-pointer"
-      >
-        <option
-            v-for="option in localeOptions"
-            :key="option.code"
-            :value="option.code"
-        >
-          {{ option.code.toUpperCase() }} · {{ option.label }}
-        </option>
-      </select>
-      <span class="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-[10px] text-red-500">
-        ▼
-      </span>
-    </label>
-  </div>
+  <label class="relative inline-flex items-center">
+    <span class="sr-only">{{ t("languageSwitcher.label") }}</span>
+    <select
+        v-model="selectedLocale"
+        :aria-label="t('languageSwitcher.label')"
+        class="min-h-11 cursor-pointer appearance-none rounded-full border-0 bg-snow py-0 pl-4 pr-9 text-sm font-extrabold text-cranberry-900 shadow-[0_6px_16px_rgba(60,0,0,0.25)] outline-none focus-visible:ring-4 focus-visible:ring-gold-400/60">
+      <option v-for="option in localeOptions" :key="option.code" :value="option.code">
+        {{ option.code.toUpperCase() }} · {{ option.label }}
+      </option>
+    </select>
+    <svg class="pointer-events-none absolute right-3.5 h-4 w-4 text-cranberry-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="m6 9 6 6 6-6" />
+    </svg>
+  </label>
 </template>
 
 <script setup lang="ts">
@@ -42,7 +32,6 @@ const selectedLocale = computed({
 
 <style scoped>
 select option {
-  color: #991b1b;
+  color: #7a0f14;
 }
 </style>
-

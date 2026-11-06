@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Santa Lab</title>
+  <style>
+    body { margin: 0; background: linear-gradient(135deg,#dc2626,#991b1b); font-family: system-ui; color: #fff; }
+    .grid { display: flex; flex-wrap: wrap; gap: 16px; padding: 16px; }
+    .cell { width: 320px; height: 400px; position: relative; }
+    .cell span { position: absolute; left: 8px; top: 6px; font-weight: 600; }
+    body.white { background: transparent; }
+  </style>
+</head>
+<body>
+  <!--
+    Gelistirme / still-uretim sayfasi (production build'e girmez).
+    npm run dev  ->  http://localhost:5173/art/web/santa-lab.html
+    ?capture -> animasyon durur, window.__step(dt) ile kare kare ilerletilir (video kaydi icin)
+    ?still=wave&t=0.5  -> tek mod, seffaf arka plan, window.__stillReady = true olunca canvas hazir
+  -->
+  <div class="grid" id="grid"></div>
+  <script type="module">
+    import { SantaStage, startStage } from "/src/components/christmas/santa3d/santaStage.ts";
+    const q = new URLSearchParams(location.search);
+    const grid = document.getElementById("grid");
+    const still = q.get("still");
+    const moods = still ? [still] : (q.get("moods") || "wave,thinking,sad,celebrate").split(",");
+    if (still) document.body.classList.add("white");
+    const size = Number(q.get("w") || 320);
+    for (const mood of moods) {
+      const cell = document.createElement("div");
+      cell.className = "cell";
+      cell.style.width = size + "px";
+      cell.style.height = size * 1.25 + "px";
+      if (!still) cell.innerHTML = `<span>${mood}</span>`;
+      grid.appendChild(cell);
+      const stage = new SantaStage({
+        mood,
+        interactive: q.has("interactive"),
+        onReady: () => {
+          if (still) {
+            stage.snapshot(mood, Number(q.get("t") || 0.3));
+            window.__stillReady = true;
+          } else if (!q.has("capture")) startStage(stage);
+        },
+      });
+      stage.resize(size, size * 1.25, Number(q.get("dpr") || 2));
+      cell.appendChild(stage.canvas);
+      cell.addEventListener("pointermove", (e) => {
+        const r = cell.getBoundingClientRect();
+        stage.setPointer(((e.clientX - r.left) / r.width) * 2 - 1, ((e.clientY - r.top) / r.height) * 2 - 1);
+      });
+      cell.addEventListener("click", () => stage.boop());
+      window.__stages = (window.__stages || []).concat(stage);
+      window.__step = (dt) => window.__stages.forEach((s) => s.tick(dt));
+      window.__ready = () => window.__stages.every((s) => s.isReady);
+    }
+  </script>
+</body>
+</html>
