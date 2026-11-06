@@ -147,3 +147,9 @@ vite.config.ts.timestamp-*
 # Blender render ciktilari (art/build_santa.py ile yeniden uretilir)
 art/renders/
 art/*.blend1
+
+# local artifacts
+Claude outputs/
+art/__pycache__/
+art/brand/*.dmg
+art/brand/
