@@ -34,7 +34,7 @@
             <p class="xm-glow font-script text-[44px] leading-none text-gold-300 lg:text-[52px]">{{ t("dashboard.script") }}</p>
             <h1 id="mode-title" class="mt-1 font-display text-[32px] font-black leading-tight text-snow lg:text-[40px]">{{ t("dashboard.title") }}</h1>
           </div>
-          <SantaCharacter class="-mb-3 shrink-0" mood="wave" :size="150" interactive eager />
+          <SantaCharacter class="-mb-3 shrink-0" mood="watch" :size="150" interactive eager />
         </div>
 
         <article class="xm-rise xm-d2 relative rounded-3xl bg-snow p-6 text-ink shadow-[inset_0_0_0_2px_#e6b94a,0_20px_50px_rgba(50,0,0,0.3)] lg:p-[26px]">

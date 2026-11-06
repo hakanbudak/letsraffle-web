@@ -363,25 +363,26 @@ def build_character():
     hem = torus("Etek_Kurk", (0, 0, 0.4), 0.52, 0.12, P["fur"], upper, scale=(1.04, 0.88, 1))
     fur(hem, 0.03, 0.06)
     torus("Kemer", (0, 0, 0.74), 0.67, 0.07, P["belt"], upper, scale=(1.03, 0.85, 1.7))
-    # buckle: frame with a real hole + prong
+    # buckle: solid gold plate with a darker inset (no see-through hole)
     buckle = rbox("Kemer_Toka", (0, -0.585, 0.74), (0.38, 0.08, 0.3), 0.045, P["gold"], upper)
     old = bpy.data.objects.get("Toka_Kesici")
     if old:
         bpy.data.objects.remove(old, do_unlink=True)
-    bpy.ops.mesh.primitive_cube_add(size=1, location=(0, -0.585, 0.74))
-    cutter = bpy.context.object
-    cutter.scale = (0.2, 0.3, 0.14)
-    bo = buckle.modifiers.new("Delik", "BOOLEAN")
-    bo.operation = 'DIFFERENCE'
-    bo.object = cutter
-    bo.solver = 'EXACT'
-    # keep the boolean before bevel/outline
-    buckle.modifiers.move(buckle.modifiers.find("Delik"), 0)
-    cutter.hide_viewport = cutter.hide_render = True
-    cutter.name = "Toka_Kesici"
-    for uc in cutter.users_collection:
-        uc.objects.unlink(cutter)
-    bpy.data.collections["Sahne"].objects.link(cutter)
+    bpy.ops.mesh.primitive_cube_add(size=1, location=(0, -0.649, 0.74))
+    inset = bpy.context.object
+    inset.name = "Kemer_Toka_Ic"
+    inset.scale = (0.2, 0.01, 0.14)
+    inset.data.materials.append(toon_mat("T_Toka_Ic", "#C8932C", "#9E7220"))
+    bvi = inset.modifiers.new("Bevel", "BEVEL")
+    bvi.width = 0.01
+    bvi.segments = 2
+    for uc in inset.users_collection:
+        uc.objects.unlink(inset)
+    buckle.users_collection[0].objects.link(inset)
+    bpy.context.view_layer.update()
+    inset.parent = buckle
+    inset.matrix_parent_inverse = buckle.matrix_world.inverted()
+    add_outline(inset, 0.006)
     cyl("Toka_Dil", (-0.03, -0.62, 0.74), 0.016, 0.16, P["gold"], upper, rot=(0, 90, 0))
 
     # ---------------------------------------------------------------- arms

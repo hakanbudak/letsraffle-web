@@ -58,7 +58,7 @@
 
       <div class="flex min-h-[180px] flex-1 items-center justify-center py-2">
         <div class="aspect-[4/5] h-[min(30vh,250px)] min-h-[170px]">
-          <SantaCharacter :mood="isDrawCompleted ? 'celebrate' : 'wave'" fluid interactive />
+          <SantaCharacter :mood="isDrawCompleted ? 'celebrate' : 'draw'" fluid interactive />
         </div>
       </div>
 

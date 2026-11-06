@@ -26,15 +26,15 @@
               </ol>
             </template>
           </div>
-          <SantaCharacter class="shrink-0 lg:hidden" mood="wave" :size="140" interactive eager />
+          <SantaCharacter class="shrink-0 lg:hidden" :mood="santaMood" :preload="santaPreload" :size="140" interactive eager />
         </div>
 
-        <div class="absolute -bottom-[64px] tall:bottom-[46px] left-1/2 hidden aspect-[4/5] h-[min(50vh,440px)] -translate-x-[38%] lg:block">
-          <SantaCharacter mood="wave" fluid interactive eager />
+        <div class="absolute -bottom-[20px] tall:bottom-[78px] left-1/2 hidden aspect-[9/10] h-[min(54vh,480px)] -translate-x-[46%] lg:block">
+          <SantaCharacter :mood="santaMood" :preload="santaPreload" fluid interactive eager />
         </div>
       </section>
 
-      <div class="flex items-start lg:items-center lg:pb-[70px]">
+      <div class="flex items-start lg:items-center lg:pb-[70px]" @focusin="onFormFocus" @focusout="onFormBlur">
         <IntroCard
             v-if="currentPanel === 'intro'"
             @manual-click="goManual"
@@ -73,6 +73,18 @@ const route = useRoute();
 const { t } = useI18n();
 
 const currentPanel = ref<"intro" | "register" | "login">("intro");
+
+// Noel Baba: tanıtımda torbadan çeker, giriş/kayıtta listesini tutar, şifre yazılırken gözlerini kapatır
+const passwordFocused = ref(false);
+const isPasswordField = (el: EventTarget | null) =>
+    el instanceof HTMLInputElement && (el.type === "password" || /password/i.test(el.id) || /password/i.test(el.name));
+const onFormFocus = (e: FocusEvent) => (passwordFocused.value = isPasswordField(e.target));
+const onFormBlur = (e: FocusEvent) => {
+  if (!isPasswordField(e.relatedTarget)) passwordFocused.value = false;
+};
+const santaMood = computed(() =>
+    currentPanel.value === "intro" ? "draw" : passwordFocused.value ? "cover" : "list");
+const santaPreload = computed<("cover" | "list")[]>(() => (currentPanel.value === "intro" ? ["list"] : ["cover"]));
 
 const steps = computed(() => [
   t("invitePanel.howItWorks.step1Title"),

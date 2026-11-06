@@ -1,28 +1,24 @@
 <template>
   <div
       ref="rootRef"
-      :class="['santa-character relative select-none', interactive ? '' : 'pointer-events-none', wrapperClass]"
+      :class="['santa-character relative select-none', interactive ? 'cursor-pointer' : 'pointer-events-none', wrapperClass]"
       :style="[fluid ? { width: '100%', height: '100%' } : { width: size + 'px', height: size * 1.25 + 'px' }, wrapperStyle]"
       role="img"
       :aria-label="ariaLabel"
+      @click="onClick"
   >
-    <!-- Durağan kare: model yüklenene kadar, hareket azaltma tercihinde ve WebGL yoksa gösterilir -->
     <img
-        :src="still"
+        :key="mood"
+        :src="currentSrc"
         :width="size"
         :height="size * 1.25"
         :loading="eager ? 'eager' : 'lazy'"
         decoding="async"
         draggable="false"
         alt=""
-        class="absolute inset-0 block w-full h-full object-contain transition-opacity duration-500 ease-out"
-        :class="live ? 'opacity-0' : 'opacity-100'"
-    />
-    <div
-        ref="hostRef"
-        class="absolute inset-0 overflow-hidden transition-opacity duration-500 ease-out"
-        :class="[live ? 'opacity-100' : 'opacity-0', interactive ? 'cursor-pointer' : '']"
-        @click="onClick"
+        class="santa-img absolute inset-0 block h-full w-full object-contain object-bottom"
+        :class="{ 'santa-boop': booping }"
+        @animationend="booping = false"
     />
   </div>
 </template>
@@ -30,25 +26,23 @@
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
-import type { SantaMood, SantaStage } from "./santa3d/santaStage";
-
-import waveStill from "@/assets/characters/santa-wave-still.webp";
-import thinkingStill from "@/assets/characters/santa-thinking-still.webp";
-import sadStill from "@/assets/characters/santa-sad-still.webp";
-import celebrateStill from "@/assets/characters/santa-celebrate-still.webp";
-
-export type { SantaMood };
 
 /**
- * Gerçek zamanlı 3D Noel Baba (three.js). Model: src/assets/characters/santa.glb
+ * Blender'da render edilen Noel Baba animasyonları (seffaf, döngülü WebP).
+ * Kaynak: art/build_santa.py (mood'lar) -> art/renders/ios -> src/assets/characters
  *
- * - mood: wave | thinking | sad | celebrate — değiştiğinde karakter yumuşakça yeni moda geçer.
- * - size: genişlik (px); yükseklik size * 1.25.
- * - interactive: başı ve gözleri imleci takip eder, tıklayınca zıplar.
- * - eager: ekranda görünür olmasını beklemeden hemen yükle (sayfanın üstündeki karakterler için).
- *
- * three.js ayrı bir parça olarak, yalnızca karakter ekrana girdiğinde yüklenir.
+ * - mood: wave | thinking | sad | celebrate | draw | list | cover | watch | invite
+ * - Ekrana girene kadar (eager değilse) ve "hareketi azalt" açıksa ilk kare (still) gösterilir.
+ * - mood değişince önce yeni modun ilk karesi, animasyon yüklenince animasyon gösterilir.
+ * - preload: sonradan geçilecek modların animasyonlarını önceden indirir (örn. şifre alanı için "cover").
  */
+export type SantaMood = "wave" | "thinking" | "sad" | "celebrate" | "draw" | "list" | "cover" | "watch" | "invite";
+
+const anims = import.meta.glob("@/assets/characters/santa-*.webp", { eager: true, import: "default" }) as Record<string, string>;
+const pick = (name: string) => Object.entries(anims).find(([k]) => k.endsWith(`/${name}`))?.[1] ?? "";
+const animOf = (m: SantaMood) => pick(`santa-${m}.webp`);
+const stillOf = (m: SantaMood) => pick(`santa-${m}-still.webp`);
+
 const props = withDefaults(defineProps<{
   mood?: SantaMood
   size?: number
@@ -59,6 +53,7 @@ const props = withDefaults(defineProps<{
   label?: string
   /** fill the parent box instead of using size (parent should keep a 4:5 aspect ratio) */
   fluid?: boolean
+  preload?: SantaMood[]
 }>(), {
   mood: "wave",
   size: 400,
@@ -68,110 +63,93 @@ const props = withDefaults(defineProps<{
   eager: false,
   label: "",
   fluid: false,
+  preload: () => [],
 });
 
-const STILLS: Record<SantaMood, string> = {
-  wave: waveStill,
-  thinking: thinkingStill,
-  sad: sadStill,
-  celebrate: celebrateStill,
-};
-
 const { t } = useI18n();
-const still = computed(() => STILLS[props.mood] ?? STILLS.wave);
 const ariaLabel = computed(() => props.label || t(`characters.santa.${props.mood}`));
 
 const rootRef = ref<HTMLElement | null>(null);
-const hostRef = ref<HTMLElement | null>(null);
-const live = ref(false);
-
-let stage: SantaStage | null = null;
-let api: typeof import("./santa3d/santaStage") | null = null;
+const currentSrc = ref(stillOf(props.mood));
+const booping = ref(false);
+let visible = props.eager;
 let io: IntersectionObserver | null = null;
-let ro: ResizeObserver | null = null;
-let visible = false;
-let destroyed = false;
-let initStarted = false; // eager + IntersectionObserver can both call init(); create only one stage
+const loaded = new Set<string>();
 
 const reducedMotion = () =>
     typeof window !== "undefined" &&
     typeof window.matchMedia === "function" &&
     window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-async function init() {
-  if (initStarted || destroyed) return;
-  initStarted = true;
-  try {
-    api = await import("./santa3d/santaStage");
-  } catch {
+function load(src: string, done?: () => void) {
+  if (!src) return;
+  if (loaded.has(src)) { done?.(); return; }
+  const img = new Image();
+  img.decoding = "async";
+  img.onload = () => { loaded.add(src); done?.(); };
+  img.src = src;
+}
+
+function show(m: SantaMood) {
+  if (reducedMotion() || !visible) {
+    currentSrc.value = stillOf(m);
     return;
   }
-  if (destroyed || !hostRef.value || !api.webglAvailable()) return;
-  stage = new api.SantaStage({
-    mood: props.mood,
-    interactive: props.interactive,
-    onReady: () => {
-      live.value = true;
-      updateRunning();
-    },
-  });
-  hostRef.value.appendChild(stage.canvas);
-  const resize = () => {
-    const el = hostRef.value;
-    if (el && stage) stage.resize(Math.max(1, el.clientWidth), Math.max(1, el.clientHeight));
-  };
-  resize();
-  ro = new ResizeObserver(resize);
-  ro.observe(hostRef.value);
-}
-
-function updateRunning() {
-  if (!stage || !api) return;
-  if (visible && stage.isReady) api.startStage(stage);
-  else api.stopStage(stage);
-}
-
-function onPointerMove(e: PointerEvent) {
-  if (!stage || !rootRef.value) return;
-  const r = rootRef.value.getBoundingClientRect();
-  // normalized so the cursor at the far edge of the viewport is ~±1.5
-  const nx = (e.clientX - (r.left + r.width / 2)) / Math.max(r.width, window.innerWidth / 3);
-  const ny = (e.clientY - (r.top + r.height * 0.3)) / Math.max(r.height, window.innerHeight / 3);
-  stage.setPointer(nx, ny);
+  const anim = animOf(m);
+  if (loaded.has(anim)) {
+    currentSrc.value = anim;
+    return;
+  }
+  currentSrc.value = stillOf(m);
+  load(anim, () => { if (props.mood === m) currentSrc.value = anim; });
 }
 
 function onClick() {
-  if (props.interactive) stage?.boop();
+  if (props.interactive) booping.value = true;
 }
 
-watch(() => props.mood, (m) => stage?.setMood(m));
-watch(() => props.interactive, (v) => stage?.setInteractive(v));
+watch(() => props.mood, (m) => show(m));
 
 onMounted(() => {
-  if (reducedMotion() || typeof IntersectionObserver === "undefined") return;
-  // eager: start loading right away, but only if the element is actually laid out (not display:none)
-  if (props.eager && rootRef.value?.offsetParent) init();
-  io = new IntersectionObserver(
-      (entries) => {
-        visible = entries.some((en) => en.isIntersecting);
-        if (visible) init();
-        updateRunning();
-      },
-      { rootMargin: "150px" }
-  );
-  if (rootRef.value) io.observe(rootRef.value);
-  if (props.interactive) window.addEventListener("pointermove", onPointerMove, { passive: true });
+  if (reducedMotion()) return;
+  if (visible) show(props.mood);
+  if (typeof IntersectionObserver === "undefined") {
+    visible = true;
+    show(props.mood);
+  } else {
+    io = new IntersectionObserver((entries) => {
+      if (entries.some((e) => e.isIntersecting) && !visible) {
+        visible = true;
+        show(props.mood);
+      }
+    }, { rootMargin: "150px" });
+    if (rootRef.value) io.observe(rootRef.value);
+  }
+  for (const m of props.preload) load(animOf(m));
 });
 
-onUnmounted(() => {
-  destroyed = true;
-  io?.disconnect();
-  ro?.disconnect();
-  window.removeEventListener("pointermove", onPointerMove);
-  if (stage && api) {
-    api.stopStage(stage);
-    stage.dispose();
-  }
-  stage = null;
-});
+onUnmounted(() => io?.disconnect());
 </script>
+
+<style scoped>
+.santa-img {
+  animation: santa-in 0.35s ease-out both;
+}
+.santa-boop {
+  animation: santa-boop 0.5s cubic-bezier(0.3, 1.6, 0.5, 1);
+  transform-origin: 50% 100%;
+}
+@keyframes santa-in {
+  from { opacity: 0.4; }
+  to { opacity: 1; }
+}
+@keyframes santa-boop {
+  0% { transform: none; }
+  30% { transform: translateY(-6%) scale(1.03, 0.97); }
+  60% { transform: translateY(0) scale(0.98, 1.02); }
+  100% { transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .santa-img, .santa-boop { animation: none; }
+}
+</style>

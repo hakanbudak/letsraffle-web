@@ -21,6 +21,11 @@ const messages = {
         thinking: "Düşünceli Noel Baba",
         sad: "Üzgün Noel Baba",
         celebrate: "Kutlama yapan Noel Baba",
+        draw: "Torbadan çekiliş kâğıdı çeken Noel Baba",
+        list: "Listesine yeni isim ekleyen Noel Baba",
+        cover: "Elleriyle gözlerini kapatan Noel Baba",
+        watch: "Cep saatine bakan Noel Baba",
+        invite: "Elinde davet zarfı tutan Noel Baba",
       },
     },
     languageSwitcher: {
@@ -295,6 +300,12 @@ const messages = {
       drawDateInfo: "Çekilişiniz {date} tarihinde yapılacaktır.",
     },
     auth: {
+      social: {
+        or: "veya",
+        apple: "Apple ile devam et",
+        google: "Google ile devam et",
+        soon: "Bu giriş yöntemi çok yakında aktif olacak.",
+      },
       heroTitle: "Kızağa hoş geldin.",
       goRegister: "← Kayıt ol",
       goBack: "← Geri dön",
@@ -352,6 +363,11 @@ const messages = {
         thinking: "Santa thinking",
         sad: "Sad Santa",
         celebrate: "Santa celebrating",
+        draw: "Santa drawing a name from his sack",
+        list: "Santa adding a name to his list",
+        cover: "Santa covering his eyes",
+        watch: "Santa checking his pocket watch",
+        invite: "Santa holding an invitation",
       },
     },
     languageSwitcher: {
@@ -626,6 +642,12 @@ const messages = {
       drawDateInfo: "Your draw will take place on {date}.",
     },
     auth: {
+      social: {
+        or: "or",
+        apple: "Continue with Apple",
+        google: "Continue with Google",
+        soon: "This sign-in option is coming soon.",
+      },
       heroTitle: "Welcome aboard the sleigh.",
       goRegister: "← Register",
       goBack: "← Back",

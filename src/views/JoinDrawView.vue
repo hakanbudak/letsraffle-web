@@ -22,10 +22,10 @@
               </span>
             </div>
           </div>
-          <SantaCharacter class="shrink-0 lg:hidden" :mood="showSuccessModal ? 'celebrate' : 'wave'" :size="130" interactive eager />
+          <SantaCharacter class="shrink-0 lg:hidden" :mood="showSuccessModal ? 'celebrate' : 'invite'" :size="130" interactive eager />
         </div>
         <div class="absolute -bottom-[64px] tall:bottom-[46px] left-1/2 hidden aspect-[4/5] h-[min(46vh,410px)] -translate-x-[40%] lg:block">
-          <SantaCharacter :mood="showSuccessModal ? 'celebrate' : 'wave'" fluid interactive eager />
+          <SantaCharacter :mood="showSuccessModal ? 'celebrate' : 'invite'" fluid interactive eager />
         </div>
       </section>
 

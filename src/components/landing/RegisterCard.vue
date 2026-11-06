@@ -39,6 +39,8 @@
       </button>
     </form>
 
+    <SocialLogin />
+
     <div class="mt-5 flex flex-wrap items-center justify-between gap-2 text-sm font-bold">
       <button type="button" class="min-h-11 cursor-pointer border-0 bg-transparent p-0 font-extrabold text-cranberry-600 hover:text-cranberry-900" @click="$emit('back-to-intro')">
         {{ t("auth.goBack") }}
@@ -58,7 +60,8 @@ import api from "@/services/api";
 import { handleAuthSuccess } from "@/services/authHelpers";
 import { validateEmail } from "@/helpers/common";
 import Input from "@/components/ui-kit/input/Input.vue";
-import AuthTabs from "@/components/landing/AuthTabs.vue";
+import AuthTabs from "@/components/landing/AuthTabs.vue"
+import SocialLogin from "@/components/landing/SocialLogin.vue";
 import { useI18n } from "vue-i18n";
 
 const emit = defineEmits<{

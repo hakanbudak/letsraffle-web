@@ -11,7 +11,7 @@
           <span aria-hidden="true" class="absolute -bottom-2.5 left-1/2 h-5 w-5 -translate-x-1/2 rotate-45 bg-snow shadow-[2px_2px_0_#e6b94a]"></span>
         </p>
         <div class="aspect-[4/5] h-[220px] lg:h-[min(48vh,420px)]">
-          <SantaCharacter mood="thinking" fluid interactive eager />
+          <SantaCharacter :mood="pwFocused ? 'cover' : 'thinking'" :preload="['cover']" fluid interactive eager />
         </div>
       </div>
 
@@ -19,7 +19,7 @@
         <h1 id="pw-title" class="mb-2.5 font-display text-[34px] font-black leading-tight text-cranberry-800">{{ t("auth.resetPasswordTitle") }}</h1>
         <div class="xm-candy xm-candy-move mb-3 w-[88px]"></div>
         <p class="mb-6 text-[15px] leading-normal text-ink-soft">{{ t("auth.resetPasswordSubtitle") }}</p>
-        <form class="flex flex-col gap-4" novalidate @submit.prevent="submitForm">
+        <form class="flex flex-col gap-4" novalidate @submit.prevent="submitForm" @focusin="pwFocused = isPw($event.target)" @focusout="pwFocused = isPw($event.relatedTarget)">
           <Input
               id="new-password"
               v-model:input="form.password.value"
@@ -87,6 +87,9 @@ const form = reactive({
 })
 
 const loading = ref(false)
+// Noel Baba şifre yazılırken gözlerini kapatır
+const pwFocused = ref(false)
+const isPw = (el: EventTarget | null) => el instanceof HTMLInputElement && /password/i.test(el.id + el.name + el.type)
 const successMessage = ref("")
 const generalError = ref("")
 const token = ref("")
