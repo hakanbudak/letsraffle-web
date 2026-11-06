@@ -1,205 +1,99 @@
 <template>
-  <div class="min-h-screen flex flex-col lg:flex-row overflow-hidden relative">
-    <div class="snowfall"></div>
-    <div class="hidden lg:flex w-full lg:w-1/2 bg-gradient-to-br from-red-600 via-red-700 to-red-800 items-center justify-center relative overflow-hidden">
-      <div class="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.1),transparent)]"></div>
+  <ChristmasScene>
+    <template #header>
+      <AppHeader />
+    </template>
 
-      <div class="absolute top-32 left-1/2 -translate-x-1/2 z-20 text-center w-full px-8">
-        <h1 class="text-7xl font-bold text-amber-50 mb-2 drop-shadow-2xl tracking-wider"
-            style="text-shadow: 4px 4px 8px rgba(0,0,0,0.3), 0 0 20px rgba(255,255,255,0.2)">
-          {{ t("common.tagline") }}
-        </h1>
-        <h1 class="text-8xl font-bold text-yellow-400 drop-shadow-2xl tracking-wider"
-            style="text-shadow: 4px 4px 8px rgba(0,0,0,0.4), 0 0 25px rgba(234,179,8,0.3)">
-          {{ t("common.title") }}
-        </h1>
+    <main class="grid flex-1 gap-6 px-4 pb-10 lg:min-h-0 lg:grid-cols-[minmax(0,1fr)_minmax(0,560px)] lg:gap-16 lg:pb-[120px] tall:pb-0 lg:pl-[72px] lg:pr-20">
+      <section class="relative flex flex-col lg:min-h-0 lg:pt-[4vh]">
+        <div class="flex items-end justify-between gap-2 lg:block">
+          <div class="min-w-0 pb-4 lg:pb-0">
+            <template v-if="currentPanel === 'intro'">
+              <p class="xm-eyebrow text-[11px] text-gold-300 md:text-sm">{{ t("landing.tagline") }}</p>
+              <h1 class="xm-glow mt-3 font-script text-[58px] font-normal leading-none text-gold-300 md:text-[clamp(88px,11vh,132px)]">
+                {{ t("landing.heroScript") }}
+              </h1>
+              <p class="mt-2.5 max-w-[430px] text-sm font-semibold leading-relaxed text-snow/90 md:text-[19px]">{{ t("landing.heroText") }}</p>
+            </template>
+            <template v-else>
+              <p class="xm-eyebrow text-[11px] text-gold-300 md:text-sm">{{ t("landing.inviteCardTitle") }}</p>
+              <h1 class="mt-1 font-display text-[34px] font-black leading-[1.04] tracking-tight text-snow md:text-[64px]">{{ t("auth.heroTitle") }}</h1>
+              <ol class="mt-5 hidden list-none flex-col gap-2.5 p-0 text-base font-bold md:flex">
+                <li v-for="(step, i) in steps" :key="i" class="xm-rise flex items-center gap-2.5" :class="`xm-d${i + 1}`">
+                  <span class="inline-flex h-[26px] w-[26px] items-center justify-center rounded-full bg-gold-300 text-[13px] font-black text-cranberry-900">{{ i + 1 }}</span>
+                  {{ step }}
+                </li>
+              </ol>
+            </template>
+          </div>
+          <SantaCharacter class="shrink-0 lg:hidden" mood="wave" :size="140" interactive eager />
+        </div>
+
+        <div class="absolute -bottom-[64px] tall:bottom-[46px] left-1/2 hidden aspect-[4/5] h-[min(50vh,440px)] -translate-x-[38%] lg:block">
+          <SantaCharacter mood="wave" fluid interactive eager />
+        </div>
+      </section>
+
+      <div class="flex items-start lg:items-center lg:pb-[70px]">
+        <IntroCard
+            v-if="currentPanel === 'intro'"
+            @manual-click="goManual"
+            @register-click="openRegister" />
+
+        <RegisterCard
+            v-else-if="currentPanel === 'register'"
+            @go-login="openLogin"
+            @back-to-intro="backToIntro"
+            @register-success="router.push('/dashboard')" />
+
+        <LoginCard
+            v-else
+            @go-register="openRegister"
+            @back-to-intro="backToIntro"
+            @login-success="router.push('/dashboard')" />
       </div>
-
-      <ChristmasTree
-          variant="large"
-          customClass="absolute left-10 top-1/2 -translate-y-1/2 opacity-40" />
-
-      <ChristmasTree
-          variant="small"
-          customClass="absolute right-16 top-1/2 -translate-y-1/2 opacity-30" />
-
-      <DecorativeLight
-          class="absolute top-1/4 left-1/4 bg-yellow-300 shadow-yellow-300/50"
-          :size="12"
-          variant="twinkle" />
-
-      <DecorativeLight
-          class="absolute top-1/3 right-1/4 bg-red-300 shadow-red-300/50"
-          :size="8"
-          variant="delayed" />
-
-      <DecorativeLight
-          class="absolute top-2/3 left-1/3 bg-green-300 shadow-green-300/50"
-          :size="8"
-          variant="twinkle" />
-
-      <DecorativeLight
-          class="absolute top-1/2 right-1/3 bg-blue-300 shadow-blue-300/50"
-          :size="12"
-          variant="delayed" />
-
-      <DecorativeLight
-          class="absolute bottom-1/3 left-1/4 bg-yellow-300 shadow-yellow-300/50"
-          :size="8"
-          variant="delayed" />
-
-      <div class="absolute top-16 right-20 animate-swing">
-        <ChristmasBell
-            size="40"
-            class="absolute top-16 right-20"
-            swing />
-      </div>
-
-      <div ref="santaRef" class="relative z-10 mt-40">
-        <SantaAvatar class="relative z-10" :size="400" />
-      </div>
-    </div>
-
-
-    <div
-        class="w-full lg:w-1/2 bg-gradient-to-b from-red-700 via-red-600 to-red-800
-         flex flex-col items-center justify-center p-4 md:p-6 relative min-h-screen lg:min-h-0">
-      <div class="absolute inset-0 bg-[radial-gradient(circle_at_70%_30%,rgba(255,255,255,0.15),transparent)]"></div>
-
-      <div class="absolute -left-10 -top-10 w-40 h-40 rounded-full bg-yellow-200/20 blur-2xl"></div>
-      <div class="absolute -right-16 top-10 w-52 h-52 rounded-full bg-red-300/20 blur-3xl"></div>
-      <div class="absolute bottom-10 right-20 w-32 h-32 rounded-full bg-green-300/15 blur-2xl"></div>
-
-      <div class="lg:hidden mb-4 md:mb-6 relative z-10">
-        <SantaAvatar :size="120" />
-      </div>
-
-      <IntroCard
-          v-if="currentPanel === 'intro'"
-          @manual-click="goManual"
-          @register-click="openRegister" />
-
-      <RegisterCard
-          v-else-if="currentPanel === 'register'"
-          @go-login="openLogin"
-          @back-to-intro="backToIntro"
-          @register-success="router.push('/dashboard')" />
-
-      <LoginCard
-          v-else
-          @go-register="openRegister"
-          @back-to-intro="backToIntro"
-          @login-success="router.push('/dashboard')" />
-    </div>
-
-
-  </div>
+    </main>
+  </ChristmasScene>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
-import { useRouter, useRoute } from 'vue-router'
+import { computed, onMounted, ref } from "vue";
+import { useRoute, useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
-import SantaAvatar from "@/components/christmas/SantaAvatar.vue";
-import ChristmasTree from "@/components/christmas/ChristmasTree.vue";
-import ChristmasBell from "@/components/christmas/ChristmasBell.vue";
-import DecorativeLight from "@/components/christmas/DecorativeLight.vue";
+import ChristmasScene from "@/components/layout/ChristmasScene.vue";
+import AppHeader from "@/components/layout/AppHeader.vue";
+import SantaCharacter from "@/components/christmas/SantaCharacter.vue";
 import IntroCard from "@/components/landing/IntroCard.vue";
 import RegisterCard from "@/components/landing/RegisterCard.vue";
 import LoginCard from "@/components/landing/LoginCard.vue";
 import { isAuthenticated } from "@/services/authHelpers";
 
-
-const router = useRouter()
-const route = useRoute()
+const router = useRouter();
+const route = useRoute();
 const { t } = useI18n();
 
-const santaRef = ref<HTMLElement | null>(null)
-const mousePos = ref({ x: 0, y: 0 })
-const leftEye = ref({ x: 0, y: 0 })
-const rightEye = ref({ x: 0, y: 0 })
+const currentPanel = ref<"intro" | "register" | "login">("intro");
 
-const currentPanel = ref<'intro' | 'register' | 'login'>('intro')
-
-const getEyePosition = (eyeX: number, eyeY: number) => {
-  if (!santaRef.value) return { x: 0, y: 0 }
-
-  const rect = santaRef.value.getBoundingClientRect()
-  const eyeAbsX = rect.left + eyeX
-  const eyeAbsY = rect.top + eyeY
-
-  const angle = Math.atan2(mousePos.value.y - eyeAbsY, mousePos.value.x - eyeAbsX)
-  const distance = Math.min(8, Math.hypot(mousePos.value.x - eyeAbsX, mousePos.value.y - eyeAbsY) / 30)
-
-  return {
-    x: Math.cos(angle) * distance,
-    y: Math.sin(angle) * distance
-  }
-}
-
-const handleMouseMove = (e: MouseEvent) => {
-  mousePos.value = { x: e.clientX, y: e.clientY }
-  leftEye.value = getEyePosition(180, 200)
-  rightEye.value = getEyePosition(260, 200)
-}
+const steps = computed(() => [
+  t("invitePanel.howItWorks.step1Title"),
+  t("invitePanel.howItWorks.step2Title"),
+  t("invitePanel.howItWorks.step3Title"),
+]);
 
 onMounted(() => {
   if (isAuthenticated()) {
-    router.push('/dashboard').catch(() => undefined)
-    return
+    router.push("/dashboard").catch(() => undefined);
+    return;
   }
-  
-  window.addEventListener('mousemove', handleMouseMove)
-  
-  // Check if panel query parameter exists
-  const panelParam = route.query.panel as string | undefined
-  if (panelParam === 'register') {
-    currentPanel.value = 'register'
-  } else if (panelParam === 'login') {
-    currentPanel.value = 'login'
-  }
-})
-
-onUnmounted(() => {
-  window.removeEventListener('mousemove', handleMouseMove)
-})
+  const panelParam = route.query.panel as string | undefined;
+  if (panelParam === "register") currentPanel.value = "register";
+  else if (panelParam === "login") currentPanel.value = "login";
+});
 
 const goManual = () => {
-  router.push({ path: '/draw/manual', query: { directStart: 'true' } })
-}
-
-const openRegister = () => {
-  currentPanel.value = 'register'
-}
-
-const openLogin = () => {
-  currentPanel.value = 'login'
-}
-
-const backToIntro = () => {
-  currentPanel.value = 'intro'
-}
-
+  router.push({ path: "/draw/manual", query: { directStart: "true" } });
+};
+const openRegister = () => (currentPanel.value = "register");
+const openLogin = () => (currentPanel.value = "login");
+const backToIntro = () => (currentPanel.value = "intro");
 </script>
-
-<style>
-@keyframes fall {
-  0% {
-    transform: translateY(-10vh) rotate(0deg);
-    opacity: 1;
-  }
-  100% {
-    transform: translateY(100vh) rotate(360deg);
-    opacity: 0.3;
-  }
-}
-
-@keyframes swing {
-  0%, 100% { transform: rotate(-5deg); }
-  50% { transform: rotate(5deg); }
-}
-
-.animate-swing {
-  animation: swing 2s ease-in-out infinite;
-}
-</style>

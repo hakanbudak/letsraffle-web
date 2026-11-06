@@ -17,78 +17,76 @@
       :message="t('draw.readyForDrawInfoMessage')"
       @close="showReadyInfoModal = false"
   />
-  <div class="w-full grid md:grid-cols-2 gap-4 md:gap-6 lg:gap-8">
-    <div class="bg-white rounded-2xl md:rounded-3xl border border-red-100 p-4 md:p-8">
-      <header class="mb-3 md:mb-4">
-        <p class="text-xs md:text-sm uppercase tracking-[0.25em] md:tracking-[0.35em] text-red-500 text-center md:text-left">
-          {{ t("draw.headingTagline") }}
-        </p>
-        <h2 class="mt-1.5 md:mt-2 text-2xl md:text-3xl lg:text-4xl font-bold text-red-700 text-center md:text-left">
-          {{ t("draw.headingTitle") }}
-        </h2>
-        <p class="mt-1 text-sm md:text-base text-slate-600 text-center md:text-left">
-          {{ t("draw.headingSubtitle") }}
-        </p>
-      </header>
 
-      <!-- Register Prompt Banner (shown when user is not logged in) -->
-      <section
+  <AppHeader :show-open-source="false">
+    <template #start>
+      <div class="flex min-w-0 items-center gap-4">
+        <router-link
+            :to="isAuthenticated ? '/dashboard' : '/'"
+            :aria-label="t('draw.back')"
+            class="flex h-11 w-11 flex-none items-center justify-center rounded-full bg-snow/15 text-snow hover:bg-snow/25">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5" /><path d="m11 18-6-6 6-6" /></svg>
+        </router-link>
+        <div class="min-w-0">
+          <p class="xm-eyebrow text-gold-300">{{ t("draw.headingTagline") }}</p>
+          <h1 class="m-0 truncate font-display text-2xl font-black leading-tight text-snow md:text-[28px]">{{ t("draw.headingTitle") }}</h1>
+        </div>
+      </div>
+    </template>
+    <template #actions>
+      <div v-if="!hideModeToggle" role="tablist" :aria-label="t('draw.manualModeTitle')" class="flex gap-1 rounded-full bg-[rgba(60,0,0,0.3)] p-[5px]">
+        <button
+            role="tab"
+            type="button"
+            :aria-selected="mode === 'manual'"
+            class="min-h-10 cursor-pointer rounded-full border-0 px-[18px] text-sm font-extrabold transition-all"
+            :class="mode === 'manual' ? 'bg-snow text-cranberry-800' : 'bg-transparent text-snow hover:bg-snow/10'"
+            @click="mode !== 'manual' && switchToManualMode()">
+          {{ t("participantsPanel.drawType.manual") }}
+        </button>
+        <button
+            role="tab"
+            type="button"
+            :aria-selected="mode === 'invite'"
+            class="min-h-10 cursor-pointer rounded-full border-0 px-[18px] text-sm font-extrabold transition-all"
+            :class="mode === 'invite' ? 'bg-snow text-cranberry-800' : 'bg-transparent text-snow hover:bg-snow/10'"
+            @click="mode !== 'invite' && switchToInviteMode()">
+          {{ t("participantsPanel.drawType.dynamic") }}
+        </button>
+      </div>
+      <button v-if="isAuthenticated" type="button" class="xm-btn xm-btn-glass xm-btn-sm !rounded-full" @click="handleLogout">
+        {{ t("auth.logout") }}
+      </button>
+    </template>
+  </AppHeader>
+
+  <main class="xm-card mx-4 mb-8 mt-2 grid overflow-hidden lg:mx-12 lg:mb-10 lg:min-h-0 lg:flex-1 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_minmax(0,0.9fr)]">
+    <!-- Step 1: form -->
+    <section class="xm-scroll flex flex-col gap-4 p-6 lg:min-h-0 lg:overflow-y-auto lg:p-8" aria-labelledby="form-title">
+      <div
           v-if="hideModeToggle && !isRegisterPromptDismissed"
-          class="mb-4 md:mb-6 bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-300 rounded-xl md:rounded-2xl px-4 md:px-6 py-4 md:py-5 shadow-md relative">
-        <!-- Close Button -->
+          class="xm-rise relative rounded-[20px] bg-pine-100 py-4 pl-4 pr-12 shadow-[inset_0_0_0_2px_rgba(31,92,62,0.25)]">
         <button
             type="button"
-            @click="dismissRegisterPrompt"
-            class="absolute top-2 right-2 md:top-3 md:right-3 w-6 h-6 md:w-7 md:h-7 rounded-full bg-green-100 hover:bg-green-200
-                 flex items-center justify-center text-green-700 hover:text-green-800 transition-all"
-            :title="t('common.close')">
-          <svg class="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-          </svg>
+            class="absolute right-2 top-2 flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border-0 bg-transparent text-pine-700 hover:bg-white/60"
+            :aria-label="t('common.close')"
+            @click="dismissRegisterPrompt">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 18 18 6M6 6l12 12" /></svg>
         </button>
-
-        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 md:gap-4 pr-6 md:pr-8">
-          <div class="flex-1">
-            <h3 class="text-base md:text-lg font-bold text-green-800 mb-1.5 md:mb-2">
-              {{ t("draw.registerPromptTitle") }}
-            </h3>
-            <p class="text-sm md:text-base text-green-700 leading-relaxed">
-              {{ t("draw.registerPromptMessage") }}
-            </p>
-          </div>
-          <button
-              type="button"
-              @click="goToRegister"
-              class="flex-shrink-0 inline-flex items-center justify-center gap-2 rounded-lg md:rounded-xl bg-green-600
-                   text-white text-xs md:text-sm font-semibold px-4 md:px-6 py-2 md:py-2.5
-                   hover:bg-green-700 hover:shadow-lg transition-all whitespace-nowrap cursor-pointer">
-            {{ t("draw.registerPromptButton") }}
-            <span aria-hidden="true">→</span>
-          </button>
-        </div>
-      </section>
-
-      <!-- Mod switch: manuel / davet linki -->
-      <section
-          v-if="!hideModeToggle"
-          class="mb-4 md:mb-6 flex flex-col gap-2 md:gap-3 md:flex-row md:items-center md:justify-between bg-red-50/60 border border-red-100 rounded-xl md:rounded-2xl px-3 md:px-4 py-2.5 md:py-3 text-xs md:text-sm lg:text-base text-slate-600">
-        <div class="max-w-md">
-          <p class="font-medium text-red-700">
-            {{ mode === 'manual' ? t("draw.manualModeTitle") : t("draw.inviteModeTitle") }}
-          </p>
-          <p class="mt-1 text-sm">
-            {{ t("draw.modeDescription") }}
-          </p>
-        </div>
-        <button
-            type="button"
-            class="self-start md:self-auto inline-flex items-center gap-1 rounded-lg md:rounded-xl border border-red-200
-                 bg-white px-2.5 md:px-3 py-1 md:py-1.5 font-medium text-xs md:text-sm lg:sm text-red-700 hover:bg-red-50
-                 transition-all w-full md:w-auto justify-center"
-            @click="mode === 'manual' ? switchToInviteMode() : switchToManualMode()">
-          {{ mode === 'manual' ? t("draw.viewInviteButton") : t("draw.backManualButton") }}
+        <h3 class="m-0 font-display text-lg font-black text-pine-700">{{ t("draw.registerPromptTitle") }}</h3>
+        <p class="mb-3 mt-1 text-sm leading-normal text-pine-900">{{ t("draw.registerPromptMessage") }}</p>
+        <button type="button" class="xm-btn xm-btn-pine xm-btn-sm" @click="goToRegister">
+          {{ t("draw.registerPromptButton") }} <span aria-hidden="true">→</span>
         </button>
-      </section>
+      </div>
+
+      <div>
+        <p class="xm-eyebrow text-cranberry-600">{{ t("draw.step", { n: 1 }) }}</p>
+        <h2 id="form-title" class="mt-1 font-display text-[26px] font-black leading-tight text-cranberry-800">
+          {{ mode === "manual" ? t("draw.addTitle") : t("draw.organizerTitle") }}
+        </h2>
+        <p v-if="mode === 'invite' && !isOrganizerSaved" class="mt-1 text-sm font-semibold text-ink-muted">{{ t("draw.organizerHint") }}</p>
+      </div>
 
       <DrawSettings
           ref="drawSettingsRef"
@@ -102,135 +100,103 @@
           :is-disabled="participants.length > 0 || isOrganizerSaved"
           @normalize-draw-date="normalizeDrawDate"
       />
-      <div class="w-full">
-        <section class="space-y-4">
-          <div class="grid gap-3 md:gap-4 md:grid-cols-2">
-            <div class="flex flex-col gap-1">
-              <span class="text-sm md:text-base font-medium text-slate-700">{{ t("draw.fields.firstName.label") }}</span>
-              <Input
-                  id="first-name"
-                  v-model:input="form.firstName.value"
-                  :invalidMessage="form.firstName.inValidMessage"
-                  :disabled="mode === 'invite' && isOrganizerSaved"
-                  type="text"
-                  name="firstName"
-                  :placeholder="t('draw.fields.firstName.placeholder')"
-                  @onFocus="clearError('firstName')" />
-            </div>
 
-            <div class="flex flex-col gap-1">
-              <span class="text-sm md:text-base font-medium text-slate-700">{{ t("draw.fields.lastName.label") }}</span>
-              <Input
-                  id="last-name"
-                  v-model:input="form.lastName.value"
-                  :invalidMessage="form.lastName.inValidMessage"
-                  :disabled="mode === 'invite' && isOrganizerSaved"
-                  type="text"
-                  name="lastName"
-                  :placeholder="t('draw.fields.lastName.placeholder')"
-                  @onFocus="clearError('lastName')" />
-            </div>
-          </div>
+      <form class="flex flex-col gap-3.5" novalidate @submit.prevent="mode === 'manual' ? handleAddParticipant() : (!isOrganizerSaved && handleSaveOrganizer())">
+        <div class="grid gap-3 sm:grid-cols-2">
+          <Input
+              id="first-name"
+              v-model:input="form.firstName.value"
+              :invalidMessage="form.firstName.inValidMessage"
+              :disabled="mode === 'invite' && isOrganizerSaved"
+              :label="t('draw.fields.firstName.label')"
+              type="text"
+              name="firstName"
+              autocomplete="given-name"
+              :placeholder="t('draw.fields.firstName.placeholder')"
+              @onFocus="clearError('firstName')" />
+          <Input
+              id="last-name"
+              v-model:input="form.lastName.value"
+              :invalidMessage="form.lastName.inValidMessage"
+              :disabled="mode === 'invite' && isOrganizerSaved"
+              :label="t('draw.fields.lastName.label')"
+              type="text"
+              name="lastName"
+              autocomplete="family-name"
+              :placeholder="t('draw.fields.lastName.placeholder')"
+              @onFocus="clearError('lastName')" />
+        </div>
 
-          <div class="flex flex-col gap-1">
-            <span class="text-sm md:text-base font-medium text-slate-700">
-              {{ t("draw.fields.email.label") }}
-              <span class="text-red-500">*</span>
-            </span>
-            <Input
-                id="email"
-                v-model:input="form.email.value"
-                :invalidMessage="form.email.inValidMessage"
-                :disabled="mode === 'invite' && isOrganizerSaved"
-                type="email"
-                name="email"
-                :placeholder="t('draw.fields.email.placeholder')"
-                @onFocus="clearError('email')" />
-          </div>
+        <Input
+            id="email"
+            v-model:input="form.email.value"
+            :invalidMessage="form.email.inValidMessage"
+            :disabled="mode === 'invite' && isOrganizerSaved"
+            :label="t('draw.fields.email.label')"
+            required
+            icon="mail"
+            type="email"
+            name="email"
+            autocomplete="email"
+            :placeholder="t('draw.fields.email.placeholder')"
+            @onFocus="clearError('email')" />
 
-          <div v-if="requireAddress" class="flex flex-col gap-1">
-            <span class="text-sm md:text-base font-medium text-slate-700">
-              {{ t("draw.fields.address.label") }}
-              <span class="text-red-500">*</span>
-            </span>
-            <Input
-                id="address"
-                v-model:input="form.address.value"
-                :invalidMessage="form.address.inValidMessage"
-                :disabled="mode === 'invite' && isOrganizerSaved"
-                type="text"
-                name="address"
-                :placeholder="t('draw.fields.address.placeholder')"
-                @onFocus="clearError('address')" />
-          </div>
+        <Input
+            v-if="requireAddress"
+            id="address"
+            v-model:input="form.address.value"
+            :invalidMessage="form.address.inValidMessage"
+            :disabled="mode === 'invite' && isOrganizerSaved"
+            :label="t('draw.fields.address.label')"
+            required
+            icon="pin"
+            type="text"
+            name="address"
+            autocomplete="street-address"
+            :placeholder="t('draw.fields.address.placeholder')"
+            @onFocus="clearError('address')" />
 
-          <div v-if="requirePhone" class="flex flex-col gap-1">
-            <span class="text-sm md:text-base font-medium text-slate-700">
-              {{ t("draw.fields.phone.label") }}
-              <span class="text-red-500">*</span>
-            </span>
-            <Input
-                id="phone"
-                v-model:input="form.phone.value"
-                :invalidMessage="form.phone.inValidMessage"
-                :disabled="mode === 'invite' && isOrganizerSaved"
-                type="text"
-                name="phone"
-                :placeholder="t('draw.fields.phone.placeholder')"
-                @onFocus="clearError('phone')" />
-          </div>
+        <Input
+            v-if="requirePhone"
+            id="phone"
+            v-model:input="form.phone.value"
+            :invalidMessage="form.phone.inValidMessage"
+            :disabled="mode === 'invite' && isOrganizerSaved"
+            :label="t('draw.fields.phone.label')"
+            required
+            icon="phone"
+            type="text"
+            name="phone"
+            autocomplete="tel"
+            :placeholder="t('draw.fields.phone.placeholder')"
+            @onFocus="clearError('phone')" />
 
-          <div
-              class="mt-4 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-            <template v-if="mode === 'manual'">
-              <button
-                  type="button"
-                  class="w-full md:w-auto px-4 md:px-5 py-2 md:py-2.5 rounded-lg md:rounded-xl bg-red-600 text-white
-                       text-sm md:text-base font-semibold shadow-sm hover:bg-red-700 hover:shadow-md
-                       transition-all cursor-pointer"
-                  @click="handleAddParticipant">
-                {{ editingParticipantId ? t("draw.manualButtons.update") : t("draw.manualButtons.add") }}
-              </button>
+        <div class="mt-1 flex flex-wrap items-center gap-3">
+          <template v-if="mode === 'manual'">
+            <button type="submit" class="xm-btn xm-btn-pine">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path v-if="!editingParticipantId" d="M12 5v14" /><path v-if="!editingParticipantId" d="M5 12h14" /><path v-else d="M20 6 9 17l-5-5" /></svg>
+              {{ editingParticipantId ? t("draw.manualButtons.update") : t("draw.manualButtons.add") }}
+            </button>
+            <button v-if="editingParticipantId" type="button" class="xm-btn xm-btn-ghost" @click="resetForm">
+              {{ t("draw.manualButtons.cancel") }}
+            </button>
+          </template>
+          <template v-else>
+            <button v-if="!isOrganizerSaved" type="submit" class="xm-btn xm-btn-red xm-shine" :disabled="isSaving">
+              <span v-if="!isSaving">{{ t("draw.inviteButtons.save") }}</span>
+              <span v-else>{{ t("draw.inviteButtons.saving") }}</span>
+            </button>
+            <button v-else type="button" class="xm-btn xm-btn-pine" @click="handleNewDraw">
+              {{ t("draw.inviteButtons.newDraw") }}
+            </button>
+          </template>
+        </div>
+      </form>
+    </section>
 
-              <button
-                  v-if="editingParticipantId"
-                  type="button"
-                  class="w-full md:w-auto px-4 md:px-5 py-2 md:py-2.5 rounded-lg md:rounded-xl border border-slate-300
-                       text-sm md:text-base font-semibold text-slate-600 bg-white hover:bg-slate-50
-                       transition-all"
-                  @click="resetForm">
-                {{ t("draw.manualButtons.cancel") }}
-              </button>
-            </template>
-
-            <template v-else>
-              <button
-                  v-if="!isOrganizerSaved"
-                  type="button"
-                  :disabled="isSaving"
-                  class="w-full md:w-auto px-4 md:px-5 py-2 md:py-2.5 rounded-lg md:rounded-xl bg-red-600 text-white
-                       text-sm md:text-base font-semibold shadow-sm hover:bg-red-700 hover:shadow-md
-                       transition-all disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
-                  @click="handleSaveOrganizer">
-                <span v-if="!isSaving">{{ t("draw.inviteButtons.save") }}</span>
-                <span v-else>{{ t("draw.inviteButtons.saving") }}</span>
-              </button>
-              <button
-                  v-else
-                  type="button"
-                  class="w-full md:w-auto px-4 md:px-5 py-2 md:py-2.5 rounded-lg md:rounded-xl bg-green-600 text-white
-                       text-sm md:text-base font-semibold shadow-sm hover:bg-green-700 hover:shadow-md
-                       transition-all cursor-pointer"
-                  @click="handleNewDraw">
-                {{ t("draw.inviteButtons.newDraw") }}
-              </button>
-            </template>
-          </div>
-        </section>
-      </div>
-    </div>
     <ManualSummaryPanel
         v-if="mode === 'manual'"
+        class="lg:col-span-2"
         :participants="participants"
         :require-address="requireAddress"
         :require-phone="requirePhone"
@@ -243,7 +209,8 @@
         @remove="removeParticipant"
     />
     <InvitePanel
-              v-else
+        v-else
+        class="lg:col-span-2"
         :invite-url="inviteUrl"
         :qr-code-data-url="qrCodeDataUrl"
         :is-loading-invites="isLoadingInvites"
@@ -265,7 +232,7 @@
         @show-ready-info="handleShowReadyInfo"
         @clear-error="clearExecuteDrawError"
     />
-  </div>
+  </main>
 </template>
 
 <script setup lang="ts">
@@ -280,7 +247,8 @@ import { useDrawForm } from "@/composables/draw/useDrawForm";
 import { useManualCreate } from "@/composables/draw/useManualCreate";
 import { useInviteActions } from "@/composables/draw/useInviteActions";
 import type { Mode, DrawDetail } from "./types";
-import { TOKEN_KEY } from "@/services/authHelpers";
+import { TOKEN_KEY, logoutUser } from "@/services/authHelpers";
+import AppHeader from "@/components/layout/AppHeader.vue";
 import DrawSettings from "@/components/draw/DrawSettings.vue";
 import { setLocale, type Locale } from "@/i18n";
 
@@ -453,6 +421,10 @@ const switchToManualMode = () => {
 
 const goToRegister = () => {
   router.push({ path: "/", query: { panel: "register" } });
+};
+
+const handleLogout = () => {
+  logoutUser(true);
 };
 
 const dismissRegisterPrompt = () => {

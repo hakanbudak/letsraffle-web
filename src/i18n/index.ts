@@ -11,10 +11,25 @@ const STORAGE_KEY = "santas_draw_locale";
 
 const messages = {
   tr: {
+    header: {
+      menu: "Üst menü",
+      openSource: "Açık kaynak",
+    },
+    characters: {
+      santa: {
+        wave: "El sallayan Noel Baba",
+        thinking: "Düşünceli Noel Baba",
+        sad: "Üzgün Noel Baba",
+        celebrate: "Kutlama yapan Noel Baba",
+      },
+    },
     languageSwitcher: {
       label: "Dil seçimi",
     },
     common: {
+      showPassword: "Şifreyi göster",
+      hidePassword: "Şifreyi gizle",
+      close: "Kapat",
       appName: "Santa's Draw",
       ok: "Tamam",
       cancel: "İptal",
@@ -25,6 +40,10 @@ const messages = {
       title: "YILLAR"
     },
     landing: {
+      heroScript: "Mutlu Yıllar",
+      heroText: "Yılbaşı çekilişini dakikalar içinde kur. Herkes adil şekilde eşleşsin, sürpriz son ana kadar saklı kalsın.",
+      badgeFree: "Ücretsiz",
+      inviteShortTag: "★ Yeni yıla özel",
       tagline: "Santa's Edition",
       title: "Santa's Draw",
       subtitlePrefix: "Yılbaşı çekilişini",
@@ -51,6 +70,8 @@ const messages = {
       goRegister: "← Kayıt ol",
     },
     dashboard: {
+      script: "Yeni bir sürpriz?",
+      eventsCount: "{count} etkinlik",
       tagline: "Yılbaşı eğlencesi başlıyor! 🎉",
       title: "Çekiliş Modunu Seç",
       subtitle: "Aktif etkinliklerini solda gör, sağdan yeni bir çekiliş başlat.",
@@ -87,6 +108,11 @@ const messages = {
       drawDateOnlyInfo: "Çekiliş {date} tarihinde yapılacaktır (Saat belirtilmedi)"
     },
     draw: {
+      step: "Adım {n}",
+      addTitle: "Katılımcı ekle",
+      organizerTitle: "Bilgilerin",
+      organizerHint: "Önce kendi bilgilerini kaydet, davet linkin hazırlansın.",
+      back: "Geri",
       headingTagline: "Santa's Draw",
       headingTitle: "Çekilişini Yönet",
       headingSubtitle: "Katılımcıları ekle, kuralları belirle ve yeni yılın ilk sürprizini başlat! 🎁✨",
@@ -135,6 +161,11 @@ const messages = {
       registerPromptButton: "Kayıt Ol",
     },
     manualSummary: {
+      listTitle: "Katılımcılar",
+      readyTitle: "Çekilişe hazır mı?",
+      minLabel: "En az 3",
+      doneTitle: "Çekiliş tamamlandı!",
+      editHint: "Düzenlemek için bir kişiye tıkla",
       mobileTitle: "Eklenen katılımcılar ({count})",
       previewTagline: "Önizleme",
       statusTitle: "Çekilişin Durumu",
@@ -147,6 +178,9 @@ const messages = {
       phoneRequired: "Telefon zorunlu",
     },
     invitePanel: {
+      saveFirst: "Davet linkin, bilgilerini kaydettiğinde burada görünecek.",
+      linkLabel: "Davet linki",
+      actionTitle: "Paylaş ve çek",
       shareTitle: "🎁 Davet Linkini Paylaş",
       copy: "Kopyala",
       qrTitle: "QR Kod ile Paylaş",
@@ -244,6 +278,8 @@ const messages = {
       joinPhoneRequired: "Telefon gereklidir",
     },
     join: {
+      script: "Davetlisin!",
+      participants: "{count} kişi katıldı",
       loading: "Çekiliş bilgileri yükleniyor...",
       errorTitle: "Bir hata oluştu",
       retry: "Tekrar Dene",
@@ -259,6 +295,7 @@ const messages = {
       drawDateInfo: "Çekilişiniz {date} tarihinde yapılacaktır.",
     },
     auth: {
+      heroTitle: "Kızağa hoş geldin.",
       goRegister: "← Kayıt ol",
       goBack: "← Geri dön",
       loginTitle: "Giriş Yap",
@@ -305,10 +342,25 @@ const messages = {
     },
   },
   en: {
+    header: {
+      menu: "Top menu",
+      openSource: "Open source",
+    },
+    characters: {
+      santa: {
+        wave: "Santa waving hello",
+        thinking: "Santa thinking",
+        sad: "Sad Santa",
+        celebrate: "Santa celebrating",
+      },
+    },
     languageSwitcher: {
       label: "Choose language",
     },
     common: {
+      showPassword: "Show password",
+      hidePassword: "Hide password",
+      close: "Close",
       appName: "Santa's Draw",
       ok: "OK",
       cancel: "Cancel",
@@ -319,6 +371,10 @@ const messages = {
       title: "CHRISTMAS"
     },
     landing: {
+      heroScript: "Merry Christmas",
+      heroText: "Set up your holiday draw in minutes. Everyone gets a fair match and the surprise stays secret until the very end.",
+      badgeFree: "Free",
+      inviteShortTag: "★ Holiday special",
       tagline: "Santa's Edition",
       title: "Santa's Draw",
       subtitlePrefix: "Start your Secret Santa draw now",
@@ -345,6 +401,8 @@ const messages = {
       goRegister: "← Register",
     },
     dashboard: {
+      script: "A new surprise?",
+      eventsCount: "{count} events",
       tagline: "New Year celebrations are starting! 🎉",
       title: "Choose your draw mode",
       subtitle: "Track active events on the left, start a new flow on the right.",
@@ -381,6 +439,11 @@ const messages = {
       drawDateOnlyInfo: "The draw will be executed on {date} (Time not specified)"
     },
     draw: {
+      step: "Step {n}",
+      addTitle: "Add participants",
+      organizerTitle: "Your details",
+      organizerHint: "Save your details first to get your invite link.",
+      back: "Back",
       headingTagline: "Santa's Draw",
       headingTitle: "Manage Your Draw",
       headingSubtitle: "Add participants, set the rules, and kick off the first surprise of the new year! 🎁",
@@ -429,6 +492,11 @@ const messages = {
       registerPromptButton: "Register",
     },
     manualSummary: {
+      listTitle: "Participants",
+      readyTitle: "Ready for the draw?",
+      minLabel: "At least 3",
+      doneTitle: "Draw complete!",
+      editHint: "Click a person to edit",
       mobileTitle: "Added participants ({count})",
       previewTagline: "Preview",
       statusTitle: "Draw Status",
@@ -441,6 +509,9 @@ const messages = {
       phoneRequired: "Phone required",
     },
     invitePanel: {
+      saveFirst: "Your invite link will appear here once you save your details.",
+      linkLabel: "Invite link",
+      actionTitle: "Share and draw",
       shareTitle: "🎁 Share Invite Link",
       copy: "Copy",
       qrTitle: "Share via QR",
@@ -538,6 +609,8 @@ const messages = {
       joinPhoneRequired: "Phone is required",
     },
     join: {
+      script: "You're invited!",
+      participants: "{count} joined",
       loading: "Loading draw information...",
       errorTitle: "Something went wrong",
       retry: "Try Again",
@@ -553,6 +626,7 @@ const messages = {
       drawDateInfo: "Your draw will take place on {date}.",
     },
     auth: {
+      heroTitle: "Welcome aboard the sleigh.",
       goRegister: "← Register",
       goBack: "← Back",
       loginTitle: "Log In",

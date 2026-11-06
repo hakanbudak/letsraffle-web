@@ -1,5 +1,212 @@
 @import "tailwindcss";
 
+/* ------------------------------------------------------------------
+   Lets Raffle — Yılbaşı tasarım dili
+   Fraunces (başlık) · Great Vibes (karşılama, sayfada bir kez) · Nunito (gövde)
+   Kızılcık #A3171C · Altın varak #E6B94A · Çam #1F5C3E · Kar #FFFBF5
+------------------------------------------------------------------- */
+/* 100vh layout only when the window is tall enough; otherwise the page scrolls naturally */
+@custom-variant tall (@media (min-width: 1024px) and (min-height: 760px));
+/* tall-but-tight desktop windows: tighten vertical rhythm so everything still fits */
+@custom-variant compact (@media (min-width: 1024px) and (min-height: 760px) and (max-height: 900px));
+
+@theme {
+  --font-display: "Fraunces Variable", "Fraunces", Georgia, serif;
+  --font-script: "Great Vibes", "Brush Script MT", cursive;
+  --font-body: "Nunito Variable", "Nunito", ui-rounded, system-ui, sans-serif;
+
+  --color-cranberry-400: #d94a43;
+  --color-cranberry-500: #c4242a;
+  --color-cranberry-600: #b91c1c;
+  --color-cranberry-700: #a3171c;
+  --color-cranberry-800: #9b1418;
+  --color-cranberry-900: #7a0f14;
+  --color-cranberry-950: #6e0d12;
+
+  --color-gold-100: #fde9b3;
+  --color-gold-200: #f8e09a;
+  --color-gold-300: #f6d98a;
+  --color-gold-400: #e6b94a;
+  --color-gold-600: #b8892b;
+  --color-gold-900: #5c0b0f;
+
+  --color-pine-100: #e3efe7;
+  --color-pine-500: #4fb87e;
+  --color-pine-700: #1f5c3e;
+  --color-pine-900: #123826;
+
+  --color-snow: #fffbf5;
+  --color-snow-200: #f8efe4;
+  --color-snow-300: #f0dfcb;
+  --color-snow-400: #ecdcc9;
+
+  --color-ink: #3a2626;
+  --color-ink-soft: #5b4040;
+  --color-ink-muted: #6b5050;
+}
+
 html {
-    font-size: 12.8px !important;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  color: var(--color-ink);
+  background: #6e0d12;
+}
+
+@layer components {
+  /* scene background */
+  .xm-scene-bg {
+    background: radial-gradient(1200px 820px at var(--xm-glow-x, 30%) var(--xm-glow-y, 30%), #c4242a 0%, #a3171c 50%, #6e0d12 100%);
+  }
+
+  /* holiday card: snow ground + double gold-foil frame */
+  .xm-card {
+    background: #fffbf5;
+    color: var(--color-ink);
+    border-radius: 30px;
+    box-shadow:
+      inset 0 0 0 2px #e6b94a,
+      inset 0 0 0 8px #fffbf5,
+      inset 0 0 0 9px rgba(230, 185, 74, 0.55),
+      0 40px 90px rgba(50, 0, 0, 0.4);
+  }
+
+  .xm-eyebrow {
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+  }
+
+  .xm-candy {
+    height: 8px;
+    border-radius: 99px;
+    background: repeating-linear-gradient(-45deg, #b91c1c 0 9px, #fffbf5 9px 18px);
+    box-shadow: inset 0 0 0 1px #ecdcc9;
+  }
+
+  /* buttons — a gift-box base under each */
+  .xm-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-height: 52px;
+    padding: 0 24px;
+    border: 0;
+    border-radius: 16px;
+    font: 800 16px/1 var(--font-body);
+    white-space: nowrap;
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform 0.18s ease, filter 0.18s ease, opacity 0.18s ease;
+  }
+  .xm-btn:hover:not(:disabled) { transform: translateY(-2px); filter: brightness(1.05); }
+  .xm-btn:active:not(:disabled) { transform: translateY(3px); }
+  .xm-btn:disabled { opacity: 0.55; cursor: not-allowed; }
+  .xm-btn:focus-visible { outline: 3px solid #f6d98a; outline-offset: 3px; }
+  .xm-btn-sm { min-height: 44px; padding: 0 16px; font-size: 14px; border-radius: 14px; }
+  .xm-btn-lg { min-height: 60px; font-size: 18px; }
+
+  .xm-btn-red { background: #b91c1c; color: #fff; box-shadow: inset 0 0 0 2px rgba(246, 217, 138, 0.6), 0 5px 0 #7a0f14; }
+  .xm-btn-gold { background: linear-gradient(180deg, #f8e09a, #e6b94a); color: #5c0b0f; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.7), 0 5px 0 #b8892b; }
+  .xm-btn-pine { background: #1f5c3e; color: #fff; box-shadow: 0 5px 0 #123826; }
+  .xm-btn-ghost { background: #fff; color: #9b1418; box-shadow: inset 0 0 0 2px #ecdcc9; }
+  .xm-btn-glass { background: rgba(255, 251, 245, 0.14); color: #fffbf5; box-shadow: inset 0 0 0 1px rgba(246, 217, 138, 0.45); }
+
+  /* gift-tag inputs */
+  .xm-label { font-size: 14px; font-weight: 800; color: #5b3a3a; }
+  .xm-field {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 54px;
+    padding: 0 14px 0 16px;
+    border-radius: 16px;
+    background: #fff;
+    box-shadow: inset 0 0 0 2px #ecdcc9;
+    transition: box-shadow 0.2s ease;
+    cursor: text;
+  }
+  .xm-field:hover { box-shadow: inset 0 0 0 2px #e6c9a6; }
+  .xm-field:focus-within { box-shadow: inset 0 0 0 2px #b91c1c, 0 0 0 5px rgba(230, 185, 74, 0.45); }
+  .xm-field.is-invalid { background: #fff5f3; box-shadow: inset 0 0 0 2px #d4372f; }
+  .xm-field.is-disabled { background: #f8efe4; cursor: not-allowed; opacity: 0.75; }
+  .xm-field input, .xm-field select {
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    min-height: 50px;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    font: 700 16px var(--font-body);
+    color: var(--color-ink);
+  }
+  .xm-field input::placeholder { color: #8a7066; font-weight: 600; }
+  .xm-error { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 700; color: #b42318; }
+
+  /* candy-cane toggle */
+  .xm-toggle { position: relative; display: inline-block; flex: none; width: 56px; height: 32px; border-radius: 99px; background: #e6d8c8; transition: background 0.25s ease; }
+  .xm-toggle input { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; margin: 0; cursor: pointer; }
+  .xm-toggle input:disabled { cursor: not-allowed; }
+  .xm-toggle .xm-knob { position: absolute; top: 4px; left: 4px; width: 24px; height: 24px; border-radius: 50%; background: #fff; box-shadow: 0 2px 4px rgba(60, 0, 0, 0.25); transition: transform 0.25s ease; pointer-events: none; }
+  .xm-toggle.is-on { background: repeating-linear-gradient(-45deg, #b91c1c 0 8px, #d94a43 8px 16px); }
+  .xm-toggle.is-on .xm-knob { transform: translateX(24px); }
+  .xm-toggle:has(input:focus-visible) { outline: 3px solid #e6b94a; outline-offset: 2px; }
+
+  .xm-seal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    border-radius: 50%;
+    font-weight: 900;
+    line-height: 1.1;
+  }
+
+  .xm-scroll { scrollbar-width: thin; scrollbar-color: #e6c9a6 transparent; }
+}
+
+/* ------------------------------------------------------------------ motion */
+@keyframes xm-fall { 0% { transform: translate3d(0, -6vh, 0); } 50% { transform: translate3d(26px, 50vh, 0); } 100% { transform: translate3d(-10px, 108vh, 0); } }
+@keyframes xm-twinkle { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+@keyframes xm-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-9px); } }
+@keyframes xm-rise { from { opacity: 0; transform: translateY(26px) scale(0.98); } to { opacity: 1; transform: none; } }
+@keyframes xm-wobble { 0%, 100% { transform: rotate(-8deg); } 50% { transform: rotate(5deg) scale(1.06); } }
+@keyframes xm-shine { 0%, 55% { transform: translateX(-140%) skewX(-20deg); } 100% { transform: translateX(320%) skewX(-20deg); } }
+@keyframes xm-candy { to { background-position: 25.46px 0; } }
+@keyframes xm-glow { 0%, 100% { text-shadow: 0 4px 0 rgba(60, 0, 0, 0.22), 0 0 0 rgba(246, 217, 138, 0); } 50% { text-shadow: 0 4px 0 rgba(60, 0, 0, 0.22), 0 0 30px rgba(246, 217, 138, 0.6); } }
+@keyframes xm-ready { 0%, 100% { box-shadow: inset 0 0 0 2px rgba(246, 217, 138, 0.6), 0 5px 0 #7a0f14, 0 0 0 0 rgba(230, 185, 74, 0.55); } 50% { box-shadow: inset 0 0 0 2px rgba(246, 217, 138, 0.6), 0 5px 0 #7a0f14, 0 0 0 10px rgba(230, 185, 74, 0); } }
+@keyframes xm-live { 0% { box-shadow: 0 0 0 0 rgba(79, 184, 126, 0.7); } 100% { box-shadow: 0 0 0 10px rgba(79, 184, 126, 0); } }
+@keyframes xm-float { 0%, 100% { transform: translateY(0) rotate(-1.5deg); } 50% { transform: translateY(-6px) rotate(1.5deg); } }
+@keyframes xm-dot { 0%, 80%, 100% { opacity: 0.2; transform: translateY(0); } 40% { opacity: 1; transform: translateY(-3px); } }
+@keyframes xm-swing { 0%, 100% { transform: rotate(-5deg); } 50% { transform: rotate(5deg); } }
+@keyframes xm-pop { 0% { opacity: 0; transform: translateY(24px) scale(0.9); } 70% { opacity: 1; transform: translateY(-4px) scale(1.02); } 100% { opacity: 1; transform: none; } }
+@keyframes xm-fade { from { opacity: 0; } to { opacity: 1; } }
+
+.xm-flake { position: absolute; top: 0; border-radius: 50%; background: #fffbf5; animation: xm-fall linear infinite; will-change: transform; }
+.xm-bulb { position: absolute; width: 12px; height: 17px; margin-left: -6px; border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; animation: xm-twinkle 2.4s ease-in-out infinite; }
+.xm-bulb::before { content: ""; position: absolute; left: 3px; top: -5px; width: 6px; height: 6px; border-radius: 2px; background: #4a3a2c; }
+.xm-bob { animation: xm-bob 3.8s ease-in-out infinite; }
+.xm-rise { animation: xm-rise 0.85s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+.xm-d1 { animation-delay: 0.12s; } .xm-d2 { animation-delay: 0.24s; } .xm-d3 { animation-delay: 0.36s; } .xm-d4 { animation-delay: 0.48s; }
+.xm-wobble { animation: xm-wobble 3.4s ease-in-out infinite; }
+.xm-shine { position: relative; overflow: hidden; }
+.xm-shine::after { content: ""; position: absolute; top: 0; bottom: 0; left: 0; width: 36%; background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent); animation: xm-shine 3.8s ease-in-out infinite; pointer-events: none; }
+.xm-candy-move { animation: xm-candy 1.4s linear infinite; }
+.xm-glow { animation: xm-glow 4.2s ease-in-out infinite; }
+.xm-ready:not(:disabled) { animation: xm-ready 2s ease-in-out infinite; }
+.xm-live { display: inline-block; width: 9px; height: 9px; border-radius: 50%; background: #4fb87e; animation: xm-live 1.6s ease-out infinite; }
+.xm-float { animation: xm-float 3.6s ease-in-out infinite; }
+.xm-dot { display: inline-block; animation: xm-dot 1.4s ease-in-out infinite; }
+.xm-swing { display: inline-block; transform-origin: 50% 0; animation: xm-swing 3.2s ease-in-out infinite; }
+.xm-pop { animation: xm-pop 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+.xm-fade { animation: xm-fade 0.3s ease-out both; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
 }

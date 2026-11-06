@@ -1,204 +1,157 @@
 <template>
-  <div class="min-h-screen flex items-center justify-center relative overflow-hidden">
-    <div class="absolute inset-0 bg-gradient-to-br from-red-600 via-red-700 to-red-800"></div>
+  <ChristmasScene glow-x="30%" glow-y="35%">
+    <template #header>
+      <AppHeader :show-open-source="false" />
+    </template>
 
-    <ChristmasTree
-        variant="large"
-        customClass="absolute left-10 bottom-0 translate-y-8 opacity-60" />
 
-    <ChristmasTree
-        variant="small"
-        customClass="absolute right-10 bottom-0 translate-y-4 opacity-60" />
-
-    <div class="absolute -left-20 top-10 w-56 h-56 rounded-full bg-yellow-200/20 blur-3xl"></div>
-    <div class="absolute -right-24 top-24 w-64 h-64 rounded-full bg-red-300/25 blur-3xl"></div>
-    <div class="absolute right-10 bottom-10 w-40 h-40 rounded-full bg-green-300/20 blur-2xl"></div>
-
-    <div class="relative z-10 w-full max-w-2xl px-4 md:px-8 py-8">
-      <div
-          v-if="showSuccessModal"
-          class="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
-          @click="showSuccessModal = false"
-      >
-        <div
-            class="bg-white rounded-3xl p-8 max-w-md mx-4 shadow-2xl"
-            @click.stop
-        >
-          <div class="text-center space-y-4">
-            <div class="text-6xl">🎉</div>
-            <h3 class="text-2xl font-bold text-red-700">{{ t("join.successTitle") }}</h3>
-            <p class="text-slate-600">
-              {{ t("join.successMessage") }}
-            </p>
-            <p v-if="drawInfo?.drawDate" class="text-sm text-slate-500">
-              {{ t("join.drawDateInfo", { date: formatDrawDate(drawInfo.drawDate) }) }}
-            </p>
-            <p class="text-sm text-slate-500">
-              {{ t("join.successInfo") }}
-            </p>
-            <p class="text-sm font-medium text-red-600">
-              {{ t("join.successFooter") }}
-            </p>
-            <button
-                type="button"
-                @click="showSuccessModal = false"
-                class="mt-4 w-full px-6 py-3 rounded-xl bg-red-600 text-white text-sm font-semibold hover:bg-red-700 transition-all"
-            >
-              {{ t("join.successButton") }}
-            </button>
+    <main class="grid flex-1 gap-6 px-4 pb-10 lg:min-h-0 lg:grid-cols-[minmax(0,1fr)_minmax(0,540px)] lg:gap-16 lg:pb-[120px] tall:pb-0 lg:pl-[72px] lg:pr-24">
+      <section class="relative flex flex-col lg:min-h-0 lg:pt-[5vh]">
+        <div class="flex items-end justify-between gap-2 lg:block">
+          <div class="min-w-0 pb-2 lg:pb-0">
+            <p class="xm-glow m-0 font-script text-[52px] leading-none text-gold-300 md:text-[64px]">{{ t("join.script") }}</p>
+            <h1 class="mt-1.5 max-w-[520px] font-display text-[30px] font-black leading-[1.05] tracking-tight text-snow md:text-[52px]">{{ t("join.heading") }}</h1>
+            <div v-if="drawInfo" class="mt-4 flex flex-wrap gap-2.5">
+              <span v-if="drawInfo.drawDate" class="inline-flex min-h-10 items-center gap-2 rounded-full bg-snow/15 px-4 text-[15px] font-extrabold shadow-[inset_0_0_0_1px_rgba(246,217,138,0.5)]">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f6d98a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2" /><path d="M16 3v4" /><path d="M8 3v4" /><path d="M3 10h18" /></svg>
+                {{ formatDrawDate(drawInfo.drawDate) }}
+              </span>
+              <span v-if="drawInfo.participantCount" class="inline-flex min-h-10 items-center gap-2 rounded-full bg-snow/15 px-4 text-[15px] font-extrabold shadow-[inset_0_0_0_1px_rgba(246,217,138,0.5)]">
+                <span class="xm-live" aria-hidden="true"></span>
+                {{ t("join.participants", { count: drawInfo.participantCount }) }}
+              </span>
+            </div>
           </div>
+          <SantaCharacter class="shrink-0 lg:hidden" :mood="showSuccessModal ? 'celebrate' : 'wave'" :size="130" interactive eager />
         </div>
-      </div>
-
-      <div class="relative flex justify-center mb-8">
-        <div class="relative -mb-20 -z-10">
-          <SantaAvatar :size="150" />
+        <div class="absolute -bottom-[64px] tall:bottom-[46px] left-1/2 hidden aspect-[4/5] h-[min(46vh,410px)] -translate-x-[40%] lg:block">
+          <SantaCharacter :mood="showSuccessModal ? 'celebrate' : 'wave'" fluid interactive eager />
         </div>
-      </div>
+      </section>
 
-      <div class="bg-white rounded-3xl border border-red-100 p-6 md:p-8 shadow-xl">
-        <div v-if="isLoading" class="text-center py-12">
-          <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-red-600"></div>
-          <p class="mt-4 text-slate-600">{{ t("join.loading") }}</p>
-        </div>
+      <div class="flex items-start lg:items-center lg:pb-[70px]">
+        <section class="xm-card xm-rise w-full px-5 py-8 sm:px-10 sm:py-9" aria-labelledby="join-title" aria-live="polite">
+          <div v-if="isLoading" class="py-12 text-center" role="status">
+            <div class="inline-block h-10 w-10 animate-spin rounded-full border-[3px] border-snow-400 border-t-cranberry-600"></div>
+            <p class="mt-4 font-bold text-ink-muted">{{ t("join.loading") }}</p>
+          </div>
 
-        <div v-else-if="error" class="text-center py-12">
-          <div class="text-4xl mb-4">😕</div>
-          <h3 class="text-xl font-bold text-red-700 mb-2">{{ t("join.errorTitle") }}</h3>
-          <p class="text-slate-600 mb-4">{{ error }}</p>
-          <button
-              type="button"
-              @click="fetchDrawInfo"
-              class="px-6 py-2 rounded-xl bg-red-600 text-white text-sm font-semibold hover:bg-red-700 transition-all"
-          >
-            {{ t("join.retry") }}
-          </button>
-        </div>
+          <div v-else-if="error" class="flex flex-col items-center py-6 text-center">
+            <SantaCharacter mood="sad" :size="120" />
+            <h2 id="join-title" class="mb-2 mt-2 font-display text-2xl font-black text-cranberry-800">{{ t("join.errorTitle") }}</h2>
+            <p class="mb-5 text-ink-soft">{{ error }}</p>
+            <button type="button" class="xm-btn xm-btn-red" @click="fetchDrawInfo">{{ t("join.retry") }}</button>
+          </div>
 
-        <div v-else-if="drawInfo">
-          <header class="mb-6 text-center">
-            <h2 class="text-2xl md:text-3xl font-bold text-red-700 mb-2">
-              {{ t("join.heading") }}
-            </h2>
-            <p class="text-sm text-slate-600">
-              {{ t("join.subheading") }}
-            </p>
-          </header>
+          <div v-else-if="drawInfo">
+            <h2 id="join-title" class="mb-2.5 font-display text-[34px] font-black leading-tight text-cranberry-800 sm:text-4xl">{{ t("join.heading") }}</h2>
+            <div class="xm-candy xm-candy-move mb-3 w-[88px]"></div>
+            <p class="mb-6 text-[15px] leading-normal text-ink-soft">{{ t("join.subheading") }}</p>
 
-          <form @submit.prevent="handleSubmit" class="space-y-4">
-            <div class="grid gap-4 md:grid-cols-2">
-              <div class="flex flex-col gap-1">
-                <span class="text-xs font-medium text-slate-700">{{ t("draw.fields.firstName.label") }}</span>
+            <form class="flex flex-col gap-3.5" novalidate @submit.prevent="handleSubmit">
+              <div class="grid gap-3 sm:grid-cols-2">
                 <Input
                     id="first-name"
                     v-model:input="form.firstName.value"
                     :invalidMessage="form.firstName.inValidMessage"
+                    :label="t('draw.fields.firstName.label')"
                     type="text"
                     name="firstName"
+                    autocomplete="given-name"
                     :placeholder="t('draw.fields.firstName.placeholder')"
                     @onFocus="clearError('firstName')" />
-              </div>
-
-              <div class="flex flex-col gap-1">
-                <span class="text-xs font-medium text-slate-700">{{ t("draw.fields.lastName.label") }}</span>
                 <Input
                     id="last-name"
                     v-model:input="form.lastName.value"
                     :invalidMessage="form.lastName.inValidMessage"
+                    :label="t('draw.fields.lastName.label')"
                     type="text"
                     name="lastName"
+                    autocomplete="family-name"
                     :placeholder="t('draw.fields.lastName.placeholder')"
                     @onFocus="clearError('lastName')" />
               </div>
-            </div>
 
-            <div class="flex flex-col gap-1">
-              <span class="text-xs font-medium text-slate-700">
-                {{ t("draw.fields.email.label") }}
-                <span class="text-red-500">*</span>
-              </span>
               <Input
                   id="email"
                   v-model:input="form.email.value"
                   :invalidMessage="form.email.inValidMessage"
+                  :label="t('draw.fields.email.label')"
+                  required
+                  icon="mail"
                   type="email"
                   name="email"
+                  autocomplete="email"
                   :placeholder="t('draw.fields.email.placeholder')"
                   @onFocus="clearError('email')" />
-            </div>
 
-            <div v-if="drawInfo.requireAddress" class="flex flex-col gap-1">
-              <span class="text-xs font-medium text-slate-700">
-                {{ t("draw.fields.address.label") }}
-                <span class="text-red-500">*</span>
-              </span>
               <Input
+                  v-if="drawInfo.requireAddress"
                   id="address"
                   v-model:input="form.address.value"
                   :invalidMessage="form.address.inValidMessage"
+                  :label="t('draw.fields.address.label')"
+                  required
+                  icon="pin"
                   type="text"
                   name="address"
+                  autocomplete="street-address"
                   :placeholder="t('draw.fields.address.placeholder')"
                   @onFocus="clearError('address')" />
-            </div>
 
-            <div v-if="drawInfo.requirePhone" class="flex flex-col gap-1">
-              <span class="text-xs font-medium text-slate-700">
-                {{ t("draw.fields.phone.label") }}
-                <span class="text-red-500">*</span>
-              </span>
               <Input
+                  v-if="drawInfo.requirePhone"
                   id="phone"
                   v-model:input="form.phone.value"
                   :invalidMessage="form.phone.inValidMessage"
+                  :label="t('draw.fields.phone.label')"
+                  required
+                  icon="phone"
                   type="text"
                   name="phone"
+                  autocomplete="tel"
                   :placeholder="t('draw.fields.phone.placeholder')"
                   @onFocus="clearError('phone')" />
-            </div>
 
-            <button
-                type="submit"
-                :disabled="isSubmitting"
-                class="w-full px-6 py-3 rounded-xl bg-red-600 text-white text-sm font-semibold shadow-sm hover:bg-red-700 hover:shadow-md transition-all disabled:opacity-60 disabled:cursor-not-allowed mt-6 cursor-pointer"
-            >
-              <span v-if="!isSubmitting">{{ t("join.submit") }}</span>
-              <span v-else>{{ t("join.submitting") }}</span>
-            </button>
+              <button type="submit" class="xm-btn xm-btn-red xm-shine mt-2 w-full" :disabled="isSubmitting">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="8" width="18" height="4" rx="1" /><path d="M12 8v13" /><path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7" /><path d="M7.5 8a2.5 2.5 0 0 1 0-5C10 3 12 8 12 8s2-5 4.5-5a2.5 2.5 0 0 1 0 5" /></svg>
+                <span v-if="!isSubmitting">{{ t("join.submit") }}</span>
+                <span v-else>{{ t("join.submitting") }}</span>
+              </button>
 
-            <div
-                v-if="submitError"
-                class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl relative"
-                role="alert"
-            >
-              <div class="flex items-start gap-3">
-                <div class="flex-1">
-                  <span class="block text-sm">{{ submitError }}</span>
-                </div>
-                <button
-                    type="button"
-                    @click="submitError = ''"
-                    class="text-red-700 hover:text-red-900 transition-colors"
-                    :aria-label="t('common.close')">
-                  <span class="text-xl leading-none">×</span>
-                </button>
+              <div v-if="submitError" class="flex items-start gap-3 rounded-2xl bg-[#fff5f3] px-4 py-3 text-[#b42318] shadow-[inset_0_0_0_2px_#f3b8b0]" role="alert">
+                <span class="flex-1 text-sm font-bold">{{ submitError }}</span>
+                <button type="button" class="flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg border-0 bg-transparent text-xl leading-none text-[#b42318]" :aria-label="t('common.close')" @click="submitError = ''">×</button>
               </div>
-            </div>
-          </form>
-        </div>
+            </form>
+          </div>
+        </section>
       </div>
-    </div>
-  </div>
+    </main>
+
+    <template #overlay>
+      <DrawSuccessModal
+          :visible="showSuccessModal"
+          :title="t('join.successTitle')"
+          :message="t('join.successMessage')"
+          :additional-message="successDetails"
+          :footer-text="t('join.successFooter')"
+          :button-text="t('join.successButton')"
+          @close="showSuccessModal = false" />
+    </template>
+  </ChristmasScene>
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, onMounted } from "vue";
+import { computed, reactive, ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import confetti from "canvas-confetti";
 import Input from "@/components/ui-kit/input/Input.vue";
 import api from "@/services/api";
-import SantaAvatar from "@/components/christmas/SantaAvatar.vue";
-import ChristmasTree from "@/components/christmas/ChristmasTree.vue";
+import SantaCharacter from "@/components/christmas/SantaCharacter.vue";
+import ChristmasScene from "@/components/layout/ChristmasScene.vue";
+import AppHeader from "@/components/layout/AppHeader.vue";
+import DrawSuccessModal from "@/components/draw/DrawSuccessModal.vue";
 import { useI18n } from "vue-i18n";
 import { setLocale, type Locale } from "@/i18n";
 
@@ -222,6 +175,11 @@ const error = ref<string>("");
 const isSubmitting = ref<boolean>(false);
 const showSuccessModal = ref<boolean>(false);
 const submitError = ref<string>("");
+
+const successDetails = computed(() =>
+  [drawInfo.value?.drawDate ? t("join.drawDateInfo", { date: formatDrawDate(drawInfo.value.drawDate) }) : "", t("join.successInfo")]
+    .filter(Boolean)
+    .join("\n"));
 
 const form = reactive({
   firstName: { value: "", inValidMessage: "" },
