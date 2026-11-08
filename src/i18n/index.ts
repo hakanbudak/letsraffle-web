@@ -299,6 +299,25 @@ const messages = {
       successButton: "Tamam",
       drawDateInfo: "Çekilişiniz {date} tarihinde yapılacaktır.",
     },
+    account: {
+      delete: {
+        link: "Hesabımı sil",
+        title: "Hesabını sil",
+        body: "Hesabın ve giriş bilgilerin kalıcı olarak silinir. Bu işlem geri alınamaz.",
+        draws: "Oluşturduğun çekilişler katılımcıların sonuçlarını görebilmesi için kalır, ancak hesabınla bağlantısı kaldırılır.",
+        confirm: "Hesabımı kalıcı olarak sil",
+        deleting: "Siliniyor...",
+        cancel: "Vazgeç",
+        failed: "Hesap silinemedi, lütfen tekrar deneyin.",
+        done: "Hesabın silindi.",
+      },
+    },
+    legal: {
+      privacy: "Gizlilik Politikası",
+      terms: "Kullanım Koşulları",
+      home: "← Ana sayfa",
+      navLabel: "Yasal",
+    },
     auth: {
       social: {
         or: "veya",
@@ -640,6 +659,25 @@ const messages = {
       successFooter: "Happy Holidays! 🎄",
       successButton: "Great!",
       drawDateInfo: "Your draw will take place on {date}.",
+    },
+    account: {
+      delete: {
+        link: "Delete my account",
+        title: "Delete your account",
+        body: "Your account and sign-in details will be permanently deleted. This cannot be undone.",
+        draws: "Draws you created stay available so participants can see their results, but they are detached from your account.",
+        confirm: "Permanently delete my account",
+        deleting: "Deleting...",
+        cancel: "Cancel",
+        failed: "Your account could not be deleted, please try again.",
+        done: "Your account has been deleted.",
+      },
+    },
+    legal: {
+      privacy: "Privacy Policy",
+      terms: "Terms of Use",
+      home: "← Home",
+      navLabel: "Legal",
     },
     auth: {
       social: {
