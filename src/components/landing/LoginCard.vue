@@ -44,7 +44,7 @@
       <p v-if="generalError" class="xm-error justify-center" role="alert">{{ generalError }}</p>
     </form>
 
-    <SocialLogin />
+    <SocialLogin @success="emit('login-success')" />
 
     <div class="mt-5 flex flex-wrap items-center justify-between gap-2 text-sm font-bold">
       <button type="button" class="min-h-11 cursor-pointer border-0 bg-transparent p-0 font-extrabold text-cranberry-600 hover:text-cranberry-900" @click="$emit('back-to-intro')">
