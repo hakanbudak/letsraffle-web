@@ -59,16 +59,27 @@
         </article>
       </section>
     </main>
+    <footer class="relative z-10 flex flex-wrap items-center justify-center gap-x-4 gap-y-1 pb-5 text-[13px] font-bold lg:fixed lg:bottom-3 lg:left-0 lg:right-0 lg:pb-0 lg:mx-auto lg:w-fit lg:rounded-full lg:bg-snow/90 lg:px-4 lg:py-1 lg:shadow-[0_4px_14px_rgba(40,4,8,0.25)]">
+      <LegalLinks />
+      <span aria-hidden="true" class="text-snow/60 lg:text-cranberry-800/50">·</span>
+      <button type="button" class="text-snow/80 hover:underline lg:text-cranberry-800/80" data-testid="delete-account" @click="showDelete = true">
+        {{ t("account.delete.link") }}
+      </button>
+    </footer>
+    <DeleteAccountDialog :visible="showDelete" @close="showDelete = false" @deleted="handleDeleted" />
   </ChristmasScene>
 </template>
 
 <script setup lang="ts">
+import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
 import ChristmasScene from "@/components/layout/ChristmasScene.vue";
 import AppHeader from "@/components/layout/AppHeader.vue";
 import SantaCharacter from "@/components/christmas/SantaCharacter.vue";
 import ParticipantsPanel from "@/components/panel/ParticipantsPanel.vue";
+import LegalLinks from "@/components/layout/LegalLinks.vue";
+import DeleteAccountDialog from "@/components/account/DeleteAccountDialog.vue";
 import type { DrawDetail } from "@/components/draw/types";
 import { logoutUser, USER_KEY } from "@/services/authHelpers";
 
@@ -87,6 +98,13 @@ const userEmail = (() => {
 const goManual = () => router.push("/draw/manual").catch(() => undefined);
 const goInvite = () => router.push("/draw/dynamic").catch(() => undefined);
 const handleLogout = () => logoutUser(true);
+
+const showDelete = ref(false);
+const handleDeleted = () => {
+  showDelete.value = false;
+  logoutUser(false);
+  router.replace({ path: "/", query: { accountDeleted: "true" } }).catch(() => undefined);
+};
 
 const handleDrawSelected = (drawDetail: DrawDetail) => {
   if (drawDetail.inviteCode) {

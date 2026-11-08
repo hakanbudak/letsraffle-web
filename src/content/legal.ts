@@ -64,7 +64,7 @@ export const legal: Record<LegalDoc, Record<"tr" | "en", LegalContent>> = {
         {
           heading: "Saklama süresi ve hesabın silinmesi",
           paragraphs: [
-            "Verilerini hesabın açık olduğu ve çekilişlerin yürütülmesi için gerektiği sürece saklarız. Hesabını istediğin zaman iOS uygulamasının Profil ekranından ya da " + CONTACT_EMAIL + " adresine yazarak silebilirsin; hesap bilgilerin silinir. Diğer katılımcıların sonuçlarını görebilmesi için geçmiş çekilişler hesabınla ilişkisi kaldırılarak tutulabilir. Silinmesini istediğin başka veriler için bize yazabilirsin.",
+            "Verilerini hesabın açık olduğu ve çekilişlerin yürütülmesi için gerektiği sürece saklarız. Hesabını istediğin zaman web sitesinde panelin altındaki \"Hesabımı sil\" bağlantısından, iOS uygulamasında Profil ekranından ya da " + CONTACT_EMAIL + " adresine yazarak silebilirsin; hesap bilgilerin silinir. Diğer katılımcıların sonuçlarını görebilmesi için geçmiş çekilişler hesabınla ilişkisi kaldırılarak tutulabilir. Silinmesini istediğin başka veriler için bize yazabilirsin.",
           ],
         },
         {
@@ -126,7 +126,7 @@ export const legal: Record<LegalDoc, Record<"tr" | "en", LegalContent>> = {
         {
           heading: "Retention and account deletion",
           paragraphs: [
-            "We keep your data while your account is open and as long as needed to run draws. You can delete your account at any time from the Profile screen of the iOS app or by emailing " + CONTACT_EMAIL + "; your account data is then deleted. Past draws may be kept, detached from your account, so other participants can still see their results. Email us to request deletion of any other data.",
+            "We keep your data while your account is open and as long as needed to run draws. You can delete your account at any time with \"Delete my account\" at the bottom of your dashboard on the website, from the Profile screen in the iOS app, or by emailing " + CONTACT_EMAIL + "; your account data is then deleted. Past draws may be kept, detached from your account, so other participants can still see their results. Email us to request deletion of any other data.",
           ],
         },
         {
@@ -165,7 +165,7 @@ export const legal: Record<LegalDoc, Record<"tr" | "en", LegalContent>> = {
           heading: "Hesabın",
           items: [
             "Kayıt sırasında doğru bilgi vermekten ve hesabının güvenliğinden sen sorumlusun.",
-            "Hesabını istediğin zaman iOS uygulamasından ya da " + CONTACT_EMAIL + " adresine yazarak silebilirsin.",
+            "Hesabını istediğin zaman web sitesinden, iOS uygulamasından ya da " + CONTACT_EMAIL + " adresine yazarak silebilirsin.",
           ],
         },
         {
@@ -217,7 +217,7 @@ export const legal: Record<LegalDoc, Record<"tr" | "en", LegalContent>> = {
           heading: "Your account",
           items: [
             "You are responsible for providing accurate information and for keeping your account secure.",
-            "You can delete your account at any time from the iOS app or by emailing " + CONTACT_EMAIL + ".",
+            "You can delete your account at any time on the website, in the iOS app, or by emailing " + CONTACT_EMAIL + ".",
           ],
         },
         {
