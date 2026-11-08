@@ -53,6 +53,7 @@
             @login-success="router.push('/dashboard')" />
       </div>
     </main>
+    <LegalLinks class="pb-5 lg:absolute lg:bottom-3 lg:left-0 lg:right-0 lg:pb-0" />
   </ChristmasScene>
 </template>
 
@@ -66,6 +67,7 @@ import SantaCharacter from "@/components/christmas/SantaCharacter.vue";
 import IntroCard from "@/components/landing/IntroCard.vue";
 import RegisterCard from "@/components/landing/RegisterCard.vue";
 import LoginCard from "@/components/landing/LoginCard.vue";
+import LegalLinks from "@/components/layout/LegalLinks.vue";
 import { isAuthenticated } from "@/services/authHelpers";
 
 const router = useRouter();

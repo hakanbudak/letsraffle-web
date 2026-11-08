@@ -299,6 +299,12 @@ const messages = {
       successButton: "Tamam",
       drawDateInfo: "Çekilişiniz {date} tarihinde yapılacaktır.",
     },
+    legal: {
+      privacy: "Gizlilik Politikası",
+      terms: "Kullanım Koşulları",
+      home: "← Ana sayfa",
+      navLabel: "Yasal",
+    },
     auth: {
       social: {
         or: "veya",
@@ -640,6 +646,12 @@ const messages = {
       successFooter: "Happy Holidays! 🎄",
       successButton: "Great!",
       drawDateInfo: "Your draw will take place on {date}.",
+    },
+    legal: {
+      privacy: "Privacy Policy",
+      terms: "Terms of Use",
+      home: "← Home",
+      navLabel: "Legal",
     },
     auth: {
       social: {
