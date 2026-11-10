@@ -8,7 +8,7 @@
       {{ t("account.delete.done") }}
     </p>
     <main class="relative grid flex-1 gap-6 px-4 pb-10 lg:min-h-0 lg:grid-cols-[minmax(0,1fr)_minmax(0,560px)] lg:gap-16 lg:pb-[120px] tall:pb-0 lg:pl-[72px] lg:pr-20">
-      <section class="relative flex flex-col lg:min-h-0 lg:pt-[4vh]">
+      <section class="relative flex flex-col lg:min-h-0 lg:pt-[calc(4vh+28px)]">
         <div class="flex items-end justify-between gap-2 lg:block">
           <div class="min-w-0 pb-4 lg:pb-0">
             <template v-if="currentPanel === 'intro'">
@@ -16,7 +16,11 @@
               <h1 class="xm-glow mt-3 font-script text-[58px] font-normal leading-none text-gold-300 md:text-[clamp(88px,11vh,132px)]">
                 {{ t("landing.heroScript") }}
               </h1>
-              <p class="mt-2.5 max-w-[430px] text-sm font-semibold leading-relaxed text-snow/90 md:text-[19px]">{{ t("landing.heroText") }}</p>
+              <!-- desktop: Santa "says" the intro in a little snow-white speech bubble pointing down at him -->
+              <p class="hero-bubble mt-2.5 max-w-[430px] text-sm font-semibold leading-relaxed text-snow/90 md:text-[19px] lg:relative lg:mt-5 lg:rounded-[24px] lg:bg-snow lg:px-6 lg:py-4 lg:font-display lg:text-[18px] lg:font-bold lg:leading-snug lg:text-cranberry-800 lg:shadow-[inset_0_0_0_2px_#e6b94a,0_14px_30px_rgba(50,0,0,0.3)]">
+                {{ t("landing.heroText") }}
+                <span aria-hidden="true" class="absolute -bottom-2.5 left-[74%] hidden h-5 w-5 -translate-x-1/2 rotate-45 bg-snow shadow-[2px_2px_0_#e6b94a] lg:block"></span>
+              </p>
             </template>
             <template v-else>
               <p class="xm-eyebrow text-[11px] text-gold-300 md:text-sm">{{ t("landing.inviteCardTitle") }}</p>
@@ -57,7 +61,7 @@
       </div>
       <!-- Santa stands on the snow ground, centred in the left column, whatever the card height -->
       <div
-          class="pointer-events-none absolute bottom-[78px] hidden aspect-[9/10] h-[min(50vh,450px)] -translate-x-[46%] lg:block"
+          class="pointer-events-none absolute bottom-[78px] hidden aspect-[9/10] h-[min(450px,50vh,calc(100vh-430px))] -translate-x-[46%] lg:block"
           style="left: calc(72px + (100% - 776px) / 2)">
         <div class="pointer-events-auto h-full w-full">
           <SantaCharacter :mood="santaMood" :preload="santaPreload" fluid interactive eager />

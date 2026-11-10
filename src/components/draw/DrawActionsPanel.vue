@@ -192,6 +192,8 @@
           </template>
         </div>
       </form>
+      <!-- breathing room under the last button: scroll containers drop their bottom padding in some browsers -->
+      <div aria-hidden="true" class="h-3 flex-none lg:h-4"></div>
     </section>
 
     <ManualSummaryPanel

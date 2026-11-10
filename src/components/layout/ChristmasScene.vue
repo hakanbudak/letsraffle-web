@@ -14,6 +14,13 @@
         <svg viewBox="0 0 1440 40" preserveAspectRatio="none" class="absolute left-0 top-[104px] hidden h-10 w-full md:block">
           <path d="M0 10 Q120 40 240 10 Q360 40 480 10 Q600 40 720 10 Q840 40 960 10 Q1080 40 1200 10 Q1320 40 1440 10" fill="none" stroke="#3b2a1e" stroke-width="2" />
         </svg>
+        <GarlandWreath
+            v-for="(x, i) in WREATHS"
+            :key="`w${i}`"
+            :uid="`w${i}`"
+            :size="46"
+            class="absolute top-[97px] hidden -translate-x-1/2 md:block"
+            :style="{ left: x }" />
         <div
             v-for="(b, i) in bulbs"
             :key="`b${i}`"
@@ -85,6 +92,9 @@
 
 <script setup lang="ts">
 import ChristmasFigure, { type FigureName } from "@/components/christmas/ChristmasFigure.vue";
+import GarlandWreath from "@/components/christmas/GarlandWreath.vue";
+/** wreaths pinned at the inner points where two arcs of the garland meet (x = 240, 480, … of 1440) */
+const WREATHS = [1, 2, 3, 4, 5].map((a) => `${((a * 240) / 1440) * 100}%`);
 /**
  * Full-viewport (100vh on desktop) Christmas scene used by every page:
  * cranberry glow background, CSS snowfall, a twinkling light garland,
