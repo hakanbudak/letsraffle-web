@@ -153,3 +153,6 @@ Claude outputs/
 art/__pycache__/
 art/brand/*.dmg
 art/brand/
+
+# intermediate lossless frames for the alpha videos
+art/_vsrc/

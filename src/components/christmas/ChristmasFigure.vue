@@ -7,6 +7,7 @@
       :aria-label="t(`characters.figures.${figure}`)"
       @click="onClick"
   >
+    <div class="relative">
     <img
         :src="currentSrc"
         :loading="eager ? 'eager' : 'lazy'"
@@ -14,15 +15,33 @@
         draggable="false"
         alt=""
         class="block h-auto w-full"
-        :class="{ 'figure-boop': booping }"
+        :class="{ 'figure-boop': booping, 'opacity-0': videoReady }"
         @animationend="booping = false"
     />
+    <video
+        v-if="videoSrc"
+        muted
+        playsinline
+        autoplay
+        loop
+        disablepictureinpicture
+        preload="auto"
+        :src="videoSrc"
+        aria-hidden="true"
+        class="absolute inset-0 block h-full w-full object-contain object-bottom"
+        :class="[videoReady ? 'opacity-100' : 'opacity-0', { 'figure-boop': booping }]"
+        @loadeddata="kickVideo($event, onVideoFail)"
+        @playing="videoReady = true"
+        @error="onVideoFail"
+    ></video>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
+import { alphaVideo, kickVideo } from "./alphaVideo";
 
 /**
  * Extra Blender-rendered Christmas figures in the Santa's toon style
@@ -56,10 +75,23 @@ const reducedMotion = () =>
     typeof window !== "undefined" && typeof window.matchMedia === "function" &&
     window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+const videoSrc = ref("");
+const videoReady = ref(false);
+let videoFailed = false;
+
+function onVideoFail() {
+  videoFailed = true;
+  videoSrc.value = "";
+  videoReady.value = false;
+  play();
+}
+
 function play() {
   const anim = pick(`${props.figure}.webp`);
   if (!anim || props.still || reducedMotion()) return;
   if (props.animateFrom && window.innerWidth < props.animateFrom) return;
+  const vid = videoFailed ? "" : alphaVideo(props.figure);
+  if (vid) { videoSrc.value = vid; return; }
   const img = new Image();
   img.decoding = "async";
   img.onload = () => { currentSrc.value = anim; };

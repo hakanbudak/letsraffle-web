@@ -27,15 +27,35 @@
         draggable="false"
         alt=""
         class="santa-img absolute inset-0 block h-full w-full object-contain object-bottom"
-        :class="{ 'santa-boop': booping, 'santa-swap': !!prevSrc }"
+        :class="{ 'santa-boop': booping, 'santa-swap': !!prevSrc, 'opacity-0': videoReady }"
         @animationend="booping = false"
     />
+    <!-- GPU-decoded transparent video on top once it is really playing (the still frame stays as poster/fallback) -->
+    <video
+        v-if="videoSrc"
+        :key="videoSrc"
+        muted
+        playsinline
+        autoplay
+        loop
+        disablepictureinpicture
+        preload="auto"
+        :src="videoSrc"
+        aria-hidden="true"
+        class="absolute inset-0 block h-full w-full object-contain object-bottom"
+        :class="[videoReady ? 'opacity-100' : 'opacity-0', { 'santa-boop': booping }]"
+        @loadeddata="kickVideo($event, onVideoFail)"
+        @playing="videoReady = true"
+        @error="onVideoFail"
+        @animationend="booping = false"
+    ></video>
   </div>
 </template>
 
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
+import { alphaVideo, kickVideo } from "./alphaVideo";
 
 /**
  * Blender'da render edilen Noel Baba animasyonları (seffaf, döngülü WebP).
@@ -100,9 +120,26 @@ function load(src: string, done?: () => void) {
   img.src = src;
 }
 
+const videoSrc = ref("");
+const videoReady = ref(false);
+let videoFailed = false;
+
+function onVideoFail() {
+  videoFailed = true;
+  videoSrc.value = "";
+  videoReady.value = false;
+  show(props.mood);
+}
+
 function show(m: SantaMood) {
   if (reducedMotion() || !visible) {
     currentSrc.value = stillOf(m);
+    return;
+  }
+  const vid = videoFailed ? "" : alphaVideo(`santa-${m}`);
+  if (vid) {
+    currentSrc.value = stillOf(m);
+    if (videoSrc.value !== vid) { videoReady.value = false; videoSrc.value = vid; }
     return;
   }
   const anim = animOf(m);
@@ -159,7 +196,13 @@ watch(() => props.preload, () => { if (visible) schedulePreload(); });
 function schedulePreload() {
   const conn = (navigator as Navigator & { connection?: { saveData?: boolean; effectiveType?: string } }).connection;
   if (conn?.saveData || /2g/.test(conn?.effectiveType ?? "")) return;
-  const run = () => { for (const m of props.preload) load(animOf(m)); };
+  const run = () => {
+    for (const m of props.preload) {
+      const vid = videoFailed ? "" : alphaVideo(`santa-${m}`);
+      if (vid) fetch(vid).catch(() => undefined);
+      else load(animOf(m));
+    }
+  };
   const idle = (window as Window & { requestIdleCallback?: (cb: () => void, o?: { timeout: number }) => number }).requestIdleCallback;
   setTimeout(() => (idle ? idle(run, { timeout: 2000 }) : run()), 1200);
 }
