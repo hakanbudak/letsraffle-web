@@ -1,5 +1,5 @@
 <template>
-  <ChristmasScene glow-x="30%" glow-y="35%" tree="right">
+  <ChristmasScene glow-x="30%" glow-y="35%" :forest="false" :decor="sceneDecor">
     <template #header>
       <AppHeader />
     </template>
@@ -157,6 +157,10 @@ import DrawSuccessModal from "@/components/draw/DrawSuccessModal.vue";
 import { useI18n } from "vue-i18n";
 import { setLocale, type Locale } from "@/i18n";
 
+// Santa's friends keep him company on the snow (left corner, clear of the join card)
+const sceneDecor = [
+  { figure: "hug" as const, cls: "left-[1.5%] bottom-[68px] w-[clamp(150px,12.5vw,200px)] [filter:saturate(0.92)_brightness(0.95)]" },
+];
 const route = useRoute();
 const { t, locale } = useI18n();
 
