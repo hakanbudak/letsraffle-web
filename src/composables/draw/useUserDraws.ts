@@ -72,6 +72,19 @@ export function useUserDraws() {
     }
   };
 
+  /** Permanently deletes a draw that has not been held yet. Returns an error message on failure. */
+  const deleteDraw = async (drawId: number): Promise<string | null> => {
+    try {
+      await api.delete(`/api/v1/draws/${drawId}`);
+      activeDraws.value = activeDraws.value.filter((d) => d.id !== drawId);
+      return null;
+    } catch (err: any) {
+      console.error("Error deleting draw:", err);
+      if (err?.response?.status === 400) return t("participantsPanel.delete.heldError");
+      return t("participantsPanel.delete.error");
+    }
+  };
+
   onMounted(() => {
     fetchUserDraw();
   });
@@ -83,6 +96,7 @@ export function useUserDraws() {
     hasFetched,
     fetchUserDraw,
     fetchDrawDetail,
+    deleteDraw,
   };
 }
 

@@ -13,6 +13,7 @@ vi.mock('vue-i18n', () => ({
 vi.mock('@/services/api', () => ({
   default: {
     get: vi.fn(),
+    delete: vi.fn(),
   },
 }))
 
@@ -232,5 +233,27 @@ describe('useUserDraws', () => {
 
     expect(result).toBeNull()
   })
-})
 
+  it('deleteDraw removes the draw from the list on success', async () => {
+    ;(api.delete as any).mockResolvedValueOnce({})
+    const { activeDraws, deleteDraw } = useUserDraws()
+    activeDraws.value = [{ id: 1 } as any, { id: 2 } as any]
+
+    const error = await deleteDraw(1)
+
+    expect(api.delete).toHaveBeenCalledWith('/api/v1/draws/1')
+    expect(error).toBeNull()
+    expect(activeDraws.value.map((d) => d.id)).toEqual([2])
+  })
+
+  it('deleteDraw keeps the draw and explains when it was already held', async () => {
+    ;(api.delete as any).mockRejectedValueOnce({ response: { status: 400 } })
+    const { activeDraws, deleteDraw } = useUserDraws()
+    activeDraws.value = [{ id: 1 } as any]
+
+    const error = await deleteDraw(1)
+
+    expect(error).toBe('participantsPanel.delete.heldError')
+    expect(activeDraws.value).toHaveLength(1)
+  })
+})
