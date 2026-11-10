@@ -43,7 +43,7 @@
         :src="videoSrc"
         aria-hidden="true"
         class="absolute inset-0 block h-full w-full object-contain object-bottom"
-        :class="[videoReady ? 'opacity-100' : 'opacity-0', { 'santa-boop': booping }]"
+        :class="[videoReady ? 'visible' : 'invisible', { 'santa-boop': booping, 'santa-swap': !!prevSrc }]"
         @loadeddata="kickVideo($event, onVideoFail)"
         @playing="videoReady = true"
         @error="onVideoFail"
@@ -217,18 +217,19 @@ onUnmounted(() => { io?.disconnect(); clearTimeout(prevTimer); });
 .santa-img {
   animation: santa-in 0.35s ease-out both;
 }
+/* the old pose fades out quickly first, the new one pops in right after: never two full Santas at once */
 .santa-swap {
-  animation: santa-swap-in 0.52s cubic-bezier(0.25, 0.8, 0.25, 1) both;
+  animation: santa-swap-in 0.34s 0.16s cubic-bezier(0.25, 0.8, 0.25, 1) both;
   transform-origin: 50% 100%;
 }
 .santa-out {
-  animation: santa-swap-out 0.52s ease-in both;
+  animation: santa-swap-out 0.2s ease-in both;
   transform-origin: 50% 100%;
   pointer-events: none;
 }
 @keyframes santa-swap-in {
-  0% { opacity: 0; transform: translateY(2%) scale(0.97); }
-  55% { opacity: 1; }
+  0% { opacity: 0; transform: translateY(2%) scale(0.96); }
+  60% { opacity: 1; }
   100% { opacity: 1; transform: none; }
 }
 @keyframes santa-swap-out {
