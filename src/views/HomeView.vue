@@ -4,7 +4,7 @@
       <AppHeader />
     </template>
 
-    <main class="grid flex-1 gap-6 px-4 pb-10 lg:min-h-0 lg:grid-cols-[minmax(0,1fr)_minmax(0,560px)] lg:gap-16 lg:pb-[120px] tall:pb-0 lg:pl-[72px] lg:pr-20">
+    <main class="relative grid flex-1 gap-6 px-4 pb-10 lg:min-h-0 lg:grid-cols-[minmax(0,1fr)_minmax(0,560px)] lg:gap-16 lg:pb-[120px] tall:pb-0 lg:pl-[72px] lg:pr-20">
       <section class="relative flex flex-col lg:min-h-0 lg:pt-[4vh]">
         <div class="flex items-end justify-between gap-2 lg:block">
           <div class="min-w-0 pb-4 lg:pb-0">
@@ -19,7 +19,7 @@
               <p class="xm-eyebrow text-[11px] text-gold-300 md:text-sm">{{ t("landing.inviteCardTitle") }}</p>
               <h1 class="mt-1 font-display text-[34px] font-black leading-[1.04] tracking-tight text-snow md:text-[64px]">{{ t("auth.heroTitle") }}</h1>
               <ol class="mt-5 hidden list-none flex-col gap-2.5 p-0 text-base font-bold md:flex">
-                <li v-for="(step, i) in steps" :key="i" class="xm-rise flex items-center gap-2.5" :class="`xm-d${i + 1}`">
+                <li v-for="(step, i) in steps" :key="i" class="flex items-center gap-2.5">
                   <span class="inline-flex h-[26px] w-[26px] items-center justify-center rounded-full bg-gold-300 text-[13px] font-black text-cranberry-900">{{ i + 1 }}</span>
                   {{ step }}
                 </li>
@@ -29,35 +29,44 @@
           <SantaCharacter class="shrink-0 lg:hidden" :mood="santaMood" :preload="santaPreload" :size="140" interactive eager />
         </div>
 
-        <div class="absolute -bottom-[20px] tall:bottom-[78px] left-1/2 hidden aspect-[9/10] h-[min(54vh,480px)] -translate-x-[46%] lg:block">
-          <SantaCharacter :mood="santaMood" :preload="santaPreload" fluid interactive eager />
-        </div>
       </section>
 
       <div class="flex items-start lg:items-center lg:pb-[70px]" @focusin="onFormFocus" @focusout="onFormBlur">
         <IntroCard
             v-if="currentPanel === 'intro'"
+            :rise="riseCard"
             @manual-click="goManual"
             @register-click="openRegister" />
 
         <RegisterCard
             v-else-if="currentPanel === 'register'"
+            :rise="riseCard"
             @go-login="openLogin"
             @back-to-intro="backToIntro"
             @register-success="router.push('/dashboard')" />
 
         <LoginCard
             v-else
+            :rise="riseCard"
             @go-register="openRegister"
             @back-to-intro="backToIntro"
             @login-success="router.push('/dashboard')" />
+      </div>
+      <!-- Santa stands on the snow ground, centred in the left column, whatever the card height -->
+      <div
+          class="pointer-events-none absolute bottom-[78px] hidden aspect-[9/10] -translate-x-[46%] lg:block"
+          :class="currentPanel === 'intro' ? 'h-[min(50vh,450px)]' : 'h-[min(42vh,420px)]'"
+          style="left: calc(72px + (100% - 776px) / 2)">
+        <div class="pointer-events-auto h-full w-full">
+          <SantaCharacter :mood="santaMood" :preload="santaPreload" fluid interactive eager />
+        </div>
       </div>
     </main>
   </ChristmasScene>
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
 import ChristmasScene from "@/components/layout/ChristmasScene.vue";
@@ -86,6 +95,9 @@ const route = useRoute();
 const { t } = useI18n();
 
 const currentPanel = ref<"intro" | "register" | "login">("intro");
+// cards only rise in on the first page load; switching intro / login / register is an instant swap
+const riseCard = ref(true);
+watch(currentPanel, () => { riseCard.value = false; }, { flush: "sync" });
 
 // Noel Baba: tanıtımda torbadan çeker, giriş/kayıtta listesini tutar, şifre yazılırken gözlerini kapatır
 const passwordFocused = ref(false);

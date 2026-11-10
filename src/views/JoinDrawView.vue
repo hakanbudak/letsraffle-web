@@ -1,7 +1,7 @@
 <template>
   <ChristmasScene glow-x="30%" glow-y="35%" tree="right">
     <template #header>
-      <AppHeader :show-open-source="false" />
+      <AppHeader />
     </template>
 
 

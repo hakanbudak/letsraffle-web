@@ -1,5 +1,5 @@
 <template>
-  <section class="xm-card xm-rise w-full px-5 py-8 sm:px-10 sm:pb-8 sm:pt-10 compact:!py-7" aria-labelledby="intro-title">
+  <section class="xm-card w-full px-5 py-8 sm:px-10 sm:pb-8 sm:pt-10 compact:!py-7" aria-labelledby="intro-title" :class="{ 'xm-rise': rise }">
     <p class="xm-eyebrow text-center text-cranberry-600" lang="en">{{ t("landing.tagline") }}</p>
     <h2 id="intro-title" class="mt-1.5 mb-3 text-center font-display text-[40px] font-black leading-none tracking-tight text-cranberry-800 sm:text-[50px] compact:!text-[42px]">
       {{ t("landing.title") }}
@@ -14,7 +14,7 @@
 
     <div class="flex flex-col gap-4">
       <!-- Invite mode: a wrapped present -->
-      <article class="xm-rise xm-d2 relative overflow-hidden rounded-[22px] bg-cranberry-800 px-6 pb-[22px] pt-6 text-snow shadow-[inset_0_0_0_2px_#e6b94a,0_12px_30px_rgba(110,13,18,0.28)]">
+      <article :class="{ 'xm-rise xm-d2': rise }" class="relative overflow-hidden rounded-[22px] bg-cranberry-800 px-6 pb-[22px] pt-6 text-snow shadow-[inset_0_0_0_2px_#e6b94a,0_12px_30px_rgba(110,13,18,0.28)]">
         <div aria-hidden="true" class="absolute bottom-0 top-0 right-[46px] sm:right-[92px] w-3.5 bg-gold-400/90"></div>
         <div aria-hidden="true" class="absolute left-0 right-0 top-[38px] h-3.5 bg-gold-400/90"></div>
         <span class="xm-seal xm-wobble absolute right-5 sm:right-[66px] top-3.5 h-[66px] w-[66px] bg-snow text-xs text-cranberry-800 shadow-[inset_0_0_0_3px_#e6b94a,0_6px_14px_rgba(60,0,0,0.3)]">
@@ -41,7 +41,7 @@
       </article>
 
       <!-- Manual mode -->
-      <article class="xm-rise xm-d3 rounded-[22px] bg-white px-6 py-[22px] compact:py-4 shadow-[inset_0_0_0_2px_#f0dfcb]">
+      <article :class="{ 'xm-rise xm-d3': rise }" class="rounded-[22px] bg-white px-6 py-[22px] compact:py-4 shadow-[inset_0_0_0_2px_#f0dfcb]">
         <div class="flex flex-wrap items-center justify-between gap-4 sm:flex-nowrap">
           <div class="min-w-0 flex-1">
             <h3 class="mb-1 font-display text-2xl font-black text-cranberry-800">
@@ -60,13 +60,15 @@
       </article>
     </div>
 
-    <p class="mt-5 text-center text-[13px] leading-normal text-ink-muted compact:mt-3">{{ t("landing.footnote") }}</p>
+    <p class="mt-5 text-balance text-center text-[13px] leading-normal text-ink-muted compact:mt-3">{{ t("landing.footnote") }}</p>
   </section>
 </template>
 
 <script setup lang="ts">
 import { useI18n } from "vue-i18n";
 
+/** play the rise-in animations (only on the first page load, not when coming back from login/register) */
+withDefaults(defineProps<{ rise?: boolean }>(), { rise: true });
 defineEmits<{
   (e: "manual-click"): void
   (e: "register-click"): void

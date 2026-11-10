@@ -124,6 +124,43 @@ body {
   .xm-btn-ghost { background: #fff; color: #9b1418; box-shadow: inset 0 0 0 2px #ecdcc9; }
   .xm-btn-glass { background: rgba(255, 251, 245, 0.14); color: #fffbf5; box-shadow: inset 0 0 0 1px rgba(246, 217, 138, 0.45); }
 
+  /* Christmas header pills: gold rim and a gift-box bottom edge */
+  .xm-hpill {
+    position: relative;
+    isolation: isolate;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+    padding: 0 16px;
+    border: 0;
+    border-radius: 9999px;
+    font-size: 14px;
+    font-weight: 800;
+    line-height: 1;
+    cursor: pointer;
+    transition: transform 0.18s ease, filter 0.18s ease;
+  }
+  .xm-hpill:hover { transform: translateY(-1px); }
+  .xm-hpill:active { transform: translateY(2px); }
+  .xm-hpill:focus-visible { outline: 3px solid #f6d98a; outline-offset: 3px; }
+  .xm-hpill-snow { background: #fffbf5; color: #7a0f14; box-shadow: inset 0 0 0 2px #e6b94a, 0 4px 0 #c99a3c, 0 8px 18px rgba(60, 0, 0, 0.28); }
+  .xm-hpill-snow:hover { background: #fff3dc; }
+  .xm-hpill-berry { background: #7a0f14; color: #fffbf5; box-shadow: inset 0 0 0 2px #e6b94a, 0 4px 0 #4a080c, 0 8px 18px rgba(40, 0, 0, 0.3); }
+  .xm-hpill-berry:hover { background: #8e1318; }
+  .xm-hpill-icon {
+    display: inline-flex;
+    width: 26px;
+    height: 26px;
+    margin-left: -6px;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9999px;
+  }
+  .xm-hpill-snow .xm-hpill-icon { background: #9b1418; color: #f6d98a; }
+  .xm-hpill-berry .xm-hpill-icon { background: linear-gradient(180deg, #f8e09a, #e6b94a); color: #7a0f14; }
+
   /* gift-tag inputs */
   .xm-label { font-size: 14px; font-weight: 800; color: #5b3a3a; }
   .xm-field {

@@ -2,10 +2,11 @@
   <div class="group relative">
     <button
         type="button"
-        class="xm-btn xm-btn-glass xm-btn-sm !rounded-full"
-        aria-haspopup="true">
-      <IconGithub :width="18" :height="18" stroke-class="stroke-current" />
-      <span class="hidden sm:inline">{{ t("header.openSource") }}</span>
+        class="xm-hpill xm-hpill-berry w-11 justify-center !px-0"
+        aria-haspopup="true"
+        :aria-label="t('header.openSource')"
+        :title="t('header.openSource')">
+      <IconGithub :width="20" :height="20" stroke-class="stroke-current" class="text-gold-300" />
     </button>
 
     <div
@@ -24,6 +25,14 @@
           rel="noopener noreferrer"
           class="flex min-h-11 items-center justify-between rounded-xl px-3 text-sm font-bold text-ink no-underline hover:bg-snow-200">
         Backend
+        <IconGithub :width="16" :height="16" stroke-class="stroke-current" />
+      </a>
+      <a
+          href="https://github.com/selamet/letsraffle-ios"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="flex min-h-11 items-center justify-between rounded-xl px-3 text-sm font-bold text-ink no-underline hover:bg-snow-200">
+        iOS
         <IconGithub :width="16" :height="16" stroke-class="stroke-current" />
       </a>
     </div>

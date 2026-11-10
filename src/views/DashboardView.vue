@@ -2,12 +2,8 @@
   <ChristmasScene :garland="false" :pines="false" glow-x="70%" glow-y="25%">
     <template #header>
       <AppHeader>
-        <template #actions>
-          <span v-if="userEmail" class="hidden text-sm font-bold text-snow/85 xl:inline">{{ userEmail }}</span>
-          <button type="button" class="xm-btn xm-btn-sm !rounded-full bg-snow text-cranberry-800 shadow-none" @click="handleLogout">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /><path d="m16 17 5-5-5-5" /><path d="M21 12H9" /></svg>
-            {{ t("dashboard.logout") }}
-          </button>
+        <template #account>
+          <UserMenu />
         </template>
       </AppHeader>
     </template>
@@ -97,26 +93,17 @@ import ParticipantsPanel from "@/components/panel/ParticipantsPanel.vue";
 import IconLink from "@/components/icons/IconLink.vue";
 import IconUser from "@/components/icons/IconUser.vue";
 import type { DrawDetail } from "@/components/draw/types";
-import { logoutUser, USER_KEY } from "@/services/authHelpers";
+import UserMenu from "@/components/ui-kit/UserMenu.vue";
 
 const router = useRouter();
 const { t } = useI18n();
 
-const userEmail = (() => {
-  try {
-    const raw = localStorage.getItem(USER_KEY);
-    return raw ? (JSON.parse(raw)?.email as string | undefined) ?? "" : "";
-  } catch {
-    return "";
-  }
-})();
 
 const inviteFeatures = ["link", "schedule", "oneClick"] as const;
 const manualFeatures = ["addYourself", "rules", "instant"] as const;
 
 const goManual = () => router.push("/draw/manual").catch(() => undefined);
 const goInvite = () => router.push("/draw/dynamic").catch(() => undefined);
-const handleLogout = () => logoutUser(true);
 
 const handleDrawSelected = (drawDetail: DrawDetail) => {
   if (drawDetail.inviteCode) {

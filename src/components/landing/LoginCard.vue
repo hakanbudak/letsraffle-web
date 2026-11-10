@@ -1,6 +1,6 @@
 <template>
-  <section class="xm-card xm-rise w-full px-5 py-8 sm:px-10 sm:py-9 compact:!py-7" aria-labelledby="login-title">
-    <AuthTabs active="login" @select="(v) => v === 'register' && $emit('go-register')" />
+  <section class="xm-card w-full px-5 py-8 sm:px-10 sm:py-9 compact:!py-7" :class="{ 'xm-rise': rise }" aria-labelledby="login-title">
+    <AuthTabs active="login" @back="$emit('back-to-intro')" @select="(v) => v === 'register' && $emit('go-register')" />
     <h2 id="login-title" class="mt-6 compact:mt-4 mb-1.5 font-display text-[34px] font-black leading-tight text-cranberry-800">{{ t("auth.loginTitle") }}</h2>
     <div class="xm-candy xm-candy-move mb-3 w-[88px]"></div>
     <p class="mb-6 text-[15px] leading-normal text-ink-soft">{{ t("auth.loginSubtitle") }}</p>
@@ -46,12 +46,6 @@
 
     <SocialLogin />
 
-    <div class="mt-5 flex flex-wrap items-center justify-between gap-2 text-sm font-bold">
-      <button type="button" class="min-h-11 cursor-pointer border-0 bg-transparent p-0 font-extrabold text-cranberry-600 hover:text-cranberry-900" @click="$emit('back-to-intro')">
-        {{ t("auth.goBack") }}
-      </button>
-      <span class="text-ink-muted">{{ t("auth.celebration") }}</span>
-    </div>
   </section>
 </template>
 
@@ -67,6 +61,8 @@ import AuthTabs from "@/components/landing/AuthTabs.vue"
 import SocialLogin from "@/components/landing/SocialLogin.vue"
 import { useI18n } from "vue-i18n";
 
+/** play the rise-in animation (off when switching tabs between login and register) */
+withDefaults(defineProps<{ rise?: boolean }>(), { rise: true })
 const emit = defineEmits<{
   (e: "go-register"): void
   (e: "back-to-intro"): void

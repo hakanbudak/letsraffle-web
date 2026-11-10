@@ -18,7 +18,7 @@
       @close="showReadyInfoModal = false"
   />
 
-  <AppHeader :show-open-source="false">
+  <AppHeader>
     <template #start>
       <div class="flex min-w-0 items-center gap-4">
         <router-link
@@ -54,9 +54,9 @@
           {{ t("participantsPanel.drawType.dynamic") }}
         </button>
       </div>
-      <button v-if="isAuthenticated" type="button" class="xm-btn xm-btn-glass xm-btn-sm !rounded-full" @click="handleLogout">
-        {{ t("auth.logout") }}
-      </button>
+    </template>
+    <template #account>
+      <UserMenu v-if="isAuthenticated" />
     </template>
   </AppHeader>
 
@@ -247,7 +247,8 @@ import { useDrawForm } from "@/composables/draw/useDrawForm";
 import { useManualCreate } from "@/composables/draw/useManualCreate";
 import { useInviteActions } from "@/composables/draw/useInviteActions";
 import type { Mode, DrawDetail } from "./types";
-import { TOKEN_KEY, logoutUser } from "@/services/authHelpers";
+import { TOKEN_KEY } from "@/services/authHelpers";
+import UserMenu from "@/components/ui-kit/UserMenu.vue";
 import AppHeader from "@/components/layout/AppHeader.vue";
 import DrawSettings from "@/components/draw/DrawSettings.vue";
 import { setLocale, type Locale } from "@/i18n";
@@ -423,9 +424,6 @@ const goToRegister = () => {
   router.push({ path: "/", query: { panel: "register" } });
 };
 
-const handleLogout = () => {
-  logoutUser(true);
-};
 
 const dismissRegisterPrompt = () => {
   isRegisterPromptDismissed.value = true;

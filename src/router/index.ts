@@ -40,6 +40,11 @@ const routes = [
         component: () => import('@/views/JoinDrawView.vue'),
     },
     {
+        path: '/reveal/:token',
+        name: 'reveal',
+        component: () => import('@/views/RevealView.vue'),
+    },
+    {
         path: '/:pathMatch(.*)*',
         name: 'not-found',
         component: () => import('@/views/NotFoundView.vue'),

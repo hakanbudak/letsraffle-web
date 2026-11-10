@@ -7,8 +7,18 @@
       :aria-label="ariaLabel"
       @click="onClick"
   >
+    <!-- previous mood fades out underneath while the new one fades in: a soft crossfade instead of a hard cut -->
     <img
-        :key="mood"
+        v-if="prevSrc"
+        :key="`prev-${prevKey}`"
+        :src="prevSrc"
+        alt=""
+        draggable="false"
+        aria-hidden="true"
+        class="santa-out absolute inset-0 block h-full w-full object-contain object-bottom"
+    />
+    <img
+        :key="`cur-${prevKey}`"
         :src="currentSrc"
         :width="size"
         :height="size * 1.25"
@@ -17,7 +27,7 @@
         draggable="false"
         alt=""
         class="santa-img absolute inset-0 block h-full w-full object-contain object-bottom"
-        :class="{ 'santa-boop': booping }"
+        :class="{ 'santa-boop': booping, 'santa-swap': !!prevSrc }"
         @animationend="booping = false"
     />
   </div>
@@ -108,7 +118,20 @@ function onClick() {
   if (props.interactive) booping.value = true;
 }
 
-watch(() => props.mood, (m) => show(m));
+const prevSrc = ref("");
+const prevKey = ref(0);
+let prevTimer: ReturnType<typeof setTimeout> | undefined;
+const SWAP_MS = 520;
+
+watch(() => props.mood, (m) => {
+  if (!reducedMotion() && currentSrc.value) {
+    prevSrc.value = currentSrc.value;
+    prevKey.value++;
+    clearTimeout(prevTimer);
+    prevTimer = setTimeout(() => { prevSrc.value = ""; }, SWAP_MS);
+  }
+  show(m);
+});
 
 onMounted(() => {
   if (reducedMotion()) return;
@@ -128,12 +151,30 @@ onMounted(() => {
   for (const m of props.preload) load(animOf(m));
 });
 
-onUnmounted(() => io?.disconnect());
+onUnmounted(() => { io?.disconnect(); clearTimeout(prevTimer); });
 </script>
 
 <style scoped>
 .santa-img {
   animation: santa-in 0.35s ease-out both;
+}
+.santa-swap {
+  animation: santa-swap-in 0.52s cubic-bezier(0.25, 0.8, 0.25, 1) both;
+  transform-origin: 50% 100%;
+}
+.santa-out {
+  animation: santa-swap-out 0.52s ease-in both;
+  transform-origin: 50% 100%;
+  pointer-events: none;
+}
+@keyframes santa-swap-in {
+  0% { opacity: 0; transform: translateY(2%) scale(0.97); }
+  55% { opacity: 1; }
+  100% { opacity: 1; transform: none; }
+}
+@keyframes santa-swap-out {
+  0% { opacity: 1; transform: none; }
+  100% { opacity: 0; transform: translateY(1%) scale(1.02); }
 }
 .santa-boop {
   animation: santa-boop 0.5s cubic-bezier(0.3, 1.6, 0.5, 1);
@@ -150,6 +191,24 @@ onUnmounted(() => io?.disconnect());
   100% { transform: none; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .santa-img, .santa-boop { animation: none; }
+  .santa-img, .santa-swap {
+  animation: santa-swap-in 0.52s cubic-bezier(0.25, 0.8, 0.25, 1) both;
+  transform-origin: 50% 100%;
+}
+.santa-out {
+  animation: santa-swap-out 0.52s ease-in both;
+  transform-origin: 50% 100%;
+  pointer-events: none;
+}
+@keyframes santa-swap-in {
+  0% { opacity: 0; transform: translateY(2%) scale(0.97); }
+  55% { opacity: 1; }
+  100% { opacity: 1; transform: none; }
+}
+@keyframes santa-swap-out {
+  0% { opacity: 1; transform: none; }
+  100% { opacity: 0; transform: translateY(1%) scale(1.02); }
+}
+.santa-boop { animation: none; }
 }
 </style>

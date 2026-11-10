@@ -1,7 +1,7 @@
 <template>
   <ChristmasScene glow-x="50%" glow-y="40%" :garland="false">
     <template #header>
-      <AppHeader :show-open-source="false" />
+      <AppHeader />
     </template>
 
     <main class="flex flex-1 flex-col items-center justify-center px-4 pb-12 text-center lg:min-h-0 lg:pb-[100px]">

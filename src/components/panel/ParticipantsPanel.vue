@@ -93,6 +93,7 @@ import IconArrowRight from "@/components/icons/IconArrowRight.vue";
 import IconUser from "@/components/icons/IconUser.vue";
 import IconLink from "@/components/icons/IconLink.vue";
 import ChristmasFigure from "@/components/christmas/ChristmasFigure.vue";
+import {funDrawName} from "@/utils/drawNames";
 
 const {t} = useI18n();
 const {activeDraws, isLoading, hasFetched, fetchDrawDetail, deleteDraw} = useUserDraws();
@@ -106,24 +107,13 @@ interface DisplayDraw extends DrawListItem {
   displayName: string;
 }
 
-const displayDraws = computed<DisplayDraw[]>(() => {
-  let manualCount = 0;
-  return activeDraws.value.map((draw) => {
-    let displayName = draw.inviteCode;
-
-    if (draw.drawType === 'manual') {
-      manualCount++;
-      if (!displayName || displayName.trim() === '') {
-        displayName = `manuel-santa-${manualCount}`;
-      }
-    }
-
-    return {
-      ...draw,
-      displayName
-    };
-  });
-});
+const displayDraws = computed<DisplayDraw[]>(() =>
+  activeDraws.value.map((draw) => ({
+    ...draw,
+    // manual draws have no invite code: give them a fun name in the draw's language
+    displayName: draw.inviteCode?.trim() ? draw.inviteCode : funDrawName(draw.id, draw.language),
+  }))
+);
 
 const pendingDelete = ref<DisplayDraw | null>(null);
 const isDeleting = ref(false);

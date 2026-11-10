@@ -14,6 +14,8 @@
       <slot name="actions"></slot>
       <OpenSourceButton v-if="showOpenSource" />
       <LanguageSwitcher />
+      <!-- account menu always sits at the far right -->
+      <slot name="account"></slot>
     </nav>
   </header>
 </template>

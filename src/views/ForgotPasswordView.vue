@@ -1,11 +1,12 @@
 <template>
   <ChristmasScene glow-x="35%" glow-y="40%" :garland="false">
     <template #header>
-      <AppHeader :show-open-source="false" />
+      <AppHeader />
     </template>
 
     <main class="flex flex-1 flex-col items-center justify-center gap-6 px-4 pb-10 lg:min-h-0 lg:flex-row lg:gap-[72px] lg:px-[72px] lg:pb-[90px]">
-      <div class="relative flex flex-col items-center">
+      <!-- on desktop Santa stands on the snow ground instead of floating mid-screen -->
+      <div class="relative flex flex-col items-center lg:-mb-[26px] lg:self-end">
         <p class="xm-float relative z-[1] -mb-1.5 rounded-[22px] bg-snow px-[22px] py-3.5 text-center font-display text-lg font-black text-cranberry-800 shadow-[inset_0_0_0_2px_#e6b94a,0_14px_30px_rgba(50,0,0,0.3)] md:text-xl">
           {{ t("auth.forgotPasswordFunnyMessage") }}
           <span aria-hidden="true" class="absolute -bottom-2.5 left-1/2 h-5 w-5 -translate-x-1/2 rotate-45 bg-snow shadow-[2px_2px_0_#e6b94a]"></span>
