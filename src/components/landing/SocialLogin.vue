@@ -19,7 +19,14 @@
         <span class="pr-4">{{ t("auth.social.apple") }}</span>
       </button>
 
-      <div v-if="googleEnabled" ref="googleEl" class="flex min-h-[44px] w-full justify-center" data-testid="google-signin"></div>
+      <!-- Google first paints an English placeholder and only then swaps in its localized iframe:
+           keep the slot invisible until that iframe has loaded so the label never flips language -->
+      <div
+          v-if="googleEnabled"
+          ref="googleEl"
+          class="flex min-h-[44px] w-full justify-center transition-opacity duration-200"
+          :class="googleReady ? 'opacity-100' : 'pointer-events-none opacity-0'"
+          data-testid="google-signin"></div>
       <button
         v-else
         type="button"
@@ -36,7 +43,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { onMounted, onUnmounted, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import axios from "axios";
 import appleLogo from "@/assets/brand/apple-logo-official.svg";
@@ -63,6 +70,36 @@ const notice = ref("");
 const appleBusy = ref(false);
 const googleEl = ref<HTMLElement | null>(null);
 const googleEnabled = Boolean(GOOGLE_CLIENT_ID);
+const googleReady = ref(false);
+let readyTimer: ReturnType<typeof setTimeout> | undefined;
+let iframeWatch: MutationObserver | null = null;
+
+/** reveal the Google button once its (localized) iframe has finished loading */
+function revealWhenLoaded(el: HTMLElement) {
+  iframeWatch?.disconnect();
+  clearTimeout(readyTimer);
+  const done = () => { googleReady.value = true; iframeWatch?.disconnect(); clearTimeout(readyTimer); };
+  const hook = () => {
+    const frame = el.querySelector("iframe");
+    if (!frame) return false;
+    frame.addEventListener("load", () => setTimeout(done, 60), { once: true });
+    return true;
+  };
+  if (!hook() && typeof MutationObserver !== "undefined") {
+    iframeWatch = new MutationObserver(() => { if (hook()) iframeWatch?.disconnect(); });
+    iframeWatch.observe(el, { childList: true, subtree: true });
+  }
+  readyTimer = setTimeout(done, 3000);
+}
+
+function mountGoogle() {
+  const el = googleEl.value;
+  if (!googleEnabled || !el) return;
+  googleReady.value = false;
+  el.innerHTML = "";
+  revealWhenLoaded(el);
+  renderGoogleButton(el, locale.value, finish, fail).catch((e) => { googleReady.value = true; fail(e); });
+}
 
 function finish(data: AuthResponse) {
   handleAuthSuccess(data);
@@ -90,10 +127,10 @@ async function onApple() {
   }
 }
 
-onMounted(() => {
-  if (!googleEnabled || !googleEl.value) return;
-  renderGoogleButton(googleEl.value, locale.value, finish, fail).catch(fail);
-});
+onMounted(mountGoogle);
+// re-render in the new language when the visitor switches TR / EN
+watch(locale, () => mountGoogle());
+onUnmounted(() => { iframeWatch?.disconnect(); clearTimeout(readyTimer); });
 </script>
 
 <style scoped>

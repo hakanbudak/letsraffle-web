@@ -64,7 +64,8 @@
         </div>
       </div>
     </main>
-    <LegalLinks class="pb-5 lg:fixed lg:bottom-4 lg:left-0 lg:right-0 lg:pb-0" />
+    <!-- desktop: on the snow under Santa's column, so it never runs into the (tall) login / register card -->
+    <LegalLinks class="pb-5 lg:fixed lg:bottom-4 lg:left-[calc(72px+(100%-776px)/2)] lg:-translate-x-1/2 lg:pb-0" />
   </ChristmasScene>
 </template>
 
