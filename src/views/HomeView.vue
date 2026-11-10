@@ -1,5 +1,5 @@
 <template>
-  <ChristmasScene :decor="sceneDecor">
+  <ChristmasScene :decor="sceneDecor" :forest="false" class="[--santa-h:340px] tall:[--santa-h:min(450px,50vh,calc(100vh-500px))]">
     <template #header>
       <AppHeader />
     </template>
@@ -68,7 +68,7 @@
       </div>
       <!-- Santa stands on the snow ground, centred in the left column, whatever the card height -->
       <div
-          class="pointer-events-none absolute bottom-[78px] hidden aspect-[9/10] h-[340px] tall:h-[min(450px,50vh,calc(100vh-500px))] -translate-x-[46%] lg:block"
+          class="pointer-events-none absolute bottom-[78px] hidden aspect-[9/10] h-[var(--santa-h)] -translate-x-[46%] lg:block"
           style="left: calc(72px + (100% - 776px) / 2)">
         <div class="pointer-events-auto h-full w-full">
           <SantaCharacter :mood="santaMood" :preload="santaPreload" fluid interactive eager />
@@ -95,17 +95,18 @@ import { isAuthenticated } from "@/services/authHelpers";
 
 const router = useRouter();
 
-// Behind the snow hill: a small grove of decorated trees in three depth rows and Santa's friends on his left.
+// Behind the snow hill: Santa's friends on his left and a row of trees fading into the distance on his right.
 const sceneDecor = [
-  // far row of the grove (smallest, faded) — painted first so everything else sits in front
-  { figure: "tree" as const, cls: "left-[44.5%] bottom-[86px] w-[clamp(44px,3.6vw,58px)] opacity-60 [filter:saturate(0.55)_brightness(0.62)_blur(1px)]" },
-  { figure: "tree" as const, cls: "left-[53%] bottom-[82px] w-[clamp(48px,4vw,64px)] opacity-60 [filter:saturate(0.55)_brightness(0.62)_blur(1px)]" },
-  // middle row
-  { figure: "tree" as const, cls: "left-[48.5%] bottom-[70px] w-[clamp(60px,5vw,80px)] opacity-80 [filter:saturate(0.7)_brightness(0.78)_blur(0.5px)]" },
   // Santa's friends: snowman + penguin hugging, behind the snow hill
   { figure: "hug" as const, cls: "left-[1.5%] bottom-[68px] w-[clamp(150px,12.5vw,200px)] [filter:saturate(0.92)_brightness(0.95)]" },
-  // nearest tree of the grove
-  { figure: "tree" as const, cls: "left-[42%] bottom-[58px] w-[clamp(78px,6.6vw,104px)] [filter:saturate(0.85)_brightness(0.9)_blur(0.2px)]" },
+  // a row of five trees shrinking into the distance, each one sinking a little deeper behind the snow;
+  // the nearest one keeps the same gap to Santa as the snowman pair on his left (Santa is centred at
+  // 72px + (100% - 776px) / 2 and is var(--santa-h) tall, see the Santa wrapper below)
+  { figure: "tree" as const, cls: "left-[calc(100%_-_632px_+_0.1058_*_var(--santa-h)_-_1.5%_-_clamp(150px,12.5vw,200px)_+_214px)] bottom-[40px] w-[38px] opacity-55 [filter:saturate(0.5)_brightness(0.6)_blur(1px)]".trim() },
+  { figure: "tree" as const, cls: "left-[calc(100%_-_632px_+_0.1058_*_var(--santa-h)_-_1.5%_-_clamp(150px,12.5vw,200px)_+_176px)] bottom-[48px] w-[48px] opacity-65 [filter:saturate(0.6)_brightness(0.68)_blur(0.7px)]".trim() },
+  { figure: "tree" as const, cls: "left-[calc(100%_-_632px_+_0.1058_*_var(--santa-h)_-_1.5%_-_clamp(150px,12.5vw,200px)_+_128px)] bottom-[56px] w-[60px] opacity-80 [filter:saturate(0.7)_brightness(0.78)_blur(0.4px)]".trim() },
+  { figure: "tree" as const, cls: "left-[calc(100%_-_632px_+_0.1058_*_var(--santa-h)_-_1.5%_-_clamp(150px,12.5vw,200px)_+_70px)] bottom-[64px] w-[74px] opacity-90 [filter:saturate(0.82)_brightness(0.88)]".trim() },
+  { figure: "tree" as const, cls: "left-[calc(100%_-_632px_+_0.1058_*_var(--santa-h)_-_1.5%_-_clamp(150px,12.5vw,200px)_+_0px)] bottom-[76px] w-[92px] ".trim() },
 ];
 const route = useRoute();
 const accountDeleted = computed(() => route.query.accountDeleted === "true");
