@@ -33,9 +33,11 @@ export function alphaVideo(name: string): string {
 }
 
 /** start playback even when the autoplay attribute was ignored; reports a refusal (e.g. iOS Low Power Mode) */
-export function kickVideo(e: Event, onFail: () => void) {
+export function kickVideo(e: Event, onFail: (blocked?: boolean) => void) {
   const v = e.target as HTMLVideoElement;
   v.muted = true;
   const p = v.play();
-  if (p && typeof p.catch === "function") p.catch(onFail);
+  if (p && typeof p.catch === "function") {
+    p.catch((err: unknown) => onFail((err as { name?: string })?.name === "NotAllowedError"));
+  }
 }

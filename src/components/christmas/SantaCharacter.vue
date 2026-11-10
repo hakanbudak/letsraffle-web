@@ -143,15 +143,18 @@ const videoSrc = ref("");
 const videoReady = ref(false);
 let videoFailed = false;
 
-function onVideoFail() {
+/** blocked = the browser refused autoplay (iOS Low Power Mode, data saver): stay on the light still frame */
+let stillOnly = false;
+function onVideoFail(blocked?: unknown) {
   videoFailed = true;
   videoSrc.value = "";
   videoReady.value = false;
+  if (blocked === true) { stillOnly = true; return; }
   show(props.mood);
 }
 
 function show(m: SantaMood) {
-  if (reducedMotion() || !visible || (props.animateFrom && window.innerWidth < props.animateFrom)) {
+  if (stillOnly || reducedMotion() || !visible || (props.animateFrom && window.innerWidth < props.animateFrom)) {
     currentSrc.value = stillOf(m);
     return;
   }

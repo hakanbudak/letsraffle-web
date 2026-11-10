@@ -6,9 +6,9 @@
    Kızılcık #A3171C · Altın varak #E6B94A · Çam #1F5C3E · Kar #FFFBF5
 ------------------------------------------------------------------- */
 /* 100vh layout only when the window is tall enough; otherwise the page scrolls naturally */
-@custom-variant tall (@media (min-width: 1024px) and (min-height: 600px));
+@custom-variant tall (@media (min-width: 1024px) and (min-height: 760px));
 /* tall-but-tight desktop windows: tighten vertical rhythm so everything still fits */
-@custom-variant compact (@media (min-width: 1024px) and (min-height: 600px) and (max-height: 900px));
+@custom-variant compact (@media (min-width: 1024px) and (min-height: 760px) and (max-height: 900px));
 
 @theme {
   --font-display: "Fraunces Variable", "Fraunces", Georgia, serif;

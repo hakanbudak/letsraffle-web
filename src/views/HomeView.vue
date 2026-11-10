@@ -68,7 +68,7 @@
       </div>
       <!-- Santa stands on the snow ground, centred in the left column, whatever the card height -->
       <div
-          class="pointer-events-none absolute bottom-[78px] hidden aspect-[9/10] h-[min(450px,50vh,calc(100vh-430px))] -translate-x-[46%] lg:block"
+          class="pointer-events-none absolute bottom-[78px] hidden aspect-[9/10] h-[340px] tall:h-[min(450px,50vh,calc(100vh-500px))] -translate-x-[46%] lg:block"
           style="left: calc(72px + (100% - 776px) / 2)">
         <div class="pointer-events-auto h-full w-full">
           <SantaCharacter :mood="santaMood" :preload="santaPreload" fluid interactive eager />
@@ -76,7 +76,7 @@
       </div>
     </main>
     <!-- desktop: on the snow under Santa's column, so it never runs into the (tall) login / register card -->
-    <LegalLinks class="pb-5 lg:fixed lg:bottom-4 lg:left-[calc(72px+(100%-776px)/2)] lg:-translate-x-1/2 lg:pb-0" />
+    <LegalLinks class="pb-5 tall:fixed tall:bottom-4 tall:left-[calc(72px+(100%-776px)/2)] tall:-translate-x-1/2 tall:pb-0" />
   </ChristmasScene>
 </template>
 

@@ -79,16 +79,19 @@ const videoSrc = ref("");
 const videoReady = ref(false);
 let videoFailed = false;
 
-function onVideoFail() {
+/** blocked = the browser refused autoplay (iOS Low Power Mode, data saver): stay on the light still frame */
+let stillOnly = false;
+function onVideoFail(blocked?: unknown) {
   videoFailed = true;
   videoSrc.value = "";
   videoReady.value = false;
+  if (blocked === true) { stillOnly = true; return; }
   play();
 }
 
 function play() {
   const anim = pick(`${props.figure}.webp`);
-  if (!anim || props.still || reducedMotion()) return;
+  if (!anim || stillOnly || props.still || reducedMotion()) return;
   if (props.animateFrom && window.innerWidth < props.animateFrom) return;
   const vid = videoFailed ? "" : alphaVideo(props.figure);
   if (vid) { videoSrc.value = vid; return; }

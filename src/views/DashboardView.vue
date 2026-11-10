@@ -80,7 +80,7 @@
         </div>
       </section>
     </main>
-    <footer class="relative z-10 pb-5 lg:fixed lg:bottom-4 lg:left-0 lg:right-0 lg:pb-0">
+    <footer class="relative z-10 pb-5 tall:fixed tall:bottom-4 tall:left-0 tall:right-0 tall:pb-0">
       <LegalLinks>
         <button type="button" class="legal-link" data-testid="delete-account" @click="showDelete = true">{{ t("account.delete.link") }}</button>
       </LegalLinks>

@@ -4,8 +4,8 @@
       <AppHeader />
     </template>
     <template #overlay>
-      <!-- phones: one evenly spaced row of friends pinned to the bottom of the screen (same spot on every step); desktop: two small groups standing in the left and right corners -->
-      <div aria-hidden="true" class="pointer-events-none fixed inset-x-0 bottom-[max(8px,env(safe-area-inset-bottom))] z-0 flex items-end justify-evenly lg:absolute lg:bottom-[52px] lg:justify-start lg:gap-4 lg:px-[3%]">
+      <!-- phones: one evenly spaced row of friends under the content (each step fits the screen, so they stay put); desktop: two small groups standing in the left and right corners -->
+      <div aria-hidden="true" class="pointer-events-none relative z-0 flex items-end justify-evenly pb-[max(8px,env(safe-area-inset-bottom))] lg:absolute lg:inset-x-0 lg:bottom-[52px] lg:pb-0 lg:justify-start lg:gap-4 lg:px-[3%]">
         <ChristmasFigure figure="snowman" :animate-from="1024" class="w-[54px] sm:w-[76px] lg:w-[118px]" />
         <div class="h-[78px] w-[62px] sm:h-[100px] sm:w-[80px] lg:-ml-5 lg:h-[150px] lg:w-[118px]">
           <SantaCharacter mood="celebrate" fluid :animate-from="1024" />
@@ -17,7 +17,7 @@
       </div>
     </template>
 
-    <main class="relative flex flex-1 flex-col items-center justify-center px-4 pb-28 pt-2 text-center lg:min-h-0 lg:pb-[110px]">
+    <main class="relative flex flex-1 flex-col items-center justify-center px-4 pb-3 pt-2 text-center lg:min-h-0 lg:pb-[110px]">
       <!-- loading -->
       <div v-if="stage === 'loading'" class="flex flex-col items-center gap-3" role="status">
         <div class="h-10 w-10 animate-spin rounded-full border-[3px] border-snow/30 border-t-gold-300"></div>
@@ -42,7 +42,7 @@
           <p class="xm-eyebrow text-gold-300">{{ t("reveal.eyebrow") }}</p>
           <h1 class="xm-glow mt-2 font-script text-[64px] leading-none text-gold-300 sm:text-[96px]">{{ t("reveal.happyNewYear") }}</h1>
           <p class="mt-2 font-display text-[30px] font-black text-snow sm:text-[40px]">{{ firstName }}!</p>
-          <div class="mt-2 aspect-[4/5] h-[min(36vh,300px)]">
+          <div class="mt-2 aspect-[4/5] h-[clamp(120px,calc(100svh-560px),300px)] lg:h-[min(36vh,300px)]">
             <SantaCharacter mood="wave" fluid interactive eager :preload="['draw']" />
           </div>
           <p class="mt-3 max-w-[460px] text-base font-semibold leading-relaxed text-snow/90 sm:text-lg">{{ t("reveal.helloText") }}</p>
@@ -56,7 +56,7 @@
         <!-- 2. Santa draws a name from his sack -->
         <section v-else-if="stage === 'santa'" key="santa" class="flex w-full max-w-[640px] flex-col items-center">
           <h2 class="font-display text-[30px] font-black leading-tight text-snow sm:text-[40px]">{{ t("reveal.santaTitle") }}</h2>
-          <div class="mt-3 aspect-[4/5] h-[min(42vh,360px)]">
+          <div class="mt-3 aspect-[4/5] h-[clamp(120px,calc(100svh-548px),360px)] lg:h-[min(42vh,360px)]">
             <SantaCharacter mood="draw" fluid interactive eager />
           </div>
           <p class="mt-2 min-h-[56px] max-w-[460px] text-base font-semibold leading-relaxed text-snow/90 sm:text-lg" aria-live="polite">
