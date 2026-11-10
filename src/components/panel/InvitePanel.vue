@@ -35,7 +35,7 @@
         </div>
 
         <div v-if="!invitedParticipants.length" class="flex flex-1 flex-col items-center justify-center gap-2 py-8 text-center">
-          <SantaCharacter mood="thinking" :size="110" />
+          <ChristmasFigure figure="snowman" :width="110" interactive />
           <p class="max-w-[260px] text-[15px] font-semibold text-ink-soft">{{ t("invitePanel.emptyState") }}</p>
         </div>
 
@@ -43,7 +43,7 @@
           <li
               v-for="(p, idx) in invitedParticipants"
               :key="p.id"
-              class="xm-rise flex items-center gap-3 rounded-2xl bg-white py-3 pl-3.5 pr-1 shadow-[inset_0_0_0_2px_#f3e6d6] transition-all duration-200 hover:translate-x-1 hover:shadow-[inset_0_0_0_2px_#e6b94a]"
+              class="xm-rise flex items-center gap-3 rounded-2xl bg-white py-3 pl-3.5 pr-1 shadow-[inset_0_0_0_2px_#f3e6d6] transition-[box-shadow,background-color] duration-200 hover:bg-[#fffaf0] hover:shadow-[inset_0_0_0_2px_#e6b94a]"
               :style="{ animationDelay: `${Math.min(idx, 8) * 0.06}s` }">
             <span class="flex h-10 w-10 flex-none items-center justify-center rounded-full font-display text-[15px] font-black" :class="avatarClass(idx)">
               {{ p.firstName.charAt(0) }}{{ p.lastName.charAt(0) }}
@@ -93,7 +93,7 @@
       </template>
 
       <div v-else class="flex flex-1 flex-col items-center justify-center gap-2 py-6 text-center">
-        <SantaCharacter mood="thinking" :size="130" interactive />
+        <ChristmasFigure figure="rudolph" :width="104" interactive />
         <p class="max-w-[260px] text-[15px] font-semibold text-ink-soft">{{ t("invitePanel.saveFirst") }}</p>
       </div>
 
@@ -125,7 +125,7 @@
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 import type { InvitedParticipant } from "../draw/types";
-import SantaCharacter from "@/components/christmas/SantaCharacter.vue";
+import ChristmasFigure from "@/components/christmas/ChristmasFigure.vue";
 
 const props = defineProps<{
   inviteUrl: string;

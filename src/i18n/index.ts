@@ -27,6 +27,13 @@ const messages = {
         watch: "Cep saatine bakan Noel Baba",
         invite: "Elinde davet zarfı tutan Noel Baba",
       },
+      figures: {
+        snowman: "El sallayan kardan adam",
+        rudolph: "Burnu parlayan ren geyiği Rudolph",
+        tree: "Işıkları yanıp sönen süslü çam ağacı",
+        candy: "Baston şeker ve yılbaşı şekerlemeleri",
+        hug: "Birbirine sarılan kardan adam ve Noel Baba şapkalı penguen",
+      },
     },
     languageSwitcher: {
       label: "Dil seçimi",
@@ -56,7 +63,7 @@ const messages = {
       subtitleMiddle: "veya",
       subtitleInviteHighlight: "davet linkiyle katılımcı topla",
       manualCardDescriptionLine1: "Katılımcıları kendin ekle,",
-      manualCardDescriptionLine2: "hemen çekilişi başlat ve yılbaşı eğlencesine başla! ⚡",
+      manualCardDescriptionLine2: "çekilişi hemen başlat! ⚡",
       manualCardButton: "Başla",
       manualCardTitle: "Manuel Mod",
       inviteCardDescriptionLine1: "Katılımcılar formu doldursun,",
@@ -70,7 +77,7 @@ const messages = {
       highlightOneClick: "tek tıkla",
       manualCardBadge: "Ücretsiz",
       footnote:
-        "🎁 Katılımcıların e-posta ile bilgilendirilmesi, çekiliş zamanlaması ve grup yönetimi daha sonra eklenecek.",
+        "🎁 E-posta bildirimleri, çekiliş zamanlaması ve grup yönetimi yakında geliyor.",
       back: "← Geri dön",
       goRegister: "← Kayıt ol",
     },
@@ -84,13 +91,23 @@ const messages = {
         title: "Manuel Mod",
         description: "Katılımcıları kendin ekle, kuralları belirle ve hemen çekilişi başlat!",
         cta: "Başla",
+        features: {
+          addYourself: "Katılımcıları sen ekle",
+          rules: "Kuralları belirle",
+          instant: "Anında sonuç",
+        },
       },
       inviteCard: {
         title: "Davet Mod",
         description: "Katılımcılar formu doldursun, belirlediğin tarihte otomatik çekilsin veya sen tek tıkla başlat! 🎄",
         description2: "Yeni Yıla Özel Davet Modu!",
         cta: "Noel'i başlat",
-        tag: "Özel"
+        tag: "Özel",
+        features: {
+          link: "Davet linki",
+          schedule: "Tarihli otomatik çekiliş",
+          oneClick: "Tek tıkla başlat",
+        },
       },
       backButton: "Geri",
       logout: "Çıkış Yap"
@@ -229,6 +246,16 @@ const messages = {
       drawDateLabel: "Çekiliş tarihi: {date}",
       createdAt: "Oluşturulma: {date}",
       clickToView: "Detayları görmek için tıklayın",
+      delete: {
+        button: "Etkinliği sil",
+        title: "Etkinlik silinsin mi?",
+        message: "{name} ve tüm katılımcıları kalıcı olarak silinecek. Bu işlem geri alınamaz.",
+        confirm: "Evet, sil",
+        cancel: "Vazgeç",
+        deleting: "Siliniyor…",
+        error: "Etkinlik silinemedi. Lütfen tekrar deneyin.",
+        heldError: "Gerçekleşmiş bir çekiliş silinemez.",
+      },
     },
     notFound: {
       title: "Sayfa Bulunamadı",
@@ -369,6 +396,13 @@ const messages = {
         watch: "Santa checking his pocket watch",
         invite: "Santa holding an invitation",
       },
+      figures: {
+        snowman: "Snowman waving hello",
+        rudolph: "Rudolph the reindeer with his glowing nose",
+        tree: "Decorated Christmas tree with twinkling lights",
+        candy: "Candy cane and Christmas sweets",
+        hug: "A snowman and a penguin in a Santa hat hugging",
+      },
     },
     languageSwitcher: {
       label: "Choose language",
@@ -426,13 +460,23 @@ const messages = {
         title: "Manual Mode",
         description: "Add participants yourself, tweak the rules, and run the draw instantly.",
         cta: "Get Started ⚡",
+        features: {
+          addYourself: "Add participants yourself",
+          rules: "Set the rules",
+          instant: "Instant results",
+        },
       },
       inviteCard: {
         title: "Invite Mode",
         description: "Let participants join via form, schedule the draw, or run it whenever you like.",
         description2: "New Year Special Mode!",
         cta: "Start Christmas",
-        tag: "Special"
+        tag: "Special",
+        features: {
+          link: "Invite link",
+          schedule: "Scheduled auto draw",
+          oneClick: "One-click start",
+        },
       },
       backButton: "Dashboard",
       logout: "Log Out"
@@ -571,6 +615,16 @@ const messages = {
       drawDateLabel: "Draw date: {date}",
       createdAt: "Created: {date}",
       clickToView: "Click to view details",
+      delete: {
+        button: "Delete draw",
+        title: "Delete this draw?",
+        message: "{name} and all of its participants will be permanently deleted. This can't be undone.",
+        confirm: "Yes, delete",
+        cancel: "Cancel",
+        deleting: "Deleting…",
+        error: "Couldn't delete the draw. Please try again.",
+        heldError: "A draw that has already been held can't be deleted.",
+      },
     },
     notFound: {
       title: "Page Not Found",

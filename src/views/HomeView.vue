@@ -1,5 +1,5 @@
 <template>
-  <ChristmasScene>
+  <ChristmasScene :decor="sceneDecor">
     <template #header>
       <AppHeader />
     </template>
@@ -9,7 +9,7 @@
         <div class="flex items-end justify-between gap-2 lg:block">
           <div class="min-w-0 pb-4 lg:pb-0">
             <template v-if="currentPanel === 'intro'">
-              <p class="xm-eyebrow text-[11px] text-gold-300 md:text-sm">{{ t("landing.tagline") }}</p>
+              <p class="xm-eyebrow text-[11px] text-gold-300 md:text-sm" lang="en">{{ t("landing.tagline") }}</p>
               <h1 class="xm-glow mt-3 font-script text-[58px] font-normal leading-none text-gold-300 md:text-[clamp(88px,11vh,132px)]">
                 {{ t("landing.heroScript") }}
               </h1>
@@ -69,6 +69,19 @@ import LoginCard from "@/components/landing/LoginCard.vue";
 import { isAuthenticated } from "@/services/authHelpers";
 
 const router = useRouter();
+
+// Behind the snow hill: a small grove of decorated trees in three depth rows and Santa's friends on his left.
+const sceneDecor = [
+  // far row of the grove (smallest, faded) — painted first so everything else sits in front
+  { figure: "tree" as const, cls: "left-[44.5%] bottom-[86px] w-[clamp(44px,3.6vw,58px)] opacity-60 [filter:saturate(0.55)_brightness(0.62)_blur(1px)]" },
+  { figure: "tree" as const, cls: "left-[53%] bottom-[82px] w-[clamp(48px,4vw,64px)] opacity-60 [filter:saturate(0.55)_brightness(0.62)_blur(1px)]" },
+  // middle row
+  { figure: "tree" as const, cls: "left-[48.5%] bottom-[70px] w-[clamp(60px,5vw,80px)] opacity-80 [filter:saturate(0.7)_brightness(0.78)_blur(0.5px)]" },
+  // Santa's friends: snowman + penguin hugging, behind the snow hill
+  { figure: "hug" as const, cls: "left-[1.5%] bottom-[68px] w-[clamp(150px,12.5vw,200px)] [filter:saturate(0.92)_brightness(0.95)]" },
+  // nearest tree of the grove
+  { figure: "tree" as const, cls: "left-[42%] bottom-[58px] w-[clamp(78px,6.6vw,104px)] [filter:saturate(0.85)_brightness(0.9)_blur(0.2px)]" },
+];
 const route = useRoute();
 const { t } = useI18n();
 

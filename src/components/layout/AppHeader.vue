@@ -1,16 +1,8 @@
 <template>
   <header class="relative z-[2] flex min-h-[76px] flex-wrap items-center gap-3 px-4 py-3 md:px-12 md:py-0">
     <slot name="start">
-      <router-link :to="homeTo" class="flex items-center gap-3 text-snow no-underline" :aria-label="t('common.appName')">
-        <span class="flex h-11 w-11 items-center justify-center rounded-full bg-gradient-to-b from-gold-200 to-gold-400 shadow-[inset_0_0_0_2px_rgba(255,255,255,0.6)]">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#7a0f14" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <rect x="3" y="8" width="18" height="4" rx="1" />
-            <path d="M12 8v13" />
-            <path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7" />
-            <path d="M7.5 8a2.5 2.5 0 0 1 0-5C10 3 12 8 12 8s2-5 4.5-5a2.5 2.5 0 0 1 0 5" />
-          </svg>
-        </span>
-        <span class="font-display text-[22px] font-black tracking-tight md:text-2xl">Lets Raffle</span>
+      <router-link :to="homeTo" class="flex items-center py-1 text-snow no-underline" :aria-label="t('common.appName')">
+        <img :src="lockup" alt="" height="80" class="mt-1 h-[60px] w-auto drop-shadow-[0_2px_3px_rgba(40,0,0,0.25)] transition-transform duration-300 hover:scale-[1.03] md:mt-4 md:h-[84px]" />
       </router-link>
     </slot>
 
@@ -32,6 +24,7 @@ import { useI18n } from "vue-i18n";
 import LanguageSwitcher from "@/components/ui-kit/LanguageSwitcher.vue";
 import OpenSourceButton from "@/components/ui-kit/OpenSourceButton.vue";
 import { isAuthenticated } from "@/services/authHelpers";
+import lockup from "@/assets/brand/lockup.webp";
 
 withDefaults(defineProps<{ showOpenSource?: boolean }>(), { showOpenSource: true });
 

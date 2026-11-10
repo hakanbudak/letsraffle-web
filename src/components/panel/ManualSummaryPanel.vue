@@ -14,7 +14,7 @@
       <p v-if="participants.length" class="mt-1 text-[13px] font-semibold text-ink-muted">{{ t("manualSummary.editHint") }}</p>
 
       <div v-if="!participants.length" class="flex flex-1 flex-col items-center justify-center gap-2 py-8 text-center">
-        <SantaCharacter mood="thinking" :size="110" />
+        <ChristmasFigure figure="rudolph" :width="100" interactive />
         <p class="max-w-[240px] text-[15px] font-semibold text-ink-soft">{{ t("manualSummary.emptyState") }}</p>
       </div>
 
@@ -22,7 +22,7 @@
         <li
             v-for="(p, idx) in participants"
             :key="p.id"
-            class="xm-rise flex items-center gap-1 rounded-2xl bg-white pr-1 transition-all duration-200 hover:translate-x-1"
+            class="xm-rise flex items-center gap-1 rounded-2xl bg-white pr-1 transition-colors duration-200 hover:bg-[#fffaf0]"
             :class="editingParticipantId === p.id ? 'shadow-[inset_0_0_0_2px_#b91c1c,0_0_0_4px_rgba(230,185,74,0.4)]' : 'shadow-[inset_0_0_0_2px_#f3e6d6] hover:shadow-[inset_0_0_0_2px_#e6b94a]'"
             :style="{ animationDelay: `${Math.min(idx, 8) * 0.06}s` }">
           <button type="button" class="flex min-w-0 flex-1 cursor-pointer items-center gap-3 border-0 bg-transparent px-3.5 py-3 text-left text-ink" @click="$emit('edit', p)">
@@ -105,6 +105,7 @@
 import { useI18n } from "vue-i18n";
 import type { Participant } from "../draw/types";
 import SantaCharacter from "@/components/christmas/SantaCharacter.vue";
+import ChristmasFigure from "@/components/christmas/ChristmasFigure.vue";
 
 defineProps<{
   participants: Participant[];

@@ -1,6 +1,6 @@
 <template>
   <section class="xm-card xm-rise w-full px-5 py-8 sm:px-10 sm:pb-8 sm:pt-10 compact:!py-7" aria-labelledby="intro-title">
-    <p class="xm-eyebrow text-center text-cranberry-600">{{ t("landing.tagline") }}</p>
+    <p class="xm-eyebrow text-center text-cranberry-600" lang="en">{{ t("landing.tagline") }}</p>
     <h2 id="intro-title" class="mt-1.5 mb-3 text-center font-display text-[40px] font-black leading-none tracking-tight text-cranberry-800 sm:text-[50px] compact:!text-[42px]">
       {{ t("landing.title") }}
     </h2>
@@ -42,17 +42,17 @@
 
       <!-- Manual mode -->
       <article class="xm-rise xm-d3 rounded-[22px] bg-white px-6 py-[22px] compact:py-4 shadow-[inset_0_0_0_2px_#f0dfcb]">
-        <div class="flex flex-wrap items-center justify-between gap-4">
-          <div class="min-w-0">
+        <div class="flex flex-wrap items-center justify-between gap-4 sm:flex-nowrap">
+          <div class="min-w-0 flex-1">
             <h3 class="mb-1 font-display text-2xl font-black text-cranberry-800">
               {{ t("landing.manualCardTitle") }}
               <span class="ml-1.5 rounded-full bg-pine-100 px-2.5 py-0.5 align-middle font-body text-xs font-extrabold text-pine-700">{{ t("landing.manualCardBadge") }}</span>
             </h3>
-            <p class="max-w-[300px] text-[15px] leading-normal text-ink-soft">
+            <p class="text-[15px] leading-normal text-ink-soft">
               {{ t("landing.manualCardDescriptionLine1") }} {{ t("landing.manualCardDescriptionLine2") }}
             </p>
           </div>
-          <button type="button" class="xm-btn xm-btn-red" @click="$emit('manual-click')">
+          <button type="button" class="xm-btn xm-btn-red shrink-0" @click="$emit('manual-click')">
             {{ t("landing.manualCardButton") }}
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14" /><path d="m13 6 6 6-6 6" /></svg>
           </button>

@@ -6,9 +6,9 @@
    Kızılcık #A3171C · Altın varak #E6B94A · Çam #1F5C3E · Kar #FFFBF5
 ------------------------------------------------------------------- */
 /* 100vh layout only when the window is tall enough; otherwise the page scrolls naturally */
-@custom-variant tall (@media (min-width: 1024px) and (min-height: 760px));
+@custom-variant tall (@media (min-width: 1024px) and (min-height: 600px));
 /* tall-but-tight desktop windows: tighten vertical rhythm so everything still fits */
-@custom-variant compact (@media (min-width: 1024px) and (min-height: 760px) and (max-height: 900px));
+@custom-variant compact (@media (min-width: 1024px) and (min-height: 600px) and (max-height: 900px));
 
 @theme {
   --font-display: "Fraunces Variable", "Fraunces", Georgia, serif;
@@ -47,6 +47,13 @@
 
 html {
   -webkit-font-smoothing: antialiased;
+  /* Page still scrolls on short screens, but without a visible scrollbar */
+  scrollbar-width: none;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  display: none;
 }
 
 body {
@@ -168,7 +175,9 @@ body {
     line-height: 1.1;
   }
 
-  .xm-scroll { scrollbar-width: thin; scrollbar-color: #e6c9a6 transparent; }
+  /* Scrollable areas keep scrolling but hide the scrollbar */
+  .xm-scroll { scrollbar-width: none; -ms-overflow-style: none; }
+  .xm-scroll::-webkit-scrollbar { display: none; }
 }
 
 /* ------------------------------------------------------------------ motion */

@@ -1,5 +1,5 @@
 <template>
-  <ChristmasScene glow-x="30%" glow-y="35%">
+  <ChristmasScene glow-x="30%" glow-y="35%" tree="right">
     <template #header>
       <AppHeader :show-open-source="false" />
     </template>
@@ -30,7 +30,8 @@
       </section>
 
       <div class="flex items-start lg:items-center lg:pb-[70px]">
-        <section class="xm-card xm-rise w-full px-5 py-8 sm:px-10 sm:py-9" aria-labelledby="join-title" aria-live="polite">
+        <section class="xm-card xm-rise relative w-full px-5 py-8 sm:px-10 sm:py-9" aria-labelledby="join-title" aria-live="polite">
+          <ChristmasFigure figure="candy" :width="120" class="absolute -right-10 -top-12 hidden rotate-6 sm:block" />
           <div v-if="isLoading" class="py-12 text-center" role="status">
             <div class="inline-block h-10 w-10 animate-spin rounded-full border-[3px] border-snow-400 border-t-cranberry-600"></div>
             <p class="mt-4 font-bold text-ink-muted">{{ t("join.loading") }}</p>
@@ -143,6 +144,7 @@
 </template>
 
 <script setup lang="ts">
+import ChristmasFigure from "@/components/christmas/ChristmasFigure.vue";
 import { computed, reactive, ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import confetti from "canvas-confetti";

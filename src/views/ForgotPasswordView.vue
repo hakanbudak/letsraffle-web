@@ -15,7 +15,8 @@
         </div>
       </div>
 
-      <section class="xm-card xm-rise w-full max-w-[460px] px-6 py-8 sm:px-10 sm:py-9" aria-labelledby="pw-title">
+      <section class="xm-card xm-rise relative w-full max-w-[460px] px-6 py-8 sm:px-10 sm:py-9" aria-labelledby="pw-title">
+        <ChristmasFigure figure="candy" :width="120" class="absolute -right-10 -top-12 hidden rotate-6 sm:block" />
         <h1 id="pw-title" class="mb-2.5 font-display text-[34px] font-black leading-tight text-cranberry-800">{{ t("auth.forgotPasswordTitle") }}</h1>
         <div class="xm-candy xm-candy-move mb-3 w-[88px]"></div>
         <p class="mb-6 text-[15px] leading-normal text-ink-soft">{{ t("auth.forgotPasswordSubtitle") }}</p>
@@ -49,6 +50,7 @@
 </template>
 
 <script setup lang="ts">
+import ChristmasFigure from "@/components/christmas/ChristmasFigure.vue";
 import { reactive, ref } from 'vue'
 import { useI18n } from "vue-i18n"
 import Input from "@/components/ui-kit/input/Input.vue"

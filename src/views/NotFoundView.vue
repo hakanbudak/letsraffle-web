@@ -5,6 +5,7 @@
     </template>
 
     <main class="flex flex-1 flex-col items-center justify-center px-4 pb-12 text-center lg:min-h-0 lg:pb-[100px]">
+      <ChristmasFigure figure="rudolph" :width="175" eager class="absolute bottom-[64px] right-[7%] hidden lg:block" />
       <div class="flex items-center justify-center gap-1 sm:gap-2" aria-hidden="true">
         <span class="xm-swing font-display text-[120px] font-black leading-[0.9] text-snow [text-shadow:0_8px_0_#6e0d12] sm:text-[clamp(160px,26vh,240px)]">4</span>
         <div class="aspect-[4/5] h-[160px] sm:h-[clamp(200px,32vh,290px)]">
@@ -24,6 +25,7 @@
 </template>
 
 <script setup lang="ts">
+import ChristmasFigure from "@/components/christmas/ChristmasFigure.vue";
 import { useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
 import ChristmasScene from "@/components/layout/ChristmasScene.vue";
