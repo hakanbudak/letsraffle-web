@@ -1,5 +1,5 @@
 <template>
-  <section class="xm-card w-full px-5 py-8 sm:px-10 sm:py-9 compact:!py-7" :class="{ 'xm-rise': rise }" aria-labelledby="register-title">
+  <section class="xm-card w-full px-5 py-8 sm:px-10 sm:py-9 compact:!py-7 tall:max-h-[calc(100dvh-140px)] tall:overflow-y-auto tall:overscroll-contain" :class="{ 'xm-rise': rise }" aria-labelledby="register-title">
     <AuthTabs active="register" @back="$emit('back-to-intro')" @select="(v) => v === 'login' && $emit('go-login')" />
     <h2 id="register-title" class="mt-6 compact:mt-4 mb-1.5 font-display text-[34px] font-black leading-tight text-cranberry-800">{{ t("auth.registerTitle") }}</h2>
     <div class="xm-candy xm-candy-move mb-3 w-[88px]"></div>
