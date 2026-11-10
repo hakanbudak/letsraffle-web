@@ -57,8 +57,7 @@
       </div>
       <!-- Santa stands on the snow ground, centred in the left column, whatever the card height -->
       <div
-          class="pointer-events-none absolute bottom-[78px] hidden aspect-[9/10] -translate-x-[46%] lg:block"
-          :class="currentPanel === 'intro' ? 'h-[min(50vh,450px)]' : 'h-[min(42vh,420px)]'"
+          class="pointer-events-none absolute bottom-[78px] hidden aspect-[9/10] h-[min(50vh,450px)] -translate-x-[46%] lg:block"
           style="left: calc(72px + (100% - 776px) / 2)">
         <div class="pointer-events-auto h-full w-full">
           <SantaCharacter :mood="santaMood" :preload="santaPreload" fluid interactive eager />

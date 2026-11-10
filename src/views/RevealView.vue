@@ -4,8 +4,8 @@
       <AppHeader />
     </template>
     <template #overlay>
-      <!-- phones: one evenly spaced row of friends; desktop: two small groups standing in the left and right corners -->
-      <div aria-hidden="true" class="pointer-events-none absolute inset-x-0 bottom-2 z-0 flex items-end justify-evenly lg:bottom-[52px] lg:justify-start lg:gap-4 lg:px-[3%]">
+      <!-- phones: one evenly spaced row of friends pinned to the bottom of the screen (same spot on every step); desktop: two small groups standing in the left and right corners -->
+      <div aria-hidden="true" class="pointer-events-none fixed inset-x-0 bottom-[max(8px,env(safe-area-inset-bottom))] z-0 flex items-end justify-evenly lg:absolute lg:bottom-[52px] lg:justify-start lg:gap-4 lg:px-[3%]">
         <ChristmasFigure figure="snowman" :animate-from="1024" class="w-[54px] sm:w-[76px] lg:w-[118px]" />
         <div class="h-[78px] w-[62px] sm:h-[100px] sm:w-[80px] lg:-ml-5 lg:h-[150px] lg:w-[118px]">
           <SantaCharacter mood="celebrate" fluid :animate-from="1024" />

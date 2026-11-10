@@ -15,18 +15,18 @@
         alt=""
         draggable="false"
         aria-hidden="true"
-        class="santa-out absolute inset-0 block h-full w-full object-contain object-bottom"
+        class="santa-out absolute bottom-0 block h-auto max-w-none"
+        :style="fitStyle(prevMood)"
     />
     <img
         :key="`cur-${prevKey}`"
         :src="currentSrc"
-        :width="size"
-        :height="size * 1.25"
         :loading="eager ? 'eager' : 'lazy'"
         decoding="async"
         draggable="false"
         alt=""
-        class="santa-img absolute inset-0 block h-full w-full object-contain object-bottom"
+        class="santa-img absolute bottom-0 block h-auto max-w-none"
+        :style="fitStyle(shownMood)"
         :class="{ 'santa-boop': booping, 'santa-swap': !!prevSrc, invisible: videoReady }"
         @animationend="booping = false"
     />
@@ -42,7 +42,8 @@
         preload="auto"
         :src="videoSrc"
         aria-hidden="true"
-        class="absolute inset-0 block h-full w-full object-contain object-bottom"
+        class="absolute bottom-0 block h-auto max-w-none"
+        :style="fitStyle(shownMood)"
         :class="[videoReady ? 'visible' : 'invisible', { 'santa-boop': booping, 'santa-swap': !!prevSrc }]"
         @loadeddata="kickVideo($event, onVideoFail)"
         @playing="videoReady = true"
@@ -72,6 +73,21 @@ const anims = import.meta.glob("@/assets/characters/santa-*.webp", { eager: true
 const pick = (name: string) => Object.entries(anims).find(([k]) => k.endsWith(`/${name}`))?.[1] ?? "";
 const animOf = (m: SantaMood) => pick(`santa-${m}.webp`);
 const stillOf = (m: SantaMood) => pick(`santa-${m}-still.webp`);
+
+/**
+ * Native frame sizes of the renders. Every mood is drawn at the same pixels-per-unit, so instead of
+ * "contain"-fitting each frame (which made tightly cropped poses look bigger) all moods share one
+ * scale: the frame width relative to REF_W, anchored bottom-centre. Santa is the same size in every pose.
+ */
+const DIMS: Record<SantaMood, [number, number]> = {
+  wave: [420, 567], thinking: [382, 542], sad: [385, 497], celebrate: [451, 625], draw: [460, 521],
+  list: [449, 511], cover: [306, 476], watch: [421, 497], invite: [463, 497],
+};
+const REF_W = 450;
+function fitStyle(m: SantaMood) {
+  const w = (DIMS[m][0] / REF_W) * 100;
+  return { width: `${w}%`, left: `${(100 - w) / 2}%` };
+}
 
 const props = withDefaults(defineProps<{
   mood?: SantaMood
@@ -159,6 +175,8 @@ function onClick() {
 }
 
 const prevSrc = ref("");
+const prevMood = ref<SantaMood>(props.mood);
+const shownMood = ref<SantaMood>(props.mood);
 const prevKey = ref(0);
 let prevTimer: ReturnType<typeof setTimeout> | undefined;
 const SWAP_MS = 520;
@@ -166,10 +184,12 @@ const SWAP_MS = 520;
 watch(() => props.mood, (m) => {
   if (!reducedMotion() && currentSrc.value) {
     prevSrc.value = currentSrc.value;
+    prevMood.value = shownMood.value;
     prevKey.value++;
     clearTimeout(prevTimer);
     prevTimer = setTimeout(() => { prevSrc.value = ""; }, SWAP_MS);
   }
+  shownMood.value = m;
   show(m);
 });
 
