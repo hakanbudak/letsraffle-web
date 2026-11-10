@@ -12,7 +12,7 @@
 
       <template v-if="garland">
         <svg viewBox="0 0 1440 40" preserveAspectRatio="none" class="absolute left-0 top-[104px] hidden h-10 w-full md:block">
-          <path d="M0 10 Q120 40 240 10 T480 10 T720 10 T960 10 T1200 10 T1440 10" fill="none" stroke="#3b2a1e" stroke-width="2" />
+          <path d="M0 10 Q120 40 240 10 Q360 40 480 10 Q600 40 720 10 Q840 40 960 10 Q1080 40 1200 10 Q1320 40 1440 10" fill="none" stroke="#3b2a1e" stroke-width="2" />
         </svg>
         <div
             v-for="(b, i) in bulbs"
