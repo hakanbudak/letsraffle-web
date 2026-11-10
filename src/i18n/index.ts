@@ -83,6 +83,11 @@ const messages = {
     landing: {
       heroScript: "Mutlu Yıllar",
       heroText: "Yılbaşı çekilişini dakikalar içinde kur. Herkes adil şekilde eşleşsin, sürpriz son ana kadar saklı kalsın.",
+      heroPoints: {
+        setup: "Çekilişini dakikalar içinde kur",
+        fair: "Herkes adil şekilde eşleşsin",
+        secret: "Sürpriz son ana kadar saklı kalsın",
+      },
       badgeFree: "Ücretsiz",
       inviteShortTag: "★ Yeni yıla özel",
       tagline: "Santa's Edition",
@@ -501,6 +506,11 @@ const messages = {
     landing: {
       heroScript: "Merry Christmas",
       heroText: "Set up your holiday draw in minutes. Everyone gets a fair match and the surprise stays secret until the very end.",
+      heroPoints: {
+        setup: "Set up your draw in minutes",
+        fair: "Everyone gets a fair match",
+        secret: "The surprise stays secret until the end",
+      },
       badgeFree: "Free",
       inviteShortTag: "★ Holiday special",
       tagline: "Santa's Edition",

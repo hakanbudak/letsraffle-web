@@ -16,11 +16,18 @@
               <h1 class="xm-glow mt-3 font-script text-[58px] font-normal leading-none text-gold-300 md:text-[clamp(88px,11vh,132px)]">
                 {{ t("landing.heroScript") }}
               </h1>
-              <!-- desktop: Santa "says" the intro in a little snow-white speech bubble pointing down at him -->
-              <p class="hero-bubble mt-2.5 max-w-[430px] text-sm font-semibold leading-relaxed text-snow/90 md:text-[19px] lg:relative lg:mt-5 lg:rounded-[24px] lg:bg-snow lg:px-6 lg:py-4 lg:font-display lg:text-[18px] lg:font-bold lg:leading-snug lg:text-cranberry-800 lg:shadow-[inset_0_0_0_2px_#e6b94a,0_14px_30px_rgba(50,0,0,0.3)]">
-                {{ t("landing.heroText") }}
-                <span aria-hidden="true" class="absolute -bottom-2.5 left-[74%] hidden h-5 w-5 -translate-x-1/2 rotate-45 bg-snow shadow-[2px_2px_0_#e6b94a] lg:block"></span>
-              </p>
+              <ul class="mt-3 flex list-none flex-col gap-2 p-0 text-sm font-semibold text-snow/90 md:mt-4 md:gap-2.5 md:text-[18px]">
+                <li v-for="p in heroPoints" :key="p.key" class="flex items-center gap-2.5">
+                  <span aria-hidden="true" class="inline-flex h-[26px] w-[26px] flex-none items-center justify-center rounded-full bg-gold-300 text-cranberry-800 shadow-[0_2px_0_#b8892b] md:h-[30px] md:w-[30px]">
+                    <!-- snowflake -->
+                    <svg viewBox="0 0 24 24" class="h-[16px] w-[16px] md:h-[18px] md:w-[18px]" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M12 2v20M3.3 7l17.4 10M3.3 17 20.7 7" />
+                      <path d="m9.5 3.5 2.5 2 2.5-2M9.5 20.5l2.5-2 2.5 2M4 10.2l3.1-.6-1-3M20 13.8l-3.1.6 1 3M4 13.8l3.1.6-1 3M20 10.2l-3.1-.6 1-3" />
+                    </svg>
+                  </span>
+                  {{ t(`landing.heroPoints.${p.key}`) }}
+                </li>
+              </ul>
             </template>
             <template v-else>
               <p class="xm-eyebrow text-[11px] text-gold-300 md:text-sm">{{ t("landing.inviteCardTitle") }}</p>
@@ -121,6 +128,7 @@ const santaMood = computed(() =>
     currentPanel.value === "intro" ? "draw" : passwordFocused.value ? "cover" : "list");
 const santaPreload = computed<("cover" | "list")[]>(() => (currentPanel.value === "intro" ? ["list"] : ["cover"]));
 
+const heroPoints = [{ key: "setup" }, { key: "fair" }, { key: "secret" }];
 const steps = computed(() => [
   t("invitePanel.howItWorks.step1Title"),
   t("invitePanel.howItWorks.step2Title"),
