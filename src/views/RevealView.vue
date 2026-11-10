@@ -1,10 +1,22 @@
 <template>
-  <ChristmasScene glow-x="50%" glow-y="35%" :snow="16" :tree="stage === 'reveal' ? 'right' : false">
+  <ChristmasScene glow-x="50%" glow-y="35%" :snow="16" :forest="false">
     <template #header>
       <AppHeader />
     </template>
+    <template #overlay>
+      <div aria-hidden="true" class="pointer-events-none absolute inset-x-0 bottom-2 z-0 flex items-end justify-between px-2 lg:bottom-[52px] lg:px-[3%]">
+        <div class="flex items-end gap-1 lg:gap-3">
+          <ChristmasFigure figure="snowman" class="w-[58px] sm:w-[80px] lg:w-[118px]" />
+          <ChristmasFigure figure="candy" class="w-[44px] sm:w-[60px] lg:w-[86px]" />
+        </div>
+        <div class="flex items-end gap-1 lg:gap-3">
+          <ChristmasFigure figure="hug" class="w-[62px] sm:w-[84px] lg:w-[124px]" />
+          <ChristmasFigure figure="rudolph" class="w-[54px] sm:w-[74px] lg:w-[108px]" />
+        </div>
+      </div>
+    </template>
 
-    <main class="relative flex flex-1 flex-col items-center justify-center px-4 pb-16 pt-2 text-center lg:min-h-0 lg:pb-[110px]">
+    <main class="relative flex flex-1 flex-col items-center justify-center px-4 pb-28 pt-2 text-center lg:min-h-0 lg:pb-[110px]">
       <!-- loading -->
       <div v-if="stage === 'loading'" class="flex flex-col items-center gap-3" role="status">
         <div class="h-10 w-10 animate-spin rounded-full border-[3px] border-snow/30 border-t-gold-300"></div>
@@ -78,7 +90,7 @@
           <img :src="giftEnd" alt="" class="-mb-6 w-[150px]" draggable="false" />
           <div class="xm-card reveal-card w-full px-6 pb-7 pt-8 sm:px-10">
             <p class="xm-eyebrow text-cranberry-600">{{ t("reveal.resultEyebrow") }}</p>
-            <h2 class="reveal-name mt-2 font-display text-[40px] font-black leading-[1.05] text-cranberry-800 sm:text-[52px]">
+            <h2 class="reveal-name mt-2 break-words font-display text-[40px] font-black leading-[1.05] text-cranberry-800 sm:text-[52px]">
               {{ match.receiver.firstName }} {{ match.receiver.lastName }}
             </h2>
             <div class="xm-candy xm-candy-move mx-auto mt-3 w-[110px]"></div>
@@ -267,8 +279,8 @@ onUnmounted(() => timers.forEach(clearTimeout));
   100% { opacity: 1; transform: none; }
 }
 @keyframes reveal-name {
-  0% { opacity: 0; letter-spacing: 0.2em; filter: blur(6px); }
-  100% { opacity: 1; letter-spacing: normal; filter: none; }
+  0% { opacity: 0; transform: scale(1.12); filter: blur(6px); }
+  100% { opacity: 1; transform: none; filter: none; }
 }
 .xm-ellipsis::after {
   content: "";

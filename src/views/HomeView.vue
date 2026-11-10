@@ -65,7 +65,7 @@
         </div>
       </div>
     </main>
-    <LegalLinks class="pb-5 lg:fixed lg:bottom-3 lg:left-0 lg:right-0 lg:pb-0 lg:mx-auto lg:w-fit lg:rounded-full lg:bg-snow/90 lg:px-4 lg:py-1 lg:shadow-[0_4px_14px_rgba(40,4,8,0.25)]" />
+    <LegalLinks class="pb-5 lg:fixed lg:bottom-4 lg:left-0 lg:right-0 lg:pb-0" />
   </ChristmasScene>
 </template>
 

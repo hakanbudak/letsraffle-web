@@ -42,7 +42,7 @@
         </g>
       </svg>
 
-      <template v-if="pines">
+      <template v-if="pines && forest">
         <ChristmasFigure
             v-for="(t, i) in FOREST"
             :key="`forest${i}`"
@@ -94,6 +94,8 @@ import ChristmasFigure, { type FigureName } from "@/components/christmas/Christm
 const props = withDefaults(defineProps<{
   garland?: boolean;
   pines?: boolean;
+  /** row of small decorated trees at the foot of the mountains */
+  forest?: boolean;
   ground?: boolean;
   snow?: number;
   glowX?: string;
@@ -105,6 +107,7 @@ const props = withDefaults(defineProps<{
 }>(), {
   garland: true,
   pines: true,
+  forest: true,
   ground: true,
   snow: 14,
   glowX: "30%",
