@@ -160,6 +160,11 @@ import { setLocale, type Locale } from "@/i18n";
 // Santa's friends keep him company on the snow (left corner, clear of the join card)
 const sceneDecor = [
   { figure: "hug" as const, cls: "left-[1.5%] bottom-[68px] w-[clamp(150px,12.5vw,200px)] [filter:saturate(0.92)_brightness(0.95)]" },
+  // far right: a short row of trees fading into the distance towards (and behind) the card
+  { figure: "tree" as const, cls: "right-[calc(1.2%+176px)] bottom-[48px] w-[48px] opacity-65 [filter:saturate(0.6)_brightness(0.68)_blur(0.7px)]" },
+  { figure: "tree" as const, cls: "right-[calc(1.2%+128px)] bottom-[56px] w-[60px] opacity-80 [filter:saturate(0.7)_brightness(0.78)_blur(0.4px)]" },
+  { figure: "tree" as const, cls: "right-[calc(1.2%+70px)] bottom-[64px] w-[74px] opacity-90 [filter:saturate(0.82)_brightness(0.88)]" },
+  { figure: "tree" as const, cls: "right-[1.2%] bottom-[76px] w-[92px]" },
 ];
 const route = useRoute();
 const { t, locale } = useI18n();
