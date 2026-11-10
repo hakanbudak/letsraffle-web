@@ -15,3 +15,13 @@ const app = createApp(App)
 app.use(router)
 app.use(i18n)
 app.mount('#app')
+
+// fade out the boot splash from index.html once the first page has rendered
+router.isReady().finally(() => {
+  const boot = document.getElementById('boot')
+  if (!boot) return
+  requestAnimationFrame(() => {
+    boot.classList.add('boot-hide')
+    setTimeout(() => boot.remove(), 450)
+  })
+})

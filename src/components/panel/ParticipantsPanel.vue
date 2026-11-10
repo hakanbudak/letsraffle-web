@@ -1,10 +1,7 @@
 <template>
   <div class="flex min-h-0 flex-1 flex-col">
-    <div v-if="isLoading || !hasFetched" class="flex flex-1 items-center justify-center py-8" role="status">
-      <div class="text-center">
-        <div class="inline-block h-9 w-9 animate-spin rounded-full border-[3px] border-snow-400 border-t-cranberry-600"></div>
-        <p class="mt-3 text-sm font-bold text-ink-muted">{{ t("participantsPanel.loading") }}</p>
-      </div>
+    <div v-if="isLoading || !hasFetched" class="flex flex-1 items-center justify-center py-8">
+      <ChristmasLoader :label="t('participantsPanel.loading')" />
     </div>
 
     <div v-else-if="activeDraws.length === 0" class="flex flex-1 flex-col items-center justify-center gap-2 py-6 text-center">
@@ -85,6 +82,7 @@
 </template>
 
 <script setup lang="ts">
+import ChristmasLoader from "@/components/christmas/ChristmasLoader.vue";
 import {ref, computed, nextTick} from "vue";
 import {useI18n} from "vue-i18n";
 import {useUserDraws} from "@/composables/draw/useUserDraws";

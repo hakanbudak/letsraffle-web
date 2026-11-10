@@ -19,10 +19,7 @@
 
     <main class="relative flex flex-1 flex-col items-center justify-center px-4 pb-3 pt-2 text-center lg:min-h-0 lg:pb-[110px]">
       <!-- loading -->
-      <div v-if="stage === 'loading'" class="flex flex-col items-center gap-3" role="status">
-        <div class="h-10 w-10 animate-spin rounded-full border-[3px] border-snow/30 border-t-gold-300"></div>
-        <p class="text-sm font-bold text-snow/85">{{ t("reveal.loading") }}</p>
-      </div>
+      <ChristmasLoader v-if="stage === 'loading'" tone="light" :width="150" :label="t('reveal.loading')" />
 
       <!-- invalid link / not drawn yet -->
       <section v-else-if="stage === 'error'" class="xm-card w-full max-w-[440px] px-6 py-8">
@@ -124,6 +121,7 @@
 </template>
 
 <script setup lang="ts">
+import ChristmasLoader from "@/components/christmas/ChristmasLoader.vue";
 import { computed, defineComponent, h, onMounted, onUnmounted, ref } from "vue";
 import { useRoute } from "vue-router";
 import { useI18n } from "vue-i18n";
