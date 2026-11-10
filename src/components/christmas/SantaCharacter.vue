@@ -84,6 +84,8 @@ const props = withDefaults(defineProps<{
   /** fill the parent box instead of using size (parent should keep a 4:5 aspect ratio) */
   fluid?: boolean
   preload?: SantaMood[]
+  /** only animate on viewports at least this wide; still frame below */
+  animateFrom?: number
 }>(), {
   mood: "wave",
   size: 400,
@@ -94,6 +96,7 @@ const props = withDefaults(defineProps<{
   label: "",
   fluid: false,
   preload: () => [],
+  animateFrom: 0,
 });
 
 const { t } = useI18n();
@@ -132,7 +135,7 @@ function onVideoFail() {
 }
 
 function show(m: SantaMood) {
-  if (reducedMotion() || !visible) {
+  if (reducedMotion() || !visible || (props.animateFrom && window.innerWidth < props.animateFrom)) {
     currentSrc.value = stillOf(m);
     return;
   }

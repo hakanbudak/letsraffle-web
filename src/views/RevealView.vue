@@ -4,15 +4,16 @@
       <AppHeader />
     </template>
     <template #overlay>
-      <div aria-hidden="true" class="pointer-events-none absolute inset-x-0 bottom-2 z-0 flex items-end justify-between px-2 lg:bottom-[52px] lg:px-[3%]">
-        <div class="flex items-end gap-1 lg:gap-3">
-          <ChristmasFigure figure="snowman" :animate-from="1024" class="w-[58px] sm:w-[80px] lg:w-[118px]" />
-          <ChristmasFigure figure="candy" :animate-from="1024" class="w-[44px] sm:w-[60px] lg:w-[86px]" />
+      <!-- phones: one evenly spaced row of friends; desktop: two small groups standing in the left and right corners -->
+      <div aria-hidden="true" class="pointer-events-none absolute inset-x-0 bottom-2 z-0 flex items-end justify-evenly lg:bottom-[52px] lg:justify-start lg:gap-4 lg:px-[3%]">
+        <ChristmasFigure figure="snowman" :animate-from="1024" class="w-[54px] sm:w-[76px] lg:w-[118px]" />
+        <div class="h-[78px] w-[62px] sm:h-[100px] sm:w-[80px] lg:-ml-5 lg:h-[150px] lg:w-[118px]">
+          <SantaCharacter mood="celebrate" fluid :animate-from="1024" />
         </div>
-        <div class="flex items-end gap-1 lg:gap-3">
-          <ChristmasFigure figure="hug" :animate-from="1024" class="w-[62px] sm:w-[84px] lg:w-[124px]" />
-          <ChristmasFigure figure="rudolph" :animate-from="1024" class="w-[54px] sm:w-[74px] lg:w-[108px]" />
-        </div>
+        <ChristmasFigure figure="candy" :animate-from="1024" class="w-[40px] sm:w-[56px] lg:hidden" />
+        <span class="hidden flex-1 lg:block"></span>
+        <ChristmasFigure figure="hug" :animate-from="1024" class="w-[60px] sm:w-[82px] lg:w-[124px]" />
+        <ChristmasFigure figure="rudolph" :animate-from="1024" class="w-[50px] sm:w-[70px] lg:w-[108px]" />
       </div>
     </template>
 
