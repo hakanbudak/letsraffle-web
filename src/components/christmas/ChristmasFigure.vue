@@ -15,7 +15,7 @@
         draggable="false"
         alt=""
         class="block h-auto w-full"
-        :class="{ 'figure-boop': booping, 'opacity-0': videoReady }"
+        :class="{ 'figure-boop': booping, invisible: videoReady }"
         @animationend="booping = false"
     />
     <video

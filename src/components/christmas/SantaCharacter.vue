@@ -27,7 +27,7 @@
         draggable="false"
         alt=""
         class="santa-img absolute inset-0 block h-full w-full object-contain object-bottom"
-        :class="{ 'santa-boop': booping, 'santa-swap': !!prevSrc, 'opacity-0': videoReady }"
+        :class="{ 'santa-boop': booping, 'santa-swap': !!prevSrc, invisible: videoReady }"
         @animationend="booping = false"
     />
     <!-- GPU-decoded transparent video on top once it is really playing (the still frame stays as poster/fallback) -->
