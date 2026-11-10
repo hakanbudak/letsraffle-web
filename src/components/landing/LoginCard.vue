@@ -44,7 +44,7 @@
       <p v-if="generalError" class="xm-error justify-center" role="alert">{{ generalError }}</p>
     </form>
 
-    <SocialLogin />
+    <SocialLogin @success="emit('login-success')" />
 
   </section>
 </template>

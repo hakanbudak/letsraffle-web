@@ -4,6 +4,9 @@
       <AppHeader />
     </template>
 
+    <p v-if="accountDeleted" class="mx-auto mb-3 rounded-full bg-snow px-5 py-2 text-center text-sm font-extrabold text-pine-700 shadow-[inset_0_0_0_2px_#e6b94a]" role="status">
+      {{ t("account.delete.done") }}
+    </p>
     <main class="relative grid flex-1 gap-6 px-4 pb-10 lg:min-h-0 lg:grid-cols-[minmax(0,1fr)_minmax(0,560px)] lg:gap-16 lg:pb-[120px] tall:pb-0 lg:pl-[72px] lg:pr-20">
       <section class="relative flex flex-col lg:min-h-0 lg:pt-[4vh]">
         <div class="flex items-end justify-between gap-2 lg:block">
@@ -62,6 +65,7 @@
         </div>
       </div>
     </main>
+    <LegalLinks class="pb-5 lg:fixed lg:bottom-3 lg:left-0 lg:right-0 lg:pb-0 lg:mx-auto lg:w-fit lg:rounded-full lg:bg-snow/90 lg:px-4 lg:py-1 lg:shadow-[0_4px_14px_rgba(40,4,8,0.25)]" />
   </ChristmasScene>
 </template>
 
@@ -75,6 +79,7 @@ import SantaCharacter from "@/components/christmas/SantaCharacter.vue";
 import IntroCard from "@/components/landing/IntroCard.vue";
 import RegisterCard from "@/components/landing/RegisterCard.vue";
 import LoginCard from "@/components/landing/LoginCard.vue";
+import LegalLinks from "@/components/layout/LegalLinks.vue";
 import { isAuthenticated } from "@/services/authHelpers";
 
 const router = useRouter();
@@ -92,6 +97,7 @@ const sceneDecor = [
   { figure: "tree" as const, cls: "left-[42%] bottom-[58px] w-[clamp(78px,6.6vw,104px)] [filter:saturate(0.85)_brightness(0.9)_blur(0.2px)]" },
 ];
 const route = useRoute();
+const accountDeleted = computed(() => route.query.accountDeleted === "true");
 const { t } = useI18n();
 
 const currentPanel = ref<"intro" | "register" | "login">("intro");

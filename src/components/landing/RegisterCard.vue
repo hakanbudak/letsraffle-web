@@ -39,7 +39,7 @@
       </button>
     </form>
 
-    <SocialLogin />
+    <SocialLogin @success="emit('register-success')" />
 
   </section>
 </template>

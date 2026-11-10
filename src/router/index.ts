@@ -45,6 +45,20 @@ const routes = [
         component: () => import('@/views/RevealView.vue'),
     },
     {
+        path: '/privacy',
+        alias: '/gizlilik',
+        name: 'privacy',
+        component: () => import('@/views/LegalView.vue'),
+        props: { doc: 'privacy' },
+    },
+    {
+        path: '/terms',
+        alias: '/kosullar',
+        name: 'terms',
+        component: () => import('@/views/LegalView.vue'),
+        props: { doc: 'terms' },
+    },
+    {
         path: '/:pathMatch(.*)*',
         name: 'not-found',
         component: () => import('@/views/NotFoundView.vue'),
