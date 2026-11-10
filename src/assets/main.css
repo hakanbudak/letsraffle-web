@@ -247,6 +247,12 @@ body {
 .xm-glow { animation: xm-glow 4.2s ease-in-out infinite; }
 .xm-ready:not(:disabled) { animation: xm-ready 2s ease-in-out infinite; }
 .xm-live { display: inline-block; width: 9px; height: 9px; border-radius: 50%; background: #4fb87e; animation: xm-live 1.6s ease-out infinite; }
+/* phones / touch devices: skip the repaint-heavy infinite effects (animated text-shadow, box-shadow pulse,
+   moving candy stripes) — they force a full repaint every frame and make scrolling stutter on mobile GPUs */
+@media (max-width: 1023px), (hover: none) {
+  .xm-glow, .xm-candy-move, .xm-ready:not(:disabled) { animation: none; }
+  .xm-glow { text-shadow: 0 4px 0 rgba(60, 0, 0, 0.22), 0 0 22px rgba(246, 217, 138, 0.35); }
+}
 .xm-float { animation: xm-float 3.6s ease-in-out infinite; }
 .xm-dot { display: inline-block; animation: xm-dot 1.4s ease-in-out infinite; }
 .xm-swing { display: inline-block; transform-origin: 50% 0; animation: xm-swing 3.2s ease-in-out infinite; }

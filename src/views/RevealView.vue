@@ -6,12 +6,12 @@
     <template #overlay>
       <div aria-hidden="true" class="pointer-events-none absolute inset-x-0 bottom-2 z-0 flex items-end justify-between px-2 lg:bottom-[52px] lg:px-[3%]">
         <div class="flex items-end gap-1 lg:gap-3">
-          <ChristmasFigure figure="snowman" class="w-[58px] sm:w-[80px] lg:w-[118px]" />
-          <ChristmasFigure figure="candy" class="w-[44px] sm:w-[60px] lg:w-[86px]" />
+          <ChristmasFigure figure="snowman" :animate-from="1024" class="w-[58px] sm:w-[80px] lg:w-[118px]" />
+          <ChristmasFigure figure="candy" :animate-from="1024" class="w-[44px] sm:w-[60px] lg:w-[86px]" />
         </div>
         <div class="flex items-end gap-1 lg:gap-3">
-          <ChristmasFigure figure="hug" class="w-[62px] sm:w-[84px] lg:w-[124px]" />
-          <ChristmasFigure figure="rudolph" class="w-[54px] sm:w-[74px] lg:w-[108px]" />
+          <ChristmasFigure figure="hug" :animate-from="1024" class="w-[62px] sm:w-[84px] lg:w-[124px]" />
+          <ChristmasFigure figure="rudolph" :animate-from="1024" class="w-[54px] sm:w-[74px] lg:w-[108px]" />
         </div>
       </div>
     </template>

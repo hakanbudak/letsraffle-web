@@ -82,7 +82,7 @@ const ariaLabel = computed(() => props.label || t(`characters.santa.${props.mood
 const rootRef = ref<HTMLElement | null>(null);
 const currentSrc = ref(stillOf(props.mood));
 const booping = ref(false);
-let visible = props.eager;
+let visible = false;
 let io: IntersectionObserver | null = null;
 const loaded = new Set<string>();
 
@@ -135,21 +135,34 @@ watch(() => props.mood, (m) => {
 
 onMounted(() => {
   if (reducedMotion()) return;
-  if (visible) show(props.mood);
-  if (typeof IntersectionObserver === "undefined") {
+  // start animating (and preloading the next moods) only once this Santa is really on screen:
+  // pages render a desktop and a phone Santa, and the hidden one must not download anything
+  const start = () => {
+    if (visible) return;
     visible = true;
     show(props.mood);
+    schedulePreload();
+  };
+  if (typeof IntersectionObserver === "undefined") {
+    start();
   } else {
     io = new IntersectionObserver((entries) => {
-      if (entries.some((e) => e.isIntersecting) && !visible) {
-        visible = true;
-        show(props.mood);
-      }
+      if (entries.some((e) => e.isIntersecting)) { start(); io?.disconnect(); }
     }, { rootMargin: "150px" });
     if (rootRef.value) io.observe(rootRef.value);
   }
-  for (const m of props.preload) load(animOf(m));
 });
+
+watch(() => props.preload, () => { if (visible) schedulePreload(); });
+
+/** fetch the moods we will switch to later, after the current animation and only when the browser is idle */
+function schedulePreload() {
+  const conn = (navigator as Navigator & { connection?: { saveData?: boolean; effectiveType?: string } }).connection;
+  if (conn?.saveData || /2g/.test(conn?.effectiveType ?? "")) return;
+  const run = () => { for (const m of props.preload) load(animOf(m)); };
+  const idle = (window as Window & { requestIdleCallback?: (cb: () => void, o?: { timeout: number }) => number }).requestIdleCallback;
+  setTimeout(() => (idle ? idle(run, { timeout: 2000 }) : run()), 1200);
+}
 
 onUnmounted(() => { io?.disconnect(); clearTimeout(prevTimer); });
 </script>

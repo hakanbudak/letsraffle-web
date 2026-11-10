@@ -42,7 +42,9 @@ const props = withDefaults(defineProps<{
   interactive?: boolean
   /** always show the still frame (for small background figures) */
   still?: boolean
-}>(), { width: undefined, eager: false, interactive: false, still: false });
+  /** only animate on viewports at least this wide (keeps phones light); still frame below */
+  animateFrom?: number
+}>(), { width: undefined, eager: false, interactive: false, still: false, animateFrom: 0 });
 
 const { t } = useI18n();
 const rootRef = ref<HTMLElement | null>(null);
@@ -57,6 +59,7 @@ const reducedMotion = () =>
 function play() {
   const anim = pick(`${props.figure}.webp`);
   if (!anim || props.still || reducedMotion()) return;
+  if (props.animateFrom && window.innerWidth < props.animateFrom) return;
   const img = new Image();
   img.decoding = "async";
   img.onload = () => { currentSrc.value = anim; };
@@ -69,7 +72,9 @@ function onClick() {
 
 onMounted(() => {
   if (reducedMotion()) return;
-  if (props.eager || typeof IntersectionObserver === "undefined") { play(); return; }
+  // even "eager" figures wait until they are actually on screen: hidden (display:none) desktop-only
+  // decor then never downloads its multi-megabyte animation on phones
+  if (typeof IntersectionObserver === "undefined") { play(); return; }
   io = new IntersectionObserver((entries) => {
     if (entries.some((e) => e.isIntersecting)) { play(); io?.disconnect(); }
   }, { rootMargin: "150px" });
