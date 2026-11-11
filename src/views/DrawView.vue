@@ -1,5 +1,5 @@
 <template>
-  <ChristmasScene :garland="false" :pines="false" :ground="false" glow-x="50%" glow-y="0%" :snow="8">
+  <ChristmasScene :garland="false" :mobile-garland="false" :pines="false" :ground="false" glow-x="50%" glow-y="0%" :snow="8">
     <DrawLayout />
   </ChristmasScene>
 </template>

@@ -2,7 +2,7 @@
   <div class="group relative">
     <button
         type="button"
-        class="xm-hpill xm-hpill-berry w-11 justify-center !px-0"
+        class="xm-hpill xm-hpill-berry w-10 justify-center !px-0 sm:w-11"
         aria-haspopup="true"
         :aria-label="t('header.openSource')"
         :title="t('header.openSource')">

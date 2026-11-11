@@ -1,5 +1,5 @@
 <template>
-  <ChristmasScene glow-x="50%" glow-y="35%" :snow="16" :forest="false">
+  <ChristmasScene glow-x="50%" glow-y="35%" :snow="16" :forest="false" :mobile-ground="false">
     <template #header>
       <AppHeader />
     </template>

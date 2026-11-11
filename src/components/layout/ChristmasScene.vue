@@ -82,8 +82,32 @@
 
     <slot name="header"></slot>
 
+    <!-- phones: the desktop garland / snow ground / friends are hidden, so they get a compact version of their own -->
+    <div v-if="mobileGarland" aria-hidden="true" class="pointer-events-none relative -mt-1 h-[34px] md:hidden">
+      <svg viewBox="0 0 390 30" preserveAspectRatio="none" class="absolute inset-x-0 top-0 h-[30px] w-full">
+        <path d="M0 6 Q65 26 130 6 Q195 26 260 6 Q325 26 390 6" fill="none" stroke="#3b2a1e" stroke-width="1.6" />
+      </svg>
+      <div
+          v-for="(b, i) in MOBILE_BULBS"
+          :key="`mb${i}`"
+          class="xm-bulb !h-[13px] !w-[9px] !-ml-[4.5px]"
+          :style="{ left: b.left, top: b.top, background: b.color, boxShadow: `0 0 9px ${b.color}`, animationDelay: b.delay }"></div>
+      <GarlandWreath v-for="x in ['33.33%', '66.66%']" :key="x" :uid="`mw${x}`" :size="30" class="absolute top-[-6px] -translate-x-1/2" :style="{ left: x }" />
+    </div>
+
     <div class="relative z-[1] flex min-h-0 flex-1 flex-col">
       <slot></slot>
+    </div>
+
+    <div v-if="ground && mobileGround" aria-hidden="true" class="pointer-events-none relative -mt-3 h-[96px] overflow-hidden lg:hidden">
+      <ChristmasFigure figure="hug" still class="absolute bottom-[20px] left-[3%] w-[88px]" />
+      <ChristmasFigure figure="tree" still class="absolute bottom-[22px] right-[calc(5%+82px)] w-[34px] opacity-70 [filter:saturate(0.6)_brightness(0.72)]" />
+      <ChristmasFigure figure="tree" still class="absolute bottom-[14px] right-[calc(5%+46px)] w-[44px] opacity-85 [filter:saturate(0.78)_brightness(0.85)]" />
+      <ChristmasFigure figure="tree" still class="absolute bottom-[4px] right-[5%] w-[56px]" />
+      <svg viewBox="0 0 390 60" preserveAspectRatio="none" class="absolute inset-x-0 bottom-0 h-[52px] w-full">
+        <path d="M0 22 C 70 6, 140 30, 210 18 S 330 4, 390 20 L390 60 L0 60Z" fill="#fffbf5" />
+        <path d="M0 34 C 80 22, 150 40, 230 30 S 350 22, 390 32" fill="none" stroke="#e8ddd0" stroke-width="2" />
+      </svg>
     </div>
 
     <slot name="overlay"></slot>
@@ -106,6 +130,10 @@ const props = withDefaults(defineProps<{
   pines?: boolean;
   /** row of small decorated trees at the foot of the mountains */
   forest?: boolean;
+  /** phones: a short light garland under the header */
+  mobileGarland?: boolean;
+  /** phones: a snow drift with Santa's friends at the very bottom of the page (needs `ground`) */
+  mobileGround?: boolean;
   ground?: boolean;
   snow?: number;
   glowX?: string;
@@ -118,6 +146,8 @@ const props = withDefaults(defineProps<{
   garland: true,
   pines: true,
   forest: true,
+  mobileGarland: true,
+  mobileGround: true,
   ground: true,
   snow: 14,
   glowX: "30%",
@@ -260,6 +290,17 @@ const flakes = SNOW.slice(0, props.snow).map(([left, size, opacity, duration, de
 }));
 
 const BULB_COLORS = ["#f6d98a", "#4fb87e", "#fffbf5", "#ff8a7a"];
+/** phone garland: three arcs, three bulbs each (x in % of the width, y in px under the wire) */
+const MOBILE_BULBS = [0, 1, 2].flatMap((arc) =>
+    [0.25, 0.5, 0.75].map((f, j) => {
+      const i = arc * 3 + j;
+      return {
+        left: `${((arc + f) / 3) * 100}%`,
+        top: `${[13, 17, 13][j]}px`,
+        color: BULB_COLORS[(i + 1) % 4],
+        delay: `${(i % 4) * 0.6}s`,
+      };
+    }));
 const bulbs = Array.from({ length: 6 }).flatMap((_, arc) =>
     [60, 120, 180].map((x, j) => {
       const i = arc * 3 + j;
