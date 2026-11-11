@@ -77,7 +77,34 @@
               :aria-label="t('reveal.giftCta')"
               @click="openGift">
             <span aria-hidden="true" class="absolute inset-[12%] rounded-full bg-[radial-gradient(circle,rgba(246,217,138,0.6),rgba(246,217,138,0)_68%)]"></span>
-            <img :src="giftSrc" alt="" class="relative block h-auto w-full" draggable="false" />
+            <img :src="giftSrc" alt="" class="relative block h-auto w-full" :class="{ invisible: (shakePlaying && !opening) || openPlaying }" draggable="false" />
+            <!-- GPU-decoded transparent videos instead of animated WebP (which stutters on phones):
+                 the shake loops on its own, the opening one is started by the tap itself -->
+            <template v-if="shakeVid && openVid">
+              <video
+                  v-if="!opening"
+                  muted
+                  playsinline
+                  autoplay
+                  loop
+                  disablepictureinpicture
+                  preload="auto"
+                  :src="shakeVid"
+                  class="absolute inset-0 block h-full w-full"
+                  :class="shakePlaying ? 'visible' : 'invisible'"
+                  @loadeddata="kickVideo($event, () => undefined)"
+                  @playing="shakePlaying = true"></video>
+              <video
+                  ref="openEl"
+                  muted
+                  playsinline
+                  disablepictureinpicture
+                  preload="auto"
+                  :src="openVid"
+                  class="absolute inset-0 block h-full w-full"
+                  :class="openPlaying ? 'visible' : 'invisible'"
+                  @playing="openPlaying = true"></video>
+            </template>
           </button>
           <p v-if="!opening" class="mt-1 text-sm font-extrabold uppercase tracking-[0.2em] text-gold-300">{{ t("reveal.giftCta") }} 👆</p>
           <Dots :active="2" />
@@ -136,6 +163,8 @@ import IconPhone from "@/components/icons/IconPhone.vue";
 import giftShake from "@/assets/figures/gift-shake.webp";
 import giftOpen from "@/assets/figures/gift-open.webp";
 import giftEnd from "@/assets/figures/gift-open-end.webp";
+import giftStill from "@/assets/figures/gift-shake-still.webp";
+import { alphaVideo, kickVideo } from "@/components/christmas/alphaVideo";
 
 /**
  * Personal reveal page opened from the draw result email (/reveal/:token, token = participant token).
@@ -167,7 +196,17 @@ const firstName = ref("");
 const match = ref<MatchResult | null>(null);
 const santaReady = ref(false);
 const opening = ref(false);
-const giftSrc = ref(giftShake);
+// transparent videos when the browser supports them; otherwise the animated WebPs
+const shakeVid = alphaVideo("gift-shake");
+const openVid = alphaVideo("gift-open");
+const useGiftVideo = Boolean(shakeVid && openVid);
+const giftIdle = useGiftVideo ? giftStill : giftShake;
+const giftSrc = ref(giftIdle);
+const shakePlaying = ref(false);
+const openPlaying = ref(false);
+const openEl = ref<HTMLVideoElement | null>(null);
+/** phones get a lighter celebration: fewer confetti pieces, no blur effects */
+const isSmallScreen = () => typeof window !== "undefined" && window.innerWidth < 1024;
 const copied = ref("");
 const timers: ReturnType<typeof setTimeout>[] = [];
 const later = (fn: () => void, ms: number) => timers.push(setTimeout(fn, ms));
@@ -183,13 +222,20 @@ const go = (next: Stage) => {
   }
   if (next === "gift") {
     opening.value = false;
-    giftSrc.value = giftShake;
+    shakePlaying.value = false;
+    openPlaying.value = false;
+    giftSrc.value = giftIdle;
   }
 };
 
 const burst = () => {
   if (reducedMotion()) return;
   const colors = ["#f6d98a", "#e6b94a", "#fffbf5", "#c4242a", "#4fb87e"];
+  if (isSmallScreen()) {
+    // one modest burst that fades quickly: hundreds of pieces make phones drop frames
+    confetti({ particleCount: 55, spread: 80, startVelocity: 36, ticks: 110, origin: { y: 0.55 }, colors, scalar: 1.1 });
+    return;
+  }
   confetti({ particleCount: 140, spread: 90, startVelocity: 42, origin: { y: 0.55 }, colors, scalar: 1.1 });
   later(() => confetti({ particleCount: 80, angle: 60, spread: 70, origin: { x: 0, y: 0.7 }, colors }), 220);
   later(() => confetti({ particleCount: 80, angle: 120, spread: 70, origin: { x: 1, y: 0.7 }, colors }), 220);
@@ -198,8 +244,23 @@ const burst = () => {
 const openGift = () => {
   if (opening.value) return;
   opening.value = true;
-  // fresh URL so the one-shot animation always starts from its first frame
-  giftSrc.value = `${giftOpen}#${Date.now()}`;
+  const playWebp = () => {
+    // fresh URL so the one-shot animation always starts from its first frame
+    giftSrc.value = `${giftOpen}#${Date.now()}`;
+  };
+  const v = openEl.value;
+  if (useGiftVideo && v) {
+    // started straight from the tap, so it plays even where autoplay is blocked (iOS Low Power Mode)
+    try {
+      v.currentTime = 0;
+      const p = v.play();
+      if (p && typeof p.catch === "function") p.catch(playWebp);
+    } catch {
+      playWebp();
+    }
+  } else {
+    playWebp();
+  }
   later(burst, reducedMotion() ? 0 : 650);
   later(() => (stage.value = "reveal"), reducedMotion() ? 200 : 1900);
 };
@@ -232,7 +293,7 @@ onMounted(async () => {
     match.value = result.data;
     stage.value = "hello";
     // warm up the heavier animations while the visitor reads the first step
-    [giftShake, giftOpen, giftEnd].forEach((src) => { const img = new Image(); img.src = src; });
+    (useGiftVideo ? [giftStill, giftEnd] : [giftShake, giftOpen, giftEnd]).forEach((src) => { const img = new Image(); img.src = src; });
   } catch (err: any) {
     errorKind.value = err?.response?.status === 409 ? "pending" : "invalid";
     stage.value = "error";
@@ -280,6 +341,14 @@ onUnmounted(() => timers.forEach(clearTimeout));
 @keyframes reveal-name {
   0% { opacity: 0; transform: scale(1.12); filter: blur(6px); }
   100% { opacity: 1; transform: none; filter: none; }
+}
+/* phones: same entrance without the animated blur (it is repainted every frame) */
+@keyframes reveal-name-lite {
+  0% { opacity: 0; transform: scale(1.12); }
+  100% { opacity: 1; transform: none; }
+}
+@media (max-width: 1023px), (hover: none) {
+  .reveal-name { animation-name: reveal-name-lite; }
 }
 .xm-ellipsis::after {
   content: "";
