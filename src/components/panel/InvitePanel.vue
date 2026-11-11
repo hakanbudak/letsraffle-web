@@ -83,6 +83,8 @@
           </div>
         </div>
 
+        <ShareButtons :url="inviteUrl" />
+
         <div v-if="qrCodeDataUrl" class="mt-4 flex items-center gap-4 rounded-2xl bg-white p-3 shadow-[inset_0_0_0_2px_#f3e6d6]">
           <img :src="qrCodeDataUrl" :alt="t('invitePanel.qrTitle')" class="h-28 w-28 flex-none rounded-xl" />
           <div class="min-w-0">
@@ -126,6 +128,7 @@ import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 import type { InvitedParticipant } from "../draw/types";
 import ChristmasFigure from "@/components/christmas/ChristmasFigure.vue";
+import ShareButtons from "@/components/draw/ShareButtons.vue";
 
 const props = defineProps<{
   inviteUrl: string;

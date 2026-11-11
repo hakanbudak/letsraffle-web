@@ -67,6 +67,16 @@ const messages = {
     languageSwitcher: {
       label: "Dil seçimi",
     },
+    share: {
+      title: "Hızlı paylaş",
+      message: "🎅 Yılbaşı çekilişine davetlisin! Katılmak için bilgilerini doldur: {url}",
+      messageNoUrl: "🎅 Yılbaşı çekilişine davetlisin! Katılmak için bilgilerini doldur:",
+      subject: "Yılbaşı çekilişine davetlisin 🎁",
+      email: "E-posta",
+      more: "Diğer",
+      instagramCopied: "Davet metni kopyalandı. Instagram'da istediğin sohbete ya da hikâyeye yapıştır.",
+      copyFailed: "Kopyalanamadı, linki yukarıdaki butonla kopyalayabilirsin.",
+    },
     common: {
       showPassword: "Şifreyi göster",
       hidePassword: "Şifreyi gizle",
@@ -489,6 +499,16 @@ const messages = {
     },
     languageSwitcher: {
       label: "Choose language",
+    },
+    share: {
+      title: "Quick share",
+      message: "🎅 You're invited to our Secret Santa! Fill in your details to join: {url}",
+      messageNoUrl: "🎅 You're invited to our Secret Santa! Fill in your details to join:",
+      subject: "You're invited to our Secret Santa 🎁",
+      email: "E-mail",
+      more: "More",
+      instagramCopied: "Invite text copied. Paste it into any Instagram chat or story.",
+      copyFailed: "Could not copy; use the copy button above instead.",
     },
     common: {
       showPassword: "Show password",
