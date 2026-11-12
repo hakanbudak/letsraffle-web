@@ -11,11 +11,12 @@
             :target="s.href && s.newTab ? '_blank' : undefined"
             :rel="s.href && s.newTab ? 'noopener noreferrer' : undefined"
             :type="s.href ? undefined : 'button'"
-            class="share-btn group flex w-full cursor-pointer flex-col items-center gap-1 rounded-2xl border-0 bg-white px-1 py-2.5 text-center no-underline shadow-[inset_0_0_0_2px_#f3e6d6] transition-[transform,box-shadow] duration-150 hover:-translate-y-0.5 hover:shadow-[inset_0_0_0_2px_#e6b94a]"
+            class="share-btn flex w-full cursor-pointer flex-col items-center gap-2 rounded-2xl border-0 bg-transparent px-0 pb-1 pt-2.5 text-center no-underline"
             :aria-label="s.label"
             :data-testid="`share-${s.id}`"
             @click="s.onClick?.()">
-          <span class="relative flex h-10 w-10 items-center justify-center rounded-full text-white" :style="{ background: s.color }">
+          <!-- each target is a little Christmas bauble (cranberry, pine or gold) with a gold cap, like in the app -->
+          <span class="bauble" :class="`bauble-${s.tone}`">
             <svg viewBox="0 0 24 24" class="h-[22px] w-[22px]" :fill="s.stroke ? 'none' : 'currentColor'" :stroke="s.stroke ? 'currentColor' : 'none'" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" v-html="s.icon"></svg>
             <!-- story targets carry a little "+", like the story ring in those apps -->
             <span v-if="s.badge" class="absolute -bottom-1 -right-1 flex h-[17px] w-[17px] items-center justify-center rounded-full bg-snow text-cranberry-800 shadow-[inset_0_0_0_1.5px_#e6b94a]" aria-hidden="true">
@@ -125,18 +126,52 @@ const ICON = {
   more: '<path d="M12 3v12"/><path d="m7 8 5-5 5 5"/><path d="M5 14v5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-5"/>',
 };
 
-type Target = { id: string; label: string; color: string; icon: string; stroke?: boolean; badge?: boolean; href?: string; newTab?: boolean; onClick?: () => void };
+type Target = { id: string; label: string; tone: 0 | 1 | 2; icon: string; stroke?: boolean; badge?: boolean; href?: string; newTab?: boolean; onClick?: () => void };
 
 const targets = computed<Target[]>(() => {
-  const instagram = "linear-gradient(45deg,#F9CE34 0%,#EE2A7B 50%,#6228D7 100%)";
   const list: Target[] = [
-    { id: "whatsapp", label: "WhatsApp", color: "#25D366", icon: ICON.whatsapp, href: `https://wa.me/?text=${enc(message.value)}`, newTab: true },
-    { id: "status", label: t("share.status"), color: "#25D366", icon: ICON.whatsapp, badge: true, onClick: () => shareCard("story") },
-    { id: "story", label: t("share.story"), color: instagram, icon: ICON.instagram, stroke: true, badge: true, onClick: () => shareCard("story") },
-    { id: "mail", label: t("share.email"), color: "#9B1418", icon: ICON.mail, stroke: true, href: `mailto:?subject=${enc(t("share.subject"))}&body=${enc(message.value)}` },
-    { id: "poster", label: t("share.poster"), color: "#1F5C3E", icon: ICON.poster, stroke: true, onClick: () => shareCard("poster") },
+    { id: "whatsapp", label: "WhatsApp", tone: 0, icon: ICON.whatsapp, href: `https://wa.me/?text=${enc(message.value)}`, newTab: true },
+    { id: "status", label: t("share.status"), tone: 0, icon: ICON.whatsapp, badge: true, onClick: () => shareCard("story") },
+    { id: "story", label: t("share.story"), tone: 1, icon: ICON.instagram, stroke: true, badge: true, onClick: () => shareCard("story") },
+    { id: "mail", label: t("share.email"), tone: 2, icon: ICON.mail, stroke: true, href: `mailto:?subject=${enc(t("share.subject"))}&body=${enc(message.value)}` },
+    { id: "poster", label: t("share.poster"), tone: 1, icon: ICON.poster, stroke: true, onClick: () => shareCard("poster") },
   ];
-  if (canNativeShare) list.push({ id: "more", label: t("share.more"), color: "#B08A2E", icon: ICON.more, stroke: true, onClick: shareNative });
+  if (canNativeShare) list.push({ id: "more", label: t("share.more"), tone: 0, icon: ICON.more, stroke: true, onClick: shareNative });
   return list;
 });
 </script>
+
+<style scoped>
+.bauble {
+  position: relative;
+  display: flex;
+  width: 46px;
+  height: 46px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  box-shadow: inset 0 0 0 2px rgba(246, 217, 138, 0.85), 0 3px 0 var(--edge);
+  transition: transform 0.15s ease;
+}
+/* the gold cap the bauble hangs from */
+.bauble::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: -7px;
+  width: 12px;
+  height: 8px;
+  margin-left: -6px;
+  border-radius: 2.5px;
+  background: linear-gradient(180deg, #f6d98a, #b08a2e);
+}
+.bauble-0 { --edge: #4a080c; background: radial-gradient(circle at 34% 28%, #e0444a, #a3171c 62%, #7a0f14); color: #fffbf5; }
+.bauble-1 { --edge: #0c2a1c; background: radial-gradient(circle at 34% 28%, #3f9a63, #1f5c3e 62%, #123826); color: #fffbf5; }
+.bauble-2 { --edge: #8a6a1e; background: radial-gradient(circle at 34% 28%, #fdf0c4, #e6b94a 62%, #b08a2e); color: #5a0a0f; }
+.share-btn:hover .bauble { transform: translateY(-2px); }
+.share-btn:active .bauble { transform: translateY(1px); }
+.share-btn:focus-visible { outline: 3px solid #e6b94a; outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) {
+  .bauble { transition: none; }
+}
+</style>
