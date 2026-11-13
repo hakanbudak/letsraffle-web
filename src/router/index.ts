@@ -59,6 +59,13 @@ const routes = [
         props: { doc: 'terms' },
     },
     {
+        path: '/support',
+        alias: '/destek',
+        name: 'support',
+        component: () => import('@/views/LegalView.vue'),
+        props: { doc: 'support' },
+    },
+    {
         path: '/:pathMatch(.*)*',
         name: 'not-found',
         component: () => import('@/views/NotFoundView.vue'),

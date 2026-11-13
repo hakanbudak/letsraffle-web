@@ -28,6 +28,10 @@ const messages = {
         title: "Kullanım Koşulları – Lets Raffle",
         description: "Lets Raffle yılbaşı çekilişi hizmetinin kullanım koşulları.",
       },
+      support: {
+        title: "Destek – Lets Raffle",
+        description: "Lets Raffle ile ilgili yardım ve iletişim: çekiliş e-postası, şifre sıfırlama, hesap silme.",
+      },
       default: {
         title: "Lets Raffle – Yılbaşı Çekilişi",
         description: "Yılbaşı çekilişini dakikalar içinde kur: linki paylaş, herkes bilgisini girsin, eşleşmeler sürpriz kalsın.",
@@ -509,6 +513,10 @@ const messages = {
       terms: {
         title: "Terms of Use – Lets Raffle",
         description: "The terms of use of the Lets Raffle Secret Santa service.",
+      },
+      support: {
+        title: "Support – Lets Raffle",
+        description: "Help and contact for Lets Raffle: draw e-mails, password reset, account deletion.",
       },
       default: {
         title: "Lets Raffle – Secret Santa",

@@ -18,6 +18,7 @@ const PAGE_KEYS: Record<string, string> = {
   "join-draw": "join",
   privacy: "privacy",
   terms: "terms",
+  support: "support",
 };
 
 /** only public, content pages are indexed; everything personal (dashboard, draws, reveal links …) is not */
@@ -31,7 +32,7 @@ export function isIndexable(route: Pick<RouteLocationNormalizedLoaded, "name" | 
 
 export function canonicalUrl(route: Pick<RouteLocationNormalizedLoaded, "name" | "path" | "query">): string {
   const name = String(route.name ?? "");
-  const path = name === "home" ? "/" : name === "join-draw" ? "/draw/join" : name === "privacy" ? "/privacy" : name === "terms" ? "/terms" : route.path;
+  const path = name === "home" ? "/" : name === "join-draw" ? "/draw/join" : name === "privacy" ? "/privacy" : name === "terms" ? "/terms" : name === "support" ? "/support" : route.path;
   const lang = route.query.lang === "tr" || route.query.lang === "en" ? `?lang=${route.query.lang}` : "";
   return `${SITE_URL}${path}${lang}`;
 }

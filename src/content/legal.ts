@@ -1,8 +1,8 @@
 // src/content/legal.ts
-// Privacy policy and terms of use for letsraffle.co and the Lets Raffle iOS app.
+// Privacy policy, terms of use and support page for letsraffle.co and the Lets Raffle iOS app.
 // Keep this in sync with what the backend actually stores and which processors it uses.
 
-export type LegalDoc = "privacy" | "terms";
+export type LegalDoc = "privacy" | "terms" | "support";
 
 export interface LegalSection {
   heading: string;
@@ -250,6 +250,76 @@ export const legal: Record<LegalDoc, Record<"tr" | "en", LegalContent>> = {
           paragraphs: [
             "When we update these terms we change the date on this page; continuing to use the service after an update means you accept the new terms. Questions: " +
               CONTACT_EMAIL,
+          ],
+        },
+      ],
+    },
+  },
+  support: {
+    tr: {
+      title: "Destek",
+      updated: "Bize ulaş: " + CONTACT_EMAIL,
+      intro:
+        "Lets Raffle ile ilgili bir sorun yaşıyorsan ya da bir sorun varsa bize " +
+        CONTACT_EMAIL +
+        " adresinden yazabilirsin. Mümkünse çekilişin davet kodunu ve kullandığın e-posta adresini de ekle; daha hızlı yardımcı oluruz.",
+      sections: [
+        {
+          heading: "Çekiliş e-postası gelmedi",
+          paragraphs: [
+            "Önce spam ve gereksiz klasörlerini kontrol et. E-posta adresinin çekilişe doğru yazıldığından emin ol; yanlış yazıldıysa organizatörden seni yeniden eklemesini iste. iOS uygulamasında eşleşmeni e-postayı beklemeden uygulamanın içinden de görebilirsin.",
+          ],
+        },
+        {
+          heading: "Şifremi unuttum",
+          paragraphs: [
+            "Giriş ekranındaki \"Şifremi Unuttum\" bağlantısına e-posta adresini yaz; sana bir saat geçerli bir sıfırlama bağlantısı göndeririz. Apple veya Google ile giriş yaptıysan şifren yoktur, aynı yöntemle giriş yapman yeterli.",
+          ],
+        },
+        {
+          heading: "Hesabımı silmek istiyorum",
+          paragraphs: [
+            "iOS uygulamasında Profil ekranındaki \"Hesabı Sil\" seçeneğini, web sitesinde ise giriş yaptıktan sonra panodaki hesap silme seçeneğini kullanabilirsin. İstersen bize e-posta gönder, biz silelim.",
+          ],
+        },
+        {
+          heading: "Çekilişle ilgili bir sorun var",
+          paragraphs: [
+            "Katılımcı eklemek, çıkarmak ve çekilişi başlatmak organizatörün elindedir; önce çekilişi düzenleyen kişiyle konuş. Çözemediğiniz bir durum olursa bize yaz.",
+          ],
+        },
+      ],
+    },
+    en: {
+      title: "Support",
+      updated: "Contact us: " + CONTACT_EMAIL,
+      intro:
+        "If something is not working or you have a question about Lets Raffle, write to us at " +
+        CONTACT_EMAIL +
+        ". Include the invite code of the draw and the e-mail address you used if you can; it helps us answer faster.",
+      sections: [
+        {
+          heading: "I did not get the draw e-mail",
+          paragraphs: [
+            "Check your spam and junk folders first. Make sure your address was entered correctly; if it was not, ask the organizer to add you again. In the iOS app you can also see your match inside the app without waiting for the e-mail.",
+          ],
+        },
+        {
+          heading: "I forgot my password",
+          paragraphs: [
+            "Enter your e-mail address under \"Forgot Password\" on the sign-in screen and we send you a reset link that is valid for one hour. If you signed in with Apple or Google you have no password; just sign in the same way again.",
+          ],
+        },
+        {
+          heading: "I want to delete my account",
+          paragraphs: [
+            "In the iOS app use \"Delete Account\" on the Profile screen; on the website use the delete account option on your dashboard after signing in. You can also e-mail us and we will delete it for you.",
+          ],
+        },
+        {
+          heading: "Something is wrong with a draw",
+          paragraphs: [
+            "Adding and removing participants and starting the draw are up to the organizer, so talk to the person who set it up first. If you cannot sort it out, write to us.",
           ],
         },
       ],

@@ -23,6 +23,7 @@
         <nav class="mt-8 flex flex-wrap gap-x-5 gap-y-2 border-t border-[#e8cfc0] pt-5 text-sm font-extrabold">
           <router-link to="/" class="text-cranberry-600 hover:text-cranberry-900">{{ t("legal.home") }}</router-link>
           <router-link :to="otherPath" class="text-cranberry-600 hover:text-cranberry-900">{{ otherTitle }}</router-link>
+          <router-link v-if="showSupportLink" to="/support" class="text-cranberry-600 hover:text-cranberry-900">{{ supportTitle }}</router-link>
           <a :href="`mailto:${CONTACT_EMAIL}`" class="text-cranberry-600 hover:text-cranberry-900">{{ CONTACT_EMAIL }}</a>
         </nav>
       </article>
@@ -43,6 +44,8 @@ const { t, locale } = useI18n();
 const lang = computed(() => (locale.value === "en" ? "en" : "tr"));
 const content = computed(() => legal[props.doc][lang.value]);
 const other = computed<LegalDoc>(() => (props.doc === "privacy" ? "terms" : "privacy"));
+const showSupportLink = computed(() => props.doc !== "support");
+const supportTitle = computed(() => legal.support[lang.value].title);
 const otherPath = computed(() => `/${other.value}`);
 const otherTitle = computed(() => legal[other.value][lang.value].title);
 
