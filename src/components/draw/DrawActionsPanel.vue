@@ -95,6 +95,7 @@
           v-model:require-phone="requirePhone"
           v-model:is-draw-date-enabled="isDrawDateEnabled"
           v-model:draw-date="drawDate"
+          v-model:draw-time="drawTime"
           v-model:draw-date-error="drawDateError"
           :min-draw-date="minDrawDate"
           :is-disabled="participants.length > 0 || isOrganizerSaved"
@@ -295,6 +296,7 @@ const {
 
 const {
   drawDate,
+  drawTime,
   drawDateError,
   isDrawDateEnabled,
   minDrawDate,
@@ -321,7 +323,6 @@ const {
   executeDraw,
   deleteInvitedParticipant,
   resetInviteDraw,
-  markDrawAsReady,
   clearExecuteDrawError,
 } = useInviteActions({
   participants,
@@ -334,8 +335,8 @@ const {
 
 const showReadyInfoModal = ref<boolean>(false);
 
-const handleShowReadyInfo = async () => {
-  await markDrawAsReady();
+// A scheduled draw runs on its own at the chosen time; the button only confirms that.
+const handleShowReadyInfo = () => {
   showReadyInfoModal.value = true;
 };
 
