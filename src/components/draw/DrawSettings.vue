@@ -129,6 +129,7 @@ const props = defineProps<{
   requirePhone: boolean;
   isDrawDateEnabled: boolean;
   drawDate: string;
+  drawTime: string;
   drawDateError: string;
   minDrawDate: string;
   isDisabled: boolean;
@@ -139,12 +140,12 @@ const emit = defineEmits<{
   (e: "update:requirePhone", value: boolean): void;
   (e: "update:isDrawDateEnabled", value: boolean): void;
   (e: "update:drawDate", value: string): void;
+  (e: "update:drawTime", value: string): void;
   (e: "update:drawDateError", value: string): void;
   (e: "normalizeDrawDate"): void;
 }>();
 
 const isOpen = ref<boolean>(true);
-const drawTime = ref<string>("");
 
 const requireAddress = computed({
   get: () => props.requireAddress,
@@ -164,6 +165,11 @@ const isDrawDateEnabled = computed({
 const drawDate = computed({
   get: () => props.drawDate,
   set: (value) => emit("update:drawDate", value),
+});
+
+const drawTime = computed({
+  get: () => props.drawTime,
+  set: (value) => emit("update:drawTime", value),
 });
 
 const drawDateError = computed({

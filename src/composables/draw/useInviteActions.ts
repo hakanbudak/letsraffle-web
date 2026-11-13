@@ -7,6 +7,7 @@ import type { Participant, ParticipantForm, InvitedParticipant } from "@/compone
 import type { Ref } from "vue";
 import type { Router } from "vue-router";
 import { setLocale, type Locale } from "@/i18n";
+import { combineLocalDateTime, toLocalDateInput, toLocalHourInput } from "@/utils/drawSchedule";
 
 interface Options {
   participants: Ref<Participant[]>;
@@ -22,6 +23,7 @@ const INVITE_LINK_BASE = () => `${window.location.origin}/draw/join`;
 export function useInviteActions(options: Options) {
   const { t, locale } = useI18n();
   const drawDate = ref<string>("");
+  const drawTime = ref<string>("");
   const drawDateError = ref<string>("");
   const isDrawDateEnabled = ref(false);
   const inviteCode = ref<string | null>(null);
@@ -41,8 +43,7 @@ export function useInviteActions(options: Options) {
   const minDrawDate = computed(() => {
     const min = new Date();
     min.setDate(min.getDate() + 1);
-    min.setHours(0, 0, 0, 0);
-    return min.toISOString().slice(0, 10);
+    return toLocalDateInput(min);
   });
 
   const normalizeDrawDate = () => {
@@ -121,7 +122,8 @@ export function useInviteActions(options: Options) {
       if (data.drawDate) {
         try {
           const serverDate = new Date(data.drawDate);
-          drawDate.value = serverDate.toISOString().slice(0, 10);
+          drawDate.value = toLocalDateInput(serverDate);
+          drawTime.value = toLocalHourInput(serverDate);
           isDrawDateEnabled.value = true;
         } catch {
           isDrawDateEnabled.value = false;
@@ -153,10 +155,8 @@ export function useInviteActions(options: Options) {
         drawDateError.value = t("alerts.drawDateRequired");
         return;
       }
-      selectedDate = new Date(drawDate.value + "T00:00:00");
-      const now = new Date();
-      now.setHours(0, 0, 0, 0);
-      if (selectedDate <= now) {
+      selectedDate = combineLocalDateTime(drawDate.value, drawTime.value);
+      if (selectedDate <= new Date()) {
         drawDateError.value = t("alerts.drawDateFuture");
         return;
       }
@@ -212,27 +212,6 @@ export function useInviteActions(options: Options) {
   };
 
   const canExecuteDraw = computed(() => invitedParticipants.value.length >= 3 && !!drawId.value);
-
-  const markDrawAsReady = async () => {
-    if (!drawId.value || !isDrawDateEnabled.value || !drawDate.value) {
-      return;
-    }
-
-    isSaving.value = true;
-    executeDrawError.value = "";
-    try {
-      const payload = {
-        draw_id: drawId.value,
-      };
-
-      await api.post(`/api/v1/draws/${drawId.value}/execute`, payload);
-      await fetchInvitedParticipants();
-    } catch (error) {
-      executeDrawError.value = error.response?.data?.detail || t("alerts.executeDrawError");
-    } finally {
-      isSaving.value = false;
-    }
-  };
 
   const executeDraw = async () => {
     if (!drawId.value || !canExecuteDraw.value) return;
@@ -304,11 +283,12 @@ export function useInviteActions(options: Options) {
   if (!drawDate.value) {
     const defaultDate = new Date();
     defaultDate.setDate(defaultDate.getDate() + 7);
-    drawDate.value = defaultDate.toISOString().slice(0, 10);
+    drawDate.value = toLocalDateInput(defaultDate);
   }
 
   const resetInviteDraw = () => {
     drawDate.value = "";
+    drawTime.value = "";
     drawDateError.value = "";
     isDrawDateEnabled.value = false;
     inviteCode.value = null;
@@ -325,6 +305,7 @@ export function useInviteActions(options: Options) {
 
   return {
     drawDate,
+    drawTime,
     drawDateError,
     isDrawDateEnabled,
     minDrawDate,
@@ -351,7 +332,6 @@ export function useInviteActions(options: Options) {
     isOrganizerSaved,
     isInviteDrawLocked,
     resetInviteDraw,
-    markDrawAsReady,
     clearExecuteDrawError,
   };
 }
