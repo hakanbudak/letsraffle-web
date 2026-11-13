@@ -11,6 +11,28 @@ const STORAGE_KEY = "santas_draw_locale";
 
 const messages = {
   tr: {
+    seo: {
+      home: {
+        title: "Yılbaşı Çekilişi Yap: Online Hediye Çekilişi – Lets Raffle",
+        description: "Ücretsiz online yılbaşı çekilişi (Secret Santa). Linki paylaş, herkes katılsın; isimler adil şekilde eşleşsin, kimin kime hediye alacağı sürpriz kalsın.",
+      },
+      join: {
+        title: "Çekilişe Katıl – Lets Raffle",
+        description: "Davet kodunu gir ve yılbaşı çekilişine katıl. Kime hediye alacağını çekiliş yapıldığında öğrenirsin.",
+      },
+      privacy: {
+        title: "Gizlilik Politikası – Lets Raffle",
+        description: "Lets Raffle'ın hangi bilgileri topladığını ve bunları nasıl kullandığını anlatan gizlilik politikası.",
+      },
+      terms: {
+        title: "Kullanım Koşulları – Lets Raffle",
+        description: "Lets Raffle yılbaşı çekilişi hizmetinin kullanım koşulları.",
+      },
+      default: {
+        title: "Lets Raffle – Yılbaşı Çekilişi",
+        description: "Yılbaşı çekilişini dakikalar içinde kur: linki paylaş, herkes bilgisini girsin, eşleşmeler sürpriz kalsın.",
+      },
+    },
     reveal: {
       loading: "Sürprizin hazırlanıyor…",
       eyebrow: "Çekiliş yapıldı!",
@@ -471,6 +493,28 @@ const messages = {
     },
   },
   en: {
+    seo: {
+      home: {
+        title: "Secret Santa Generator: Free Online Gift Exchange – Lets Raffle",
+        description: "Free online Secret Santa generator. Share a link, let everyone join and draw names fairly. Each person only sees who they are buying a gift for.",
+      },
+      join: {
+        title: "Join a Draw – Lets Raffle",
+        description: "Enter your invite code and join the Secret Santa draw. You find out who you are buying for once the names are drawn.",
+      },
+      privacy: {
+        title: "Privacy Policy – Lets Raffle",
+        description: "What information Lets Raffle collects and how it is used.",
+      },
+      terms: {
+        title: "Terms of Use – Lets Raffle",
+        description: "The terms of use of the Lets Raffle Secret Santa service.",
+      },
+      default: {
+        title: "Lets Raffle – Secret Santa",
+        description: "Set up your Secret Santa in minutes: share the link, everyone fills in their details and the matches stay a surprise.",
+      },
+    },
     reveal: {
       loading: "Getting your surprise ready…",
       eyebrow: "The draw is done!",
@@ -948,7 +992,14 @@ const getBrowserLocale = (): Locale => {
   return "en";
 };
 
-const initialLocale = getStoredLocale() || getBrowserLocale();
+/** `?lang=tr` / `?lang=en`: lets a link (and a search engine) ask for one language explicitly. */
+const getUrlLocale = (): Locale | null => {
+  if (typeof window === "undefined") return null;
+  const lang = new URLSearchParams(window.location.search).get("lang");
+  return localeOptions.some((option) => option.code === lang) ? (lang as Locale) : null;
+};
+
+const initialLocale = getUrlLocale() || getStoredLocale() || getBrowserLocale();
 
 export const i18n = createI18n({
   legacy: false,
