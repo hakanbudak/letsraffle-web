@@ -78,6 +78,11 @@
           </span>
         </button>
         </div>
+
+        <p class="xm-rise xm-d4 text-center text-[15px] font-semibold text-snow/90">
+          {{ t("landing.joinWithCode") }}
+          <button type="button" class="cursor-pointer border-0 bg-transparent p-0 font-extrabold text-gold-300 underline underline-offset-2 hover:text-gold-200" data-testid="join-with-code" @click="goJoin">{{ t("landing.joinWithCodeCta") }} →</button>
+        </p>
       </section>
     </main>
     <footer class="relative z-10 pb-5 tall:fixed tall:bottom-4 tall:left-0 tall:right-0 tall:pb-0">
@@ -114,6 +119,7 @@ const manualFeatures = ["addYourself", "rules", "instant"] as const;
 
 const goManual = () => router.push("/draw/manual").catch(() => undefined);
 const goInvite = () => router.push("/draw/dynamic").catch(() => undefined);
+const goJoin = () => router.push("/draw/join").catch(() => undefined);
 
 const showDelete = ref(false);
 const handleDeleted = () => {

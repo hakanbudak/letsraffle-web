@@ -9,8 +9,8 @@
       <section class="relative flex flex-col lg:min-h-0 lg:pt-[5vh]">
         <div class="flex items-end justify-between gap-2 lg:block">
           <div class="min-w-0 pb-2 lg:pb-0">
-            <p class="xm-glow m-0 font-script text-[52px] leading-none text-gold-300 md:text-[64px]">{{ t("join.script") }}</p>
-            <h1 class="mt-1.5 max-w-[520px] font-display text-[30px] font-black leading-[1.05] tracking-tight text-snow md:text-[52px]">{{ t("join.heading") }}</h1>
+            <p class="xm-glow m-0 font-script text-[52px] leading-none text-gold-300 md:text-[64px]">{{ codeStep ? t("join.code.script") : t("join.script") }}</p>
+            <h1 class="mt-1.5 max-w-[520px] font-display text-[30px] font-black leading-[1.05] tracking-tight text-snow md:text-[52px]">{{ codeStep ? t("join.code.heroHeading") : t("join.heading") }}</h1>
             <div v-if="drawInfo" class="mt-4 flex flex-wrap gap-2.5">
               <span v-if="drawInfo.drawDate" class="inline-flex min-h-10 items-center gap-2 rounded-full bg-snow/15 px-4 text-[15px] font-extrabold shadow-[inset_0_0_0_1px_rgba(246,217,138,0.5)]">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f6d98a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2" /><path d="M16 3v4" /><path d="M8 3v4" /><path d="M3 10h18" /></svg>
@@ -32,15 +32,45 @@
       <div class="flex items-start lg:items-center lg:pb-[70px]">
         <section class="xm-card xm-rise relative w-full px-5 py-8 sm:px-10 sm:py-9" aria-labelledby="join-title" aria-live="polite">
           <ChristmasFigure figure="candy" :width="120" class="absolute -right-10 -top-12 hidden rotate-6 sm:block" />
-          <div v-if="isLoading" class="flex justify-center py-12">
+          <div v-if="isLoading && !codeStep" class="flex justify-center py-12">
             <ChristmasLoader :label="t('join.loading')" />
+          </div>
+
+          <!-- no code in the link: ask for the code the organizer shared -->
+          <div v-else-if="codeStep">
+            <h2 id="join-title" class="mb-2.5 font-display text-[34px] font-black leading-tight text-cranberry-800 sm:text-4xl">{{ t("join.code.title") }}</h2>
+            <div class="xm-candy xm-candy-move mb-3 w-[88px]"></div>
+            <p class="mb-6 text-[15px] leading-normal text-ink-soft">{{ t("join.code.hint") }}</p>
+
+            <form class="flex flex-col gap-3.5" novalidate @submit.prevent="submitCode">
+              <Input
+                  id="invite-code"
+                  v-model:input="codeInput"
+                  :invalidMessage="codeError"
+                  :label="t('join.code.label')"
+                  type="text"
+                  name="inviteCode"
+                  autocomplete="off"
+                  :placeholder="t('join.code.placeholder')"
+                  @onFocus="codeError = ''" />
+
+              <button type="submit" class="xm-btn xm-btn-red xm-shine mt-2 w-full" :disabled="isLoading">
+                <span v-if="!isLoading">{{ t("join.code.continue") }}</span>
+                <span v-else>{{ t("join.code.checking") }}</span>
+                <svg v-if="!isLoading" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14" /><path d="m13 6 6 6-6 6" /></svg>
+              </button>
+            </form>
+            <p class="mt-4 text-balance text-center text-[13px] leading-normal text-ink-muted">{{ t("join.code.linkNote") }}</p>
           </div>
 
           <div v-else-if="error" class="flex flex-col items-center py-6 text-center">
             <SantaCharacter mood="sad" :size="120" />
             <h2 id="join-title" class="mb-2 mt-2 font-display text-2xl font-black text-cranberry-800">{{ t("join.errorTitle") }}</h2>
-            <p class="mb-5 text-ink-soft">{{ error }}</p>
-            <button type="button" class="xm-btn xm-btn-red" @click="fetchDrawInfo">{{ t("join.retry") }}</button>
+            <p class="mb-5 text-ink-soft">{{ loadStatus === 404 ? t("join.code.notFound") : error }}</p>
+            <div class="flex flex-wrap justify-center gap-3">
+              <button type="button" class="xm-btn xm-btn-red" @click="fetchDrawInfo">{{ t("join.retry") }}</button>
+              <button type="button" class="xm-btn xm-btn-ghost" @click="openCodeStep">{{ t("join.code.enterManually") }}</button>
+            </div>
           </div>
 
           <div v-else-if="drawInfo">
@@ -124,6 +154,11 @@
                 <button type="button" class="flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg border-0 bg-transparent text-xl leading-none text-[#b42318]" :aria-label="t('common.close')" @click="submitError = ''">×</button>
               </div>
             </form>
+            <p class="mt-4 text-center text-[13px] font-bold text-ink-muted">
+              <span class="font-display font-black text-cranberry-800">{{ inviteCode }}</span>
+              ·
+              <button type="button" class="cursor-pointer border-0 bg-transparent p-0 font-bold text-cranberry-700 underline underline-offset-2" data-testid="change-code" @click="openCodeStep">{{ t("join.code.change") }}</button>
+            </p>
           </div>
         </section>
       </div>
@@ -145,8 +180,8 @@
 <script setup lang="ts">
 import ChristmasLoader from "@/components/christmas/ChristmasLoader.vue";
 import ChristmasFigure from "@/components/christmas/ChristmasFigure.vue";
-import { computed, reactive, ref, onMounted } from "vue";
-import { useRoute } from "vue-router";
+import { computed, reactive, ref, onMounted, watch } from "vue";
+import { useRoute, useRouter } from "vue-router";
 import confetti from "canvas-confetti";
 import Input from "@/components/ui-kit/input/Input.vue";
 import api from "@/services/api";
@@ -156,6 +191,7 @@ import AppHeader from "@/components/layout/AppHeader.vue";
 import DrawSuccessModal from "@/components/draw/DrawSuccessModal.vue";
 import { useI18n } from "vue-i18n";
 import { setLocale, type Locale } from "@/i18n";
+import { parseInviteCode } from "@/utils/inviteCode";
 
 // Santa's friends keep him company on the snow (left corner, clear of the join card)
 const sceneDecor = [
@@ -168,6 +204,7 @@ const sceneDecor = [
   { figure: "tree" as const, cls: "right-[calc(1.2%+148px)] bottom-[6px] w-[92px]" },
 ];
 const route = useRoute();
+const router = useRouter();
 const { t, locale } = useI18n();
 
 interface DrawInfo {
@@ -187,6 +224,12 @@ const error = ref<string>("");
 const isSubmitting = ref<boolean>(false);
 const showSuccessModal = ref<boolean>(false);
 const submitError = ref<string>("");
+
+// Join with a code: shown when the page is opened without an invite code in the link.
+const codeStep = ref<boolean>(false);
+const codeInput = ref<string>("");
+const codeError = ref<string>("");
+const loadStatus = ref<number>(0);
 
 const successDetails = computed(() =>
   [drawInfo.value?.drawDate ? t("join.drawDateInfo", { date: formatDrawDate(drawInfo.value.drawDate) }) : "", t("join.successInfo")]
@@ -252,6 +295,8 @@ const fetchDrawInfo = async () => {
 
   isLoading.value = true;
   error.value = "";
+  loadStatus.value = 0;
+  drawInfo.value = null;
   try {
     const { data } = await api.get(`/api/v1/draws/join/${inviteCode.value}`);
     drawInfo.value = data;
@@ -264,9 +309,46 @@ const fetchDrawInfo = async () => {
     }
   } catch (err: any) {
     console.error("Çekiliş bilgileri yüklenirken hata:", err);
+    loadStatus.value = err.response?.status ?? 0;
     error.value = err.response?.data?.detail || t("alerts.joinLoadError");
   } finally {
     isLoading.value = false;
+  }
+};
+
+const openCodeStep = () => {
+  codeStep.value = true;
+  codeError.value = "";
+  error.value = "";
+  submitError.value = "";
+  drawInfo.value = null;
+  codeInput.value = inviteCode.value;
+  if (route.params.inviteCode) router.replace("/draw/join").catch(() => undefined);
+};
+
+const submitCode = async () => {
+  if (isLoading.value) return;
+  const typed = codeInput.value.trim();
+  const code = parseInviteCode(typed);
+  if (!code) {
+    codeError.value = t(typed ? "join.code.invalid" : "join.code.required");
+    return;
+  }
+
+  inviteCode.value = code;
+  await fetchDrawInfo();
+  // codes are lower-case today; fall back to exactly what was typed for anything older
+  if (!drawInfo.value && loadStatus.value === 404 && typed !== code && /^[\w-]+$/.test(typed)) {
+    inviteCode.value = typed;
+    await fetchDrawInfo();
+  }
+
+  if (drawInfo.value) {
+    codeStep.value = false;
+    router.replace(`/draw/join/${inviteCode.value}`).catch(() => undefined);
+  } else {
+    codeError.value = loadStatus.value === 404 ? t("join.code.notFound") : error.value;
+    error.value = "";
   }
 };
 
@@ -332,7 +414,19 @@ onMounted(() => {
   if (inviteCode.value) {
     fetchDrawInfo();
   } else {
-    error.value = t("alerts.joinMissingInvite");
+    codeStep.value = true;
+  }
+});
+
+// the same page serves /draw/join and /draw/join/:inviteCode, so follow the address when it changes
+watch(() => route.params.inviteCode, (param) => {
+  const code = (param as string) || "";
+  if (!code) {
+    if (!codeStep.value) openCodeStep();
+  } else if (code !== inviteCode.value) {
+    inviteCode.value = code;
+    codeStep.value = false;
+    fetchDrawInfo();
   }
 });
 </script>

@@ -131,6 +131,8 @@ const messages = {
       manualCardBadge: "Ücretsiz",
       footnote:
         "🎁 E-posta bildirimleri, çekiliş zamanlaması ve grup yönetimi yakında geliyor.",
+      joinWithCode: "Davet kodun mu var?",
+      joinWithCodeCta: "Kodla katıl",
       back: "← Geri dön",
       goRegister: "← Kayıt ol",
     },
@@ -378,6 +380,22 @@ const messages = {
       successFooter: "Mutlu Seneler! 🎄",
       successButton: "Tamam",
       drawDateInfo: "Çekilişiniz {date} tarihinde yapılacaktır.",
+      code: {
+        script: "Davetin var mı?",
+        heroHeading: "Kodu gir, Noel Baba seni listeye eklesin",
+        title: "Davet kodu",
+        hint: "Organizatörün paylaştığı kodu yaz (ör. miskin-penguen-53).",
+        label: "Davet kodu",
+        placeholder: "miskin-penguen-53",
+        continue: "Devam et",
+        checking: "Kontrol ediliyor…",
+        required: "Davet kodunu yaz.",
+        invalid: "Bu bir davet koduna benzemiyor. Kod miskin-penguen-53 gibi görünür.",
+        notFound: "Bu kodla bir çekiliş bulamadık. Kodu kontrol edip tekrar dene.",
+        linkNote: "Davet linkine tıkladığında bu adım atlanır, doğrudan form açılır.",
+        change: "Farklı bir kod gir",
+        enterManually: "Kodu elle gir",
+      },
     },
     account: {
       delete: {
@@ -573,6 +591,8 @@ const messages = {
       manualCardBadge: "Free",
       footnote:
         "🎁 Email notifications, scheduling and group management are coming soon.",
+      joinWithCode: "Got an invite code?",
+      joinWithCodeCta: "Join with a code",
       back: "← Back",
       goRegister: "← Register",
     },
@@ -820,6 +840,22 @@ const messages = {
       successFooter: "Happy Holidays! 🎄",
       successButton: "Great!",
       drawDateInfo: "Your draw will take place on {date}.",
+      code: {
+        script: "Got an invite?",
+        heroHeading: "Enter the code and Santa adds you to the list",
+        title: "Invite code",
+        hint: "Type the code the organizer shared (e.g. jolly-reindeer-742).",
+        label: "Invite code",
+        placeholder: "jolly-reindeer-742",
+        continue: "Continue",
+        checking: "Checking…",
+        required: "Enter the invite code.",
+        invalid: "That doesn't look like an invite code. A code looks like jolly-reindeer-742.",
+        notFound: "We couldn't find a draw with this code. Check it and try again.",
+        linkNote: "Opening an invite link skips this step and takes you straight to the form.",
+        change: "Use a different code",
+        enterManually: "Type the code",
+      },
     },
     account: {
       delete: {

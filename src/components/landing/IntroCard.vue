@@ -60,7 +60,10 @@
       </article>
     </div>
 
-    <p class="mt-5 text-balance text-center text-[13px] leading-normal text-ink-muted compact:mt-3">{{ t("landing.footnote") }}</p>
+    <p class="mt-5 text-balance text-center text-[15px] font-semibold leading-normal text-ink-soft compact:mt-3">
+      {{ t("landing.joinWithCode") }}
+      <button type="button" class="cursor-pointer border-0 bg-transparent p-0 font-extrabold text-cranberry-700 underline underline-offset-2 hover:text-cranberry-800" data-testid="join-with-code" @click="$emit('join-click')">{{ t("landing.joinWithCodeCta") }} →</button>
+    </p>
   </section>
 </template>
 
@@ -72,6 +75,7 @@ withDefaults(defineProps<{ rise?: boolean }>(), { rise: true });
 defineEmits<{
   (e: "manual-click"): void
   (e: "register-click"): void
+  (e: "join-click"): void
 }>();
 
 const { t } = useI18n();

@@ -50,6 +50,7 @@
             v-if="currentPanel === 'intro'"
             :rise="riseCard"
             @manual-click="goManual"
+            @join-click="goJoin"
             @register-click="openRegister" />
 
         <RegisterCard
@@ -149,6 +150,7 @@ onMounted(() => {
 const goManual = () => {
   router.push({ path: "/draw/manual", query: { directStart: "true" } });
 };
+const goJoin = () => router.push("/draw/join").catch(() => undefined);
 const openRegister = () => (currentPanel.value = "register");
 const openLogin = () => (currentPanel.value = "login");
 const backToIntro = () => (currentPanel.value = "intro");
