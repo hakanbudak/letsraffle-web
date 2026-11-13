@@ -32,6 +32,9 @@
       <div class="flex items-start lg:items-center lg:pb-[70px]">
         <section class="xm-card xm-rise relative w-full px-5 py-8 sm:px-10 sm:py-9" aria-labelledby="join-title" aria-live="polite">
           <ChristmasFigure figure="candy" :width="120" class="absolute -right-10 -top-12 hidden rotate-6 sm:block" />
+          <!-- on desktop a long form scrolls inside the card instead of stretching the page,
+               so the scene (and Santa on the snow) stays where it is -->
+          <div class="xm-scroll lg:-mr-4 lg:max-h-[max(360px,calc(100dvh-360px))] tall:max-h-[calc(100dvh-212px)] lg:overflow-y-auto lg:overscroll-contain lg:pr-4">
           <div v-if="isLoading && !codeStep" class="flex justify-center py-12">
             <ChristmasLoader :label="t('join.loading')" />
           </div>
@@ -159,6 +162,7 @@
               ·
               <button type="button" class="cursor-pointer border-0 bg-transparent p-0 font-bold text-cranberry-700 underline underline-offset-2" data-testid="change-code" @click="openCodeStep">{{ t("join.code.change") }}</button>
             </p>
+          </div>
           </div>
         </section>
       </div>
