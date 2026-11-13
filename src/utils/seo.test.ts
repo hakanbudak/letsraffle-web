@@ -16,6 +16,7 @@ describe("seo", () => {
   it("indexes only the public pages", () => {
     expect(isIndexable(route("home"))).toBe(true);
     expect(isIndexable(route("privacy"))).toBe(true);
+    expect(isIndexable(route("support"))).toBe(true);
     expect(isIndexable(route("join-draw"))).toBe(true);
     expect(isIndexable(route("join-draw", { params: { inviteCode: "miskin-penguen-53" } }))).toBe(false);
     for (const name of ["dashboard", "reveal", "draw-invite-detail", "reset-password", "not-found"]) {
@@ -27,6 +28,7 @@ describe("seo", () => {
     expect(canonicalUrl(route("home"))).toBe("https://letsraffle.co/");
     expect(canonicalUrl(route("home", { query: { lang: "en" } }))).toBe("https://letsraffle.co/?lang=en");
     expect(canonicalUrl(route("privacy", { path: "/gizlilik" }))).toBe("https://letsraffle.co/privacy");
+    expect(canonicalUrl(route("support", { path: "/destek" }))).toBe("https://letsraffle.co/support");
     expect(canonicalUrl(route("join-draw", { path: "/draw/join/miskin-penguen-53", params: { inviteCode: "x" } }))).toBe("https://letsraffle.co/draw/join");
   });
 
