@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+Disallow: /dashboard
+Disallow: /draws/
+Disallow: /draw/manual
+Disallow: /draw/dynamic
+Disallow: /reveal/
+Disallow: /forgot-password
+Disallow: /reset-password
+
+Sitemap: https://letsraffle.co/sitemap.xml
