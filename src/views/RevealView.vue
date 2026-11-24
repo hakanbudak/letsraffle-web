@@ -153,6 +153,7 @@ import { computed, defineComponent, h, onMounted, onUnmounted, ref } from "vue";
 import { useRoute } from "vue-router";
 import { useI18n } from "vue-i18n";
 import axios from "axios";
+import { CLIENT_HEADERS } from "@/services/api";
 import confetti from "canvas-confetti";
 import ChristmasScene from "@/components/layout/ChristmasScene.vue";
 import AppHeader from "@/components/layout/AppHeader.vue";
@@ -188,7 +189,7 @@ const Dots = defineComponent({
 const { t } = useI18n();
 const route = useRoute();
 // separate client: no auth interceptors (a bad token must not log the visitor out)
-const client = axios.create({ baseURL: import.meta.env.VITE_API_BASE_URL });
+const client = axios.create({ baseURL: import.meta.env.VITE_API_BASE_URL, headers: CLIENT_HEADERS });
 
 const stage = ref<Stage>("loading");
 const errorKind = ref<"invalid" | "pending">("invalid");
