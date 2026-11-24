@@ -1,6 +1,7 @@
 import type { RouteLocationNormalizedLoaded } from "vue-router";
 import { i18n, type Locale } from "@/i18n";
-import { localePath, routeLocale } from "@/i18n/localized";
+import { localePath, routeGuide, routeLocale } from "@/i18n/localized";
+import { counterpart } from "@/content/guides";
 
 /**
  * Per-page <title>, description, canonical and robots tags.
@@ -23,7 +24,8 @@ const PAGE_KEYS: Record<string, string> = {
 };
 
 /** only public, content pages are indexed; everything personal (dashboard, draws, reveal links …) is not */
-export function isIndexable(route: Pick<RouteLocationNormalizedLoaded, "name" | "params">): boolean {
+export function isIndexable(route: Pick<RouteLocationNormalizedLoaded, "name" | "params"> & { meta?: RouteLocationNormalizedLoaded["meta"] }): boolean {
+  if (routeGuide(route)) return true;
   const name = String(route.name ?? "");
   if (!(name in PAGE_KEYS)) return false;
   // an invite link is personal to a group: index the "enter your code" page, not every draw
@@ -40,7 +42,7 @@ const PAGE_PATHS: Record<string, string> = {
   support: "/support",
 };
 
-type SeoRoute = Pick<RouteLocationNormalizedLoaded, "name" | "path" | "params">;
+type SeoRoute = Pick<RouteLocationNormalizedLoaded, "name" | "path" | "params"> & { meta?: RouteLocationNormalizedLoaded["meta"] };
 
 /** the page's address in the given language (public pages only) */
 export function pageUrl(name: string, locale: Locale): string {
@@ -48,6 +50,8 @@ export function pageUrl(name: string, locale: Locale): string {
 }
 
 export function canonicalUrl(route: SeoRoute): string {
+  const guide = routeGuide(route);
+  if (guide) return `${SITE_URL}${guide.path}`;
   const name = String(route.name ?? "");
   const locale = routeLocale(route);
   if (!(name in PAGE_PATHS) || !locale) return `${SITE_URL}${route.path}`;
@@ -56,6 +60,16 @@ export function canonicalUrl(route: SeoRoute): string {
 
 /** hreflang alternates of a public page: Turkish, English, and Turkish as the default */
 export function alternateUrls(route: SeoRoute): { hreflang: string; href: string }[] {
+  const guide = routeGuide(route);
+  if (guide) {
+    // a guide may exist in one language only; the Turkish page is the default when there is one
+    const pages = [guide, counterpart(guide)].filter((page) => page !== undefined);
+    const byLocale = (locale: Locale) => pages.find((page) => page.locale === locale);
+    const links = (["tr", "en"] as const)
+      .filter((locale) => byLocale(locale))
+      .map((locale) => ({ hreflang: locale, href: `${SITE_URL}${byLocale(locale)!.path}` }));
+    return [...links, { hreflang: "x-default", href: `${SITE_URL}${(byLocale("tr") ?? guide).path}` }];
+  }
   const name = String(route.name ?? "");
   if (!(name in PAGE_PATHS)) return [];
   return [
@@ -100,8 +114,9 @@ export function applySeo(route: RouteLocationNormalizedLoaded) {
   if (typeof document === "undefined") return;
   const { t } = i18n.global;
   const key = PAGE_KEYS[String(route.name ?? "")] ?? "default";
-  const title = t(`seo.${key}.title`);
-  const description = t(`seo.${key}.description`);
+  const guide = routeGuide(route);
+  const title = guide?.title ?? t(`seo.${key}.title`);
+  const description = guide?.description ?? t(`seo.${key}.description`);
   const indexable = isIndexable(route);
 
   document.title = title;
