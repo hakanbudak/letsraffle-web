@@ -1,0 +1,24 @@
+{
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "redirects": [
+    { "source": "/gizlilik", "destination": "/privacy", "type": 301 },
+    { "source": "/kosullar", "destination": "/terms", "type": 301 },
+    { "source": "/destek", "destination": "/support", "type": 301 }
+  ],
+  "rewrites": [
+    { "source": "/dashboard", "destination": "/app.html" },
+    { "source": "/draw/manual", "destination": "/app.html" },
+    { "source": "/draw/dynamic", "destination": "/app.html" },
+    { "source": "/draws/:code", "destination": "/app.html" },
+    { "source": "/draw/join/:code", "destination": "/app.html" },
+    { "source": "/en/draw/join/:code", "destination": "/app.html" },
+    { "source": "/reveal/:token", "destination": "/app.html" },
+    { "source": "/forgot-password", "destination": "/app.html" },
+    { "source": "/reset-password", "destination": "/app.html" }
+  ],
+  "headers": [
+    { "source": "**/*.html", "headers": [{ "key": "Cache-Control", "value": "no-cache" }] },
+    { "source": "sitemap.xml", "headers": [{ "key": "Cache-Control", "value": "no-cache" }] }
+  ]
+}

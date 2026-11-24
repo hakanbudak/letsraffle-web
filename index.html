@@ -69,7 +69,12 @@
       @keyframes boot-bob { 0%, 100% { transform: translateY(0) } 50% { transform: translateY(-6px) } }
       @keyframes boot-fall { to { transform: translate3d(20px, 105vh, 0) } }
       @media (prefers-reduced-motion: reduce) { #boot img, #boot .b, #boot .f { animation: none } #boot .b { opacity: 1 } }
+      /* prerendered page text (scripts/prerender.mjs); the app replaces it on mount */
+      .static-page { max-width: 720px; margin: 0 auto; padding: 32px 20px; color: #fffbf5; font-family: system-ui, sans-serif; line-height: 1.6 }
+      .static-page a { color: #f6d98a }
     </style>
+    <!-- without JavaScript the boot splash would never go away and hide the page text -->
+    <noscript><style>#boot { display: none }</style></noscript>
   </head>
   <body>
     <div id="boot" aria-hidden="true">
@@ -88,13 +93,7 @@
     </div>
     <div id="app"></div>
     <noscript>
-      <div style="max-width:640px;margin:0 auto;padding:48px 24px;color:#fffbf5;font-family:system-ui,sans-serif;line-height:1.6">
-        <h1>Lets Raffle: online yılbaşı çekilişi</h1>
-        <p>Yılbaşı hediye çekilişini (Secret Santa) dakikalar içinde kur. Davet linkini paylaş, herkes kendi bilgisini girsin; isimler adil şekilde eşleşsin ve kimin kime hediye alacağı sürpriz kalsın.</p>
-        <p>Lets Raffle is a free online Secret Santa generator: share a link, let everyone join and draw names fairly.</p>
-        <p>Bu siteyi kullanmak için tarayıcında JavaScript'i açman gerekiyor.</p>
-        <p><a style="color:#f6d98a" href="/privacy">Gizlilik Politikası</a> · <a style="color:#f6d98a" href="/terms">Kullanım Koşulları</a></p>
-      </div>
+      <p style="text-align:center;color:#fffbf5;font-family:system-ui,sans-serif">Bu siteyi kullanmak için tarayıcında JavaScript'i açman gerekiyor. · Please enable JavaScript to use this site.</p>
     </noscript>
     <script type="module" src="/src/main.ts"></script>
   </body>
