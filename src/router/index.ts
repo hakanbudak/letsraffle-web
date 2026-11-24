@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { isAuthenticated } from '@/services/authHelpers'
+import { guides } from '@/content/guides'
 
 const routes = [
     // public pages: Turkish without a prefix, English under /en (see src/i18n/localized.ts)
@@ -66,6 +67,14 @@ const routes = [
         component: () => import('@/views/LegalView.vue'),
         props: { doc: 'support' },
     },
+    // guide pages: one route per page and language (src/content/guides.ts)
+    ...guides.map((guide) => ({
+        path: guide.path,
+        name: `guide:${guide.path}`,
+        component: () => import('@/views/GuideView.vue'),
+        props: { path: guide.path },
+        meta: { guidePath: guide.path },
+    })),
     {
         path: '/:pathMatch(.*)*',
         name: 'not-found',

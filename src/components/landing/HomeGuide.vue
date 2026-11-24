@@ -33,7 +33,14 @@
         </details>
       </div>
 
-      <slot />
+      <nav class="mt-14 text-center" :aria-label="ui.guidesHeading">
+        <h3 class="font-display text-2xl font-black text-gold-300 md:text-[28px]">{{ ui.guidesHeading }}</h3>
+        <ul class="mt-5 flex list-none flex-wrap justify-center gap-3 p-0">
+          <li v-for="guide in guideLinks" :key="guide.path">
+            <router-link :to="guide.path" class="inline-block rounded-full bg-snow px-5 py-2.5 text-[15px] font-extrabold text-cranberry-800 shadow-[inset_0_0_0_2px_#e6b94a] transition-colors hover:bg-gold-100">{{ guide.linkText }}</router-link>
+          </li>
+        </ul>
+      </nav>
     </div>
   </section>
 </template>
@@ -42,10 +49,15 @@
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 import { homeContent } from "@/content/home";
+import { guidesFor } from "@/content/guides";
+import { guideUi } from "@/content/guideUi";
 import type { Locale } from "@/i18n";
 
 const { locale } = useI18n();
-const c = computed(() => homeContent[(locale.value as Locale) === "en" ? "en" : "tr"]);
+const lang = computed<Locale>(() => (locale.value === "en" ? "en" : "tr"));
+const c = computed(() => homeContent[lang.value]);
+const ui = computed(() => guideUi[lang.value]);
+const guideLinks = computed(() => guidesFor(lang.value));
 </script>
 
 <style scoped>
