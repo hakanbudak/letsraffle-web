@@ -1,4 +1,5 @@
 <template>
+  <div>
   <ChristmasScene :decor="sceneDecor" :forest="false" class="[--santa-h:340px] tall:[--santa-h:min(450px,50vh,calc(100vh-500px))]">
     <template #header>
       <AppHeader />
@@ -12,10 +13,11 @@
         <div class="flex items-end justify-between gap-2 lg:block">
           <div class="min-w-0 pb-4 lg:pb-0">
             <template v-if="currentPanel === 'intro'">
-              <p class="xm-eyebrow text-[11px] text-gold-300 md:text-sm" lang="en">{{ t("landing.tagline") }}</p>
-              <h1 class="xm-glow mt-3 font-script text-[58px] font-normal leading-none text-gold-300 md:text-[clamp(88px,11vh,132px)]">
+              <!-- the page's one heading says what the site is; the greeting below is decoration -->
+              <h1 class="xm-eyebrow text-[11px] text-gold-300 md:text-sm">{{ t("landing.seoHeading") }}</h1>
+              <p class="xm-glow mt-3 font-script text-[58px] font-normal leading-none text-gold-300 md:text-[clamp(88px,11vh,132px)]">
                 {{ t("landing.heroScript") }}
-              </h1>
+              </p>
               <ul class="mt-3 flex list-none flex-col gap-2 p-0 text-sm font-semibold text-snow/90 md:mt-4 md:gap-2.5 md:text-[18px]">
                 <li v-for="p in heroPoints" :key="p.key" class="flex items-center gap-2.5">
                   <span aria-hidden="true" class="inline-flex h-[26px] w-[26px] flex-none items-center justify-center rounded-full bg-gold-300 text-cranberry-800 shadow-[0_2px_0_#b8892b] md:h-[30px] md:w-[30px]">
@@ -77,8 +79,10 @@
       </div>
     </main>
     <!-- desktop: on the snow under Santa's column, so it never runs into the (tall) login / register card -->
-    <LegalLinks class="pb-5 tall:fixed tall:bottom-4 tall:left-[calc(72px+(100%-776px)/2)] tall:-translate-x-1/2 tall:pb-0" />
+    <LegalLinks class="pb-5 tall:absolute tall:bottom-4 tall:left-[calc(72px+(100%-776px)/2)] tall:-translate-x-1/2 tall:pb-0" />
   </ChristmasScene>
+  <HomeGuide />
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -92,6 +96,7 @@ import IntroCard from "@/components/landing/IntroCard.vue";
 import RegisterCard from "@/components/landing/RegisterCard.vue";
 import LoginCard from "@/components/landing/LoginCard.vue";
 import LegalLinks from "@/components/layout/LegalLinks.vue";
+import HomeGuide from "@/components/landing/HomeGuide.vue";
 import { isAuthenticated } from "@/services/authHelpers";
 import { useLocalePath } from "@/i18n/localized";
 

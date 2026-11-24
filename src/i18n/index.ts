@@ -127,6 +127,7 @@ const messages = {
     },
     landing: {
       heroScript: "Mutlu Yıllar",
+      seoHeading: "Online yılbaşı hediye çekilişi",
       heroText: "Yılbaşı çekilişini dakikalar içinde kur. Herkes adil şekilde eşleşsin, sürpriz son ana kadar saklı kalsın.",
       heroPoints: {
         setup: "Çekilişini dakikalar içinde kur",
@@ -613,6 +614,7 @@ const messages = {
     },
     landing: {
       heroScript: "Merry Christmas",
+      seoHeading: "Free online Secret Santa generator",
       heroText: "Set up your holiday draw in minutes. Everyone gets a fair match and the surprise stays secret until the very end.",
       heroPoints: {
         setup: "Set up your draw in minutes",
