@@ -21,7 +21,7 @@ FROM node:20-alpine
 WORKDIR /app
 
 # Install serve globally
-RUN npm install -g serve
+RUN npm install -g serve@14.2.4
 
 # Copy built files from builder stage
 COPY --from=builder /app/dist ./dist
@@ -29,6 +29,7 @@ COPY --from=builder /app/dist ./dist
 # Expose port
 EXPOSE 3000
 
-# Start serve
-CMD ["serve", "-s", "dist", "-l", "3000"]
+# Start serve: prerendered pages as files, app routes rewritten to app.html and a real 404 for
+# everything else (dist/serve.json, see scripts/prerender.mjs)
+CMD ["serve", "dist", "-l", "3000"]
 
