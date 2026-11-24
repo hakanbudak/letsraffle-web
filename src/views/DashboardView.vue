@@ -98,6 +98,7 @@
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
+import { useLocalePath } from "@/i18n/localized";
 import ChristmasScene from "@/components/layout/ChristmasScene.vue";
 import AppHeader from "@/components/layout/AppHeader.vue";
 import SantaCharacter from "@/components/christmas/SantaCharacter.vue";
@@ -112,6 +113,7 @@ import UserMenu from "@/components/ui-kit/UserMenu.vue";
 
 const router = useRouter();
 const { t } = useI18n();
+const localePath = useLocalePath();
 
 
 const inviteFeatures = ["link", "schedule", "oneClick"] as const;
@@ -119,13 +121,13 @@ const manualFeatures = ["addYourself", "rules", "instant"] as const;
 
 const goManual = () => router.push("/draw/manual").catch(() => undefined);
 const goInvite = () => router.push("/draw/dynamic").catch(() => undefined);
-const goJoin = () => router.push("/draw/join").catch(() => undefined);
+const goJoin = () => router.push(localePath("/draw/join")).catch(() => undefined);
 
 const showDelete = ref(false);
 const handleDeleted = () => {
   showDelete.value = false;
   logoutUser(false);
-  router.replace({ path: "/", query: { accountDeleted: "true" } }).catch(() => undefined);
+  router.replace({ path: localePath("/"), query: { accountDeleted: "true" } }).catch(() => undefined);
 };
 
 const handleDrawSelected = (drawDetail: DrawDetail) => {

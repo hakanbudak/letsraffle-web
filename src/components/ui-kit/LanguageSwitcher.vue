@@ -21,14 +21,26 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
+import { useRoute, useRouter } from "vue-router";
 import { localeOptions, setLocale, type Locale } from "@/i18n";
+import { isLocalizedRoute, langParam } from "@/i18n/localized";
 
 const { locale, t } = useI18n();
+const route = useRoute();
+const router = useRouter();
 
 const selectedLocale = computed({
   get: () => locale.value,
   set: (value) => {
-    setLocale(value as Locale);
+    const next = value as Locale;
+    // a public page has one URL per language: go there (the router switches the language)
+    if (isLocalizedRoute(route)) {
+      router
+        .push({ name: route.name!, params: { ...route.params, lang: langParam(next) }, query: route.query, hash: route.hash })
+        .catch(() => undefined);
+      return;
+    }
+    setLocale(next);
   },
 });
 </script>

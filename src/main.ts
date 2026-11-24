@@ -3,6 +3,7 @@ import App from './App.vue'
 import { router } from './router'
 import { restoreAuthFromStorage, setupAuthInterceptors } from "@/services/authHelpers";
 import { i18n } from "@/i18n";
+import { installLocaleGuard } from "@/i18n/localeGuard";
 import { watch } from 'vue'
 import { applySeo } from "@/utils/seo";
 import '@fontsource-variable/fraunces'
@@ -14,6 +15,7 @@ restoreAuthFromStorage();
 setupAuthInterceptors();
 
 const app = createApp(App)
+installLocaleGuard(router)
 app.use(router)
 app.use(i18n)
 app.mount('#app')

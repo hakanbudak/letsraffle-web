@@ -1,5 +1,6 @@
 import type { RouteLocationNormalizedLoaded } from "vue-router";
-import { i18n } from "@/i18n";
+import { i18n, type Locale } from "@/i18n";
+import { localePath, routeLocale } from "@/i18n/localized";
 
 /**
  * Per-page <title>, description, canonical and robots tags.
@@ -30,11 +31,38 @@ export function isIndexable(route: Pick<RouteLocationNormalizedLoaded, "name" | 
   return true;
 }
 
-export function canonicalUrl(route: Pick<RouteLocationNormalizedLoaded, "name" | "path" | "query">): string {
+/** route name → its Turkish path; the English one is the same under /en */
+const PAGE_PATHS: Record<string, string> = {
+  home: "/",
+  "join-draw": "/draw/join",
+  privacy: "/privacy",
+  terms: "/terms",
+  support: "/support",
+};
+
+type SeoRoute = Pick<RouteLocationNormalizedLoaded, "name" | "path" | "params">;
+
+/** the page's address in the given language (public pages only) */
+export function pageUrl(name: string, locale: Locale): string {
+  return `${SITE_URL}${localePath(PAGE_PATHS[name] ?? "/", locale)}`;
+}
+
+export function canonicalUrl(route: SeoRoute): string {
   const name = String(route.name ?? "");
-  const path = name === "home" ? "/" : name === "join-draw" ? "/draw/join" : name === "privacy" ? "/privacy" : name === "terms" ? "/terms" : name === "support" ? "/support" : route.path;
-  const lang = route.query.lang === "tr" || route.query.lang === "en" ? `?lang=${route.query.lang}` : "";
-  return `${SITE_URL}${path}${lang}`;
+  const locale = routeLocale(route);
+  if (!(name in PAGE_PATHS) || !locale) return `${SITE_URL}${route.path}`;
+  return pageUrl(name, locale);
+}
+
+/** hreflang alternates of a public page: Turkish, English, and Turkish as the default */
+export function alternateUrls(route: SeoRoute): { hreflang: string; href: string }[] {
+  const name = String(route.name ?? "");
+  if (!(name in PAGE_PATHS)) return [];
+  return [
+    { hreflang: "tr", href: pageUrl(name, "tr") },
+    { hreflang: "en", href: pageUrl(name, "en") },
+    { hreflang: "x-default", href: pageUrl(name, "tr") },
+  ];
 }
 
 function setMeta(attribute: "name" | "property", key: string, content: string) {
@@ -57,6 +85,17 @@ function setCanonical(href: string) {
   element.setAttribute("href", href);
 }
 
+function setAlternates(links: { hreflang: string; href: string }[]) {
+  document.head.querySelectorAll('link[rel="alternate"][hreflang]').forEach((element) => element.remove());
+  for (const { hreflang, href } of links) {
+    const element = document.createElement("link");
+    element.setAttribute("rel", "alternate");
+    element.setAttribute("hreflang", hreflang);
+    element.setAttribute("href", href);
+    document.head.appendChild(element);
+  }
+}
+
 export function applySeo(route: RouteLocationNormalizedLoaded) {
   if (typeof document === "undefined") return;
   const { t } = i18n.global;
@@ -69,6 +108,8 @@ export function applySeo(route: RouteLocationNormalizedLoaded) {
   setMeta("name", "description", description);
   setMeta("name", "robots", indexable ? "index, follow" : "noindex, nofollow");
   setCanonical(canonicalUrl(route));
+  setAlternates(indexable ? alternateUrls(route) : []);
+  document.documentElement.setAttribute("lang", String(i18n.global.locale.value));
 
   // The Open Graph tags stay as shipped for invite links (chat apps read the static HTML anyway);
   // only the public pages describe themselves.
@@ -76,6 +117,9 @@ export function applySeo(route: RouteLocationNormalizedLoaded) {
     setMeta("property", "og:title", title);
     setMeta("property", "og:description", description);
     setMeta("property", "og:url", canonicalUrl(route));
+    const english = i18n.global.locale.value === "en";
+    setMeta("property", "og:locale", english ? "en_US" : "tr_TR");
+    setMeta("property", "og:locale:alternate", english ? "tr_TR" : "en_US");
     setMeta("name", "twitter:title", title);
     setMeta("name", "twitter:description", description);
   }

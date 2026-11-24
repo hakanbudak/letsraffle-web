@@ -27,9 +27,11 @@ import LanguageSwitcher from "@/components/ui-kit/LanguageSwitcher.vue";
 import OpenSourceButton from "@/components/ui-kit/OpenSourceButton.vue";
 import { isAuthenticated } from "@/services/authHelpers";
 import lockup from "@/assets/brand/lockup.webp";
+import { useLocalePath } from "@/i18n/localized";
 
 withDefaults(defineProps<{ showOpenSource?: boolean }>(), { showOpenSource: true });
 
 const { t } = useI18n();
-const homeTo = computed(() => (isAuthenticated() ? "/dashboard" : "/"));
+const localePath = useLocalePath();
+const homeTo = computed(() => (isAuthenticated() ? "/dashboard" : localePath("/")));
 </script>

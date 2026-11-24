@@ -43,7 +43,7 @@
           <p v-if="generalError" class="xm-error justify-center" role="alert">{{ generalError }}</p>
         </form>
         <p class="mt-5 text-center text-sm font-extrabold">
-          <router-link to="/?panel=login" class="text-cranberry-600 hover:text-cranberry-900">← {{ t("auth.backToLogin") }}</router-link>
+          <router-link :to="{ path: localePath('/'), query: { panel: 'login' } }" class="text-cranberry-600 hover:text-cranberry-900">← {{ t("auth.backToLogin") }}</router-link>
         </p>
       </section>
     </main>
@@ -54,6 +54,7 @@
 import ChristmasFigure from "@/components/christmas/ChristmasFigure.vue";
 import { reactive, ref } from 'vue'
 import { useI18n } from "vue-i18n"
+import { useLocalePath } from "@/i18n/localized"
 import Input from "@/components/ui-kit/input/Input.vue"
 import SantaCharacter from "@/components/christmas/SantaCharacter.vue"
 import ChristmasScene from "@/components/layout/ChristmasScene.vue"
@@ -63,6 +64,7 @@ import { validateEmail } from "@/helpers/common"
 import { AxiosError } from "axios"
 
 const { t, locale } = useI18n()
+const localePath = useLocalePath()
 
 const form = reactive({
   email: {

@@ -255,10 +255,12 @@ import UserMenu from "@/components/ui-kit/UserMenu.vue";
 import AppHeader from "@/components/layout/AppHeader.vue";
 import DrawSettings from "@/components/draw/DrawSettings.vue";
 import { setLocale, type Locale } from "@/i18n";
+import { useLocalePath } from "@/i18n/localized";
 
 const router = useRouter();
 const route = useRoute();
 const { t } = useI18n();
+const localePath = useLocalePath();
 
 const mode = ref<Mode>("manual");
 const drawSettingsRef = ref<InstanceType<typeof DrawSettings> | null>(null);
@@ -424,7 +426,7 @@ const switchToManualMode = () => {
 };
 
 const goToRegister = () => {
-  router.push({ path: "/", query: { panel: "register" } });
+  router.push({ path: localePath("/"), query: { panel: "register" } });
 };
 
 
