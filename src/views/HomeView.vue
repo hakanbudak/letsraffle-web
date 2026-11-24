@@ -93,6 +93,7 @@ import RegisterCard from "@/components/landing/RegisterCard.vue";
 import LoginCard from "@/components/landing/LoginCard.vue";
 import LegalLinks from "@/components/layout/LegalLinks.vue";
 import { isAuthenticated } from "@/services/authHelpers";
+import { useLocalePath } from "@/i18n/localized";
 
 const router = useRouter();
 
@@ -112,6 +113,7 @@ const sceneDecor = [
 const route = useRoute();
 const accountDeleted = computed(() => route.query.accountDeleted === "true");
 const { t } = useI18n();
+const localePath = useLocalePath();
 
 const currentPanel = ref<"intro" | "register" | "login">("intro");
 // cards only rise in on the first page load; switching intro / login / register is an instant swap
@@ -150,7 +152,7 @@ onMounted(() => {
 const goManual = () => {
   router.push({ path: "/draw/manual", query: { directStart: "true" } });
 };
-const goJoin = () => router.push("/draw/join").catch(() => undefined);
+const goJoin = () => router.push(localePath("/draw/join")).catch(() => undefined);
 const openRegister = () => (currentPanel.value = "register");
 const openLogin = () => (currentPanel.value = "login");
 const backToIntro = () => (currentPanel.value = "intro");

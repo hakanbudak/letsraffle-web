@@ -1,8 +1,8 @@
 <template>
   <nav class="legal-links relative z-10 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-[12.5px] font-extrabold tracking-wide" :aria-label="t('legal.navLabel')">
-    <router-link to="/privacy" class="legal-link">{{ t("legal.privacy") }}</router-link>
+    <router-link :to="localePath('/privacy')" class="legal-link">{{ t("legal.privacy") }}</router-link>
     <span aria-hidden="true" class="legal-sep">✦</span>
-    <router-link to="/terms" class="legal-link">{{ t("legal.terms") }}</router-link>
+    <router-link :to="localePath('/terms')" class="legal-link">{{ t("legal.terms") }}</router-link>
     <template v-if="$slots.default">
       <span aria-hidden="true" class="legal-sep">✦</span>
       <slot />
@@ -12,8 +12,10 @@
 
 <script setup lang="ts">
 import { useI18n } from "vue-i18n";
+import { useLocalePath } from "@/i18n/localized";
 
 const { t } = useI18n();
+const localePath = useLocalePath();
 </script>
 
 <style scoped>

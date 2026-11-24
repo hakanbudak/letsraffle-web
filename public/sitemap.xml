@@ -2,40 +2,62 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://letsraffle.co/</loc>
-    <xhtml:link rel="alternate" hreflang="tr" href="https://letsraffle.co/?lang=tr" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://letsraffle.co/?lang=en" />
+    <xhtml:link rel="alternate" hreflang="tr" href="https://letsraffle.co/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://letsraffle.co/en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://letsraffle.co/" />
-    <changefreq>weekly</changefreq>
-    <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://letsraffle.co/?lang=tr</loc>
-    <xhtml:link rel="alternate" hreflang="tr" href="https://letsraffle.co/?lang=tr" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://letsraffle.co/?lang=en" />
+    <loc>https://letsraffle.co/en</loc>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://letsraffle.co/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://letsraffle.co/en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://letsraffle.co/" />
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://letsraffle.co/?lang=en</loc>
-    <xhtml:link rel="alternate" hreflang="tr" href="https://letsraffle.co/?lang=tr" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://letsraffle.co/?lang=en" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://letsraffle.co/" />
-    <priority>0.9</priority>
   </url>
   <url>
     <loc>https://letsraffle.co/draw/join</loc>
-    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://letsraffle.co/draw/join" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://letsraffle.co/en/draw/join" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://letsraffle.co/draw/join" />
+  </url>
+  <url>
+    <loc>https://letsraffle.co/en/draw/join</loc>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://letsraffle.co/draw/join" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://letsraffle.co/en/draw/join" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://letsraffle.co/draw/join" />
   </url>
   <url>
     <loc>https://letsraffle.co/privacy</loc>
-    <priority>0.2</priority>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://letsraffle.co/privacy" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://letsraffle.co/en/privacy" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://letsraffle.co/privacy" />
+  </url>
+  <url>
+    <loc>https://letsraffle.co/en/privacy</loc>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://letsraffle.co/privacy" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://letsraffle.co/en/privacy" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://letsraffle.co/privacy" />
   </url>
   <url>
     <loc>https://letsraffle.co/terms</loc>
-    <priority>0.2</priority>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://letsraffle.co/terms" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://letsraffle.co/en/terms" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://letsraffle.co/terms" />
+  </url>
+  <url>
+    <loc>https://letsraffle.co/en/terms</loc>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://letsraffle.co/terms" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://letsraffle.co/en/terms" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://letsraffle.co/terms" />
   </url>
   <url>
     <loc>https://letsraffle.co/support</loc>
-    <priority>0.2</priority>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://letsraffle.co/support" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://letsraffle.co/en/support" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://letsraffle.co/support" />
+  </url>
+  <url>
+    <loc>https://letsraffle.co/en/support</loc>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://letsraffle.co/support" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://letsraffle.co/en/support" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://letsraffle.co/support" />
   </url>
 </urlset>

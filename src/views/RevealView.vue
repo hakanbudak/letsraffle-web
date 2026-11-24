@@ -30,7 +30,7 @@
         <p class="mt-2 text-[15px] leading-relaxed text-ink-soft">
           {{ errorKind === "pending" ? t("reveal.pendingText") : t("reveal.invalidText") }}
         </p>
-        <router-link to="/" class="xm-btn xm-btn-red mt-6">{{ t("reveal.goHome") }}</router-link>
+        <router-link :to="localePath('/')" class="xm-btn xm-btn-red mt-6">{{ t("reveal.goHome") }}</router-link>
       </section>
 
       <Transition v-else name="stage" mode="out-in">
@@ -152,6 +152,7 @@ import ChristmasLoader from "@/components/christmas/ChristmasLoader.vue";
 import { computed, defineComponent, h, onMounted, onUnmounted, ref } from "vue";
 import { useRoute } from "vue-router";
 import { useI18n } from "vue-i18n";
+import { useLocalePath } from "@/i18n/localized";
 import axios from "axios";
 import { CLIENT_HEADERS } from "@/services/api";
 import confetti from "canvas-confetti";
@@ -187,6 +188,7 @@ const Dots = defineComponent({
 });
 
 const { t } = useI18n();
+const localePath = useLocalePath();
 const route = useRoute();
 // separate client: no auth interceptors (a bad token must not log the visitor out)
 const client = axios.create({ baseURL: import.meta.env.VITE_API_BASE_URL, headers: CLIENT_HEADERS });

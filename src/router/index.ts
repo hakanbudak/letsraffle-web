@@ -2,8 +2,9 @@ import { createRouter, createWebHistory } from 'vue-router'
 import { isAuthenticated } from '@/services/authHelpers'
 
 const routes = [
+    // public pages: Turkish without a prefix, English under /en (see src/i18n/localized.ts)
     {
-        path: '/',
+        path: '/:lang(en)?',
         name: 'home',
         component: () => import('@/views/HomeView.vue'),
         beforeEnter: (to, from, next) => {
@@ -35,7 +36,7 @@ const routes = [
         component: () => import('@/views/DrawView.vue'),
     },
     {
-        path: '/draw/join/:inviteCode?',
+        path: '/:lang(en)?/draw/join/:inviteCode?',
         name: 'join-draw',
         component: () => import('@/views/JoinDrawView.vue'),
     },
@@ -44,23 +45,23 @@ const routes = [
         name: 'reveal',
         component: () => import('@/views/RevealView.vue'),
     },
+    { path: '/gizlilik', redirect: '/privacy' },
     {
-        path: '/privacy',
-        alias: '/gizlilik',
+        path: '/:lang(en)?/privacy',
         name: 'privacy',
         component: () => import('@/views/LegalView.vue'),
         props: { doc: 'privacy' },
     },
+    { path: '/kosullar', redirect: '/terms' },
     {
-        path: '/terms',
-        alias: '/kosullar',
+        path: '/:lang(en)?/terms',
         name: 'terms',
         component: () => import('@/views/LegalView.vue'),
         props: { doc: 'terms' },
     },
+    { path: '/destek', redirect: '/support' },
     {
-        path: '/support',
-        alias: '/destek',
+        path: '/:lang(en)?/support',
         name: 'support',
         component: () => import('@/views/LegalView.vue'),
         props: { doc: 'support' },

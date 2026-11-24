@@ -1,6 +1,7 @@
 // src/services/authHelpers.ts
 import api from "@/services/api";
 import { router } from "@/router";
+import { localePath } from "@/i18n/localized";
 import type { AuthResponse } from "@/types";
 
 export const TOKEN_KEY = "santas_draw_access_token";
@@ -33,8 +34,10 @@ export function logoutUser(redirectToLogin = true) {
 
     if (redirectToLogin) {
         const current = router.currentRoute.value;
-        if (current.path !== "/") {
-            router.push({ path: "/", query: { sessionExpired: "true" } }).catch(() => undefined);
+        // <html lang> follows the current language (kept in sync by setLocale / applySeo)
+        const home = localePath("/", document.documentElement.lang === "en" ? "en" : "tr");
+        if (current.path !== home) {
+            router.push({ path: home, query: { sessionExpired: "true" } }).catch(() => undefined);
         } else {
             router.replace({ ...current, query: { ...current.query, sessionExpired: "true" } }).catch(() => undefined);
         }

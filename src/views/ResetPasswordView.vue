@@ -55,7 +55,7 @@
           <p v-if="generalError" class="xm-error justify-center" role="alert">{{ generalError }}</p>
         </form>
         <p class="mt-5 text-center text-sm font-extrabold">
-          <router-link to="/?panel=login" class="text-cranberry-600 hover:text-cranberry-900">← {{ t("auth.backToLogin") }}</router-link>
+          <router-link :to="{ path: localePath('/'), query: { panel: 'login' } }" class="text-cranberry-600 hover:text-cranberry-900">← {{ t("auth.backToLogin") }}</router-link>
         </p>
       </section>
     </main>
@@ -67,6 +67,7 @@ import ChristmasFigure from "@/components/christmas/ChristmasFigure.vue";
 import { reactive, ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from "vue-i18n"
+import { useLocalePath } from "@/i18n/localized"
 import Input from "@/components/ui-kit/input/Input.vue"
 import SantaCharacter from "@/components/christmas/SantaCharacter.vue"
 import ChristmasScene from "@/components/layout/ChristmasScene.vue"
@@ -75,6 +76,7 @@ import api from "@/services/api"
 import { AxiosError } from "axios"
 
 const { t } = useI18n()
+const localePath = useLocalePath()
 const route = useRoute()
 const router = useRouter()
 
@@ -162,7 +164,7 @@ const submitForm = async () => {
     successMessage.value = t("auth.resetPasswordSuccess")
     
     setTimeout(() => {
-      router.push('/?panel=login')
+      router.push({ path: localePath('/'), query: { panel: 'login' } })
     }, 2000)
   } catch (err) {
     const axiosError = err as AxiosError<{ message?: string }>

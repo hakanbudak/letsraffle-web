@@ -31,16 +31,18 @@ import { useI18n } from "vue-i18n";
 import ChristmasScene from "@/components/layout/ChristmasScene.vue";
 import AppHeader from "@/components/layout/AppHeader.vue";
 import SantaCharacter from "@/components/christmas/SantaCharacter.vue";
+import { useLocalePath } from "@/i18n/localized";
 
 const router = useRouter();
 const { t } = useI18n();
+const localePath = useLocalePath();
 
 const goHome = () => {
-  router.push("/").catch(() => undefined);
+  router.push(localePath("/")).catch(() => undefined);
 };
 
 const goBack = () => {
   if (window.history.length > 1) router.go(-1);
-  else router.push("/").catch(() => undefined);
+  else router.push(localePath("/")).catch(() => undefined);
 };
 </script>
